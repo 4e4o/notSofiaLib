@@ -1,0 +1,3 @@
+gdbserver 127.0.0.1:1234 /mnt/stock_startup/bin/Sofia
+ssh -L 127.0.0.1:1234:127.0.0.1:1234 dvr
+
