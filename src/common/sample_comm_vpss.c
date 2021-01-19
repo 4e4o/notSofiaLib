@@ -28,42 +28,6 @@ extern "C"{
 
 #include "sample_comm.h"
 
-/******************************************************************************
-* function : Set vpss system memory location
-******************************************************************************/
-HI_S32 SAMPLE_COMM_VPSS_MemConfig()
-{
-    HI_CHAR * pcMmzName;
-    MPP_CHN_S stMppChnVpss;
-    HI_S32 s32Ret, i;
-
-    /*vpss group max is 64, not need config vpss chn.*/
-    for(i=0;i<64;i++)
-    {
-        stMppChnVpss.enModId  = HI_ID_VPSS;
-        stMppChnVpss.s32DevId = i;
-        stMppChnVpss.s32ChnId = 0;
-
-        if(0 == (i%2))
-        {
-            pcMmzName = NULL;  
-        }
-        else
-        {
-            pcMmzName = "ddr1";
-        }
-
-        /*vpss*/
-        s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnVpss, pcMmzName);
-        if (HI_SUCCESS != s32Ret)
-        {
-            SAMPLE_PRT("Vpss HI_MPI_SYS_SetMemConf ERR !\n");
-            return HI_FAILURE;
-        }
-    }
-    return HI_SUCCESS;
-}
-
 /*****************************************************************************
 * function : start vpss. VPSS chn with frame
 *****************************************************************************/

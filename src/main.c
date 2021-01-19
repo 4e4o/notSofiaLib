@@ -57,7 +57,6 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     HI_S32 i;
     HI_S32 s32Ret = HI_SUCCESS;
     HI_U32 u32BlkSize;
-    HI_CHAR ch;
     SIZE_S stSize;
 
     /******************************************
@@ -89,16 +88,6 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
         SAMPLE_PRT("system init failed with %d!\n", s32Ret);
         goto END_VENC_8D1_0;
     }
-
-    /******************************************
-     step 3: start vi dev & chn to capture
-    ******************************************/
-    /*s32Ret = SAMPLE_COMM_VI_MixCap_Start(enViMode, gs_enNorm);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("start vi failed!\n");
-        goto END_VENC_8D1_0;
-    }*/
 
     /******************************************
      step 3: start vi dev & chn to capture

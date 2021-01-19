@@ -2,95 +2,11 @@
 #define NVP_SAMPLE_DEFS_H
 
 #include <nvp6134_ex_170306/common.h>
+#include <nvp6134_ex_170306/video.h>
 
 #include "sample_comm.h"
 
 #define NVP6134A_FILE "/dev/nc_vdec"
-
-
-/************** Add By LianZiHao For NVP6134 2017-02-20 Start**********************/
-typedef enum _nvp6134_vi_mode
-{
-    NVP6134_VI_720H			= 0x00,	//720x576i(480)
-    NVP6134_VI_960H,       			//960x576i(480)
-    NVP6134_VI_1280H,				//1280x576i(480)
-    NVP6134_VI_1440H,				//1440x576i(480)
-    NVP6134_VI_1920H,				//1920x576i(480)
-    NVP6134_VI_960H2EX,   			//3840x576i(480)
-    NVP6134_VI_720P_2530	= 0x10,	//1280x720@25p(30)
-    NVP6134_VI_EXC_720P,			//1280x720@25p(30)
-    NVP6134_VI_EXT_720PA,			//1280x720@25p(30)
-    NVP6134_VI_EXT_720PB,			//1280x720@25p(30)
-    NVP6134_VI_HDEX,				//2560x720@25p(30)
-    NVP6134_VI_EXC_HDEX,			//2560x720@25p(30)
-    NVP6134_VI_EXT_HDAEX,			//2560x720@25p(30)
-    NVP6134_VI_EXT_HDBEX,			//2560x720@25p(30)
-    NVP6134_VI_720P_5060,			//1280x720@50p(60)
-    NVP6134_VI_EXC_720PRT,			//1280x720@50p(60)
-    NVP6134_VI_EXT_720PRT,			//1280x720@50p(60)
-    NVP6134_VI_M_720PRT,			//for nextchip test only
-    NVP6134_VI_1080P_2530	= 0x20,	//1920x1080@25p(30)
-    NVP6134_VI_EXC_1080P,			//1920x1080@25p(30)
-    NVP6134_VI_EXT_1080P,			//1920x1080@25p(30)
-    NVP6134_VI_1080P_NRT,			//1920x1080@12.5p(15)
-    NVP6134_VI_1080P_NOVIDEO,		//1920x1080@25p(30)
-    NVP6134_VI_3M_NRT		= 0x30, //2048x1536@18p
-    NVP6134_VI_3M,					//2048x1536@25p(30p)
-    NVP6134_VI_EXC_3M_NRT,			//reserved
-    NVP6134_VI_EXC_3M,				//reserved
-    NVP6134_VI_EXT_3M_NRT,			//2048x1536@18p
-    NVP6134_VI_EXT_3M,				//reserved
-    NVP6134_VI_4M_NRT		= 0x40, //2560x1440@NRT
-    NVP6134_VI_4M,					//2560x1440@25p(30)
-    NVP6134_VI_EXC_4M_NRT,			//reserved
-    NVP6134_VI_EXC_4M,				//reserved
-    NVP6134_VI_EXT_4M_NRT,			//reserved
-    NVP6134_VI_EXT_4M,				//reserved
-    NVP6134_VI_5M_NRT		= 0x50,	//2592x1944@12.5P
-    NVP6134_VI_5M,					//2592x1944@25P
-    NVP6134_VI_EXC_5M_NRT,			//reserved
-    NVP6134_VI_EXC_5M,				//reserved
-    NVP6134_VI_EXT_5M_NRT,			//2592x1944@12.5P
-    NVP6134_VI_EXT_5M,				//reserved
-    NVP6134_VI_5M_20P,				//2592x1944@20P
-    NVP6134_VI_8M_NRT		= 0x80,	//reserved
-    NVP6134_VI_8M,					//reserved
-    NVP6134_VI_EXC_8M_NRT,			//reserved
-    NVP6134_VI_EXC_8M,				//reserved
-    NVP6134_VI_EXT_8M_NRT,			//reserved
-    NVP6134_VI_EXT_8M,				//reserved
-    NVP6134_VI_UHD_X,				//reserved
-    NVP6134_VI_BUTT
-}NVP6134_VI_MODE;
-
-
-typedef enum _nvp6134_outmode_sel
-{
-    NVP6134_OUTMODE_1MUX_SD = 0,
-    NVP6134_OUTMODE_1MUX_HD,
-    NVP6134_OUTMODE_1MUX_HD5060,
-    NVP6134_OUTMODE_1MUX_FHD,
-    NVP6134_OUTMODE_2MUX_SD,
-    NVP6134_OUTMODE_2MUX_HD_X,
-    NVP6134_OUTMODE_2MUX_HD,
-    NVP6134_OUTMODE_2MUX_FHD_X,
-    NVP6134_OUTMODE_4MUX_SD,
-    NVP6134_OUTMODE_4MUX_HD_X,
-    NVP6134_OUTMODE_4MUX_HD,
-    NVP6134_OUTMODE_2MUX_FHD,
-    NVP6134_OUTMODE_1MUX_HD_X,
-    NVP6134_OUTMODE_1MUX_FHD_X,
-    NVP6134_OUTMODE_4MUX_FHD_X,
-    NVP6134_OUTMODE_4MUX_MIX,
-    NVP6134_OUTMODE_2MUX_MIX,
-    NVP6134_OUTMODE_1MUX_BT1120S,
-    NVP6134_OUTMODE_1MUX_3M_RT,
-    NVP6134_OUTMODE_1MUX_4M_NRT,
-    NVP6134_OUTMODE_BUTT
-}NVP6134_OUTMODE_SEL;
-
-/************** Add By LianZiHao For NVP6134 2017-02-20 End **********************/
-
 
 /************** Add By LianZiHao For NVP6134 2017-02-20 Start**********************/
 typedef enum sample_vi_6134_mode_e
@@ -108,11 +24,8 @@ typedef enum sample_vi_6134_mode_e
     SAMPLE_VI_MODE_6134_2MUX_D1,   // 4mux2 D1
     SAMPLE_VI_MODE_6134_4MUX_D1,   // 4mux1 D1 add by lianzihao 2017.8.11
     SAMPLE_VI_MODE_6134_4MUX_FHD,  // 4mux 1080p add by tmf 20181105
-}SAMPLE_VI_6134_MODE_E;
-/************** Add By LianZiHao For NVP6134 2017-02-20 End **********************/
+} SAMPLE_VI_6134_MODE_E;
 
-
-HI_S32 SAMPLE_WISDOM_VI_ADStart(SAMPLE_VI_MODE_E enViMode,
-    VIDEO_NORM_E enNorm,  HI_S32 s32CodecNum);
+HI_S32 SAMPLE_WISDOM_VI_ADStart(VIDEO_NORM_E enNorm,  HI_S32 s32CodecNum);
 
 #endif // NVP_SAMPLE_DEFS_H

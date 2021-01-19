@@ -110,29 +110,6 @@ HI_S32 SAMPLE_COMM_SYS_GetPicSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, SIZ
 }
 
 /******************************************************************************
-* function : calculate VB Block size of Histogram.
-******************************************************************************/
-HI_U32 SAMPLE_COMM_SYS_CalcHistVbBlkSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, SIZE_S *pstHistBlkSize, HI_U32 u32AlignWidth)
-{
-    HI_S32 s32Ret;
-    SIZE_S stPicSize;
-    
-    s32Ret = SAMPLE_COMM_SYS_GetPicSize(enNorm, enPicSize, &stPicSize);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("get picture size[%d] failed!\n", enPicSize);
-            return HI_FAILURE;
-    }
-
-   SAMPLE_PRT("stPicSize.u32Width%d,pstHistBlkSize->u32Width%d\n,stPicSize.u32Height%d,pstHistBlkSize->u32Height%d\n",
-   	stPicSize.u32Width,pstHistBlkSize->u32Width,
-   	stPicSize.u32Height,pstHistBlkSize->u32Height );
-    return (CEILING_2_POWER(44, u32AlignWidth)*CEILING_2_POWER(44, u32AlignWidth)*16*4);
-
-    return HI_SUCCESS;
-}
-
-/******************************************************************************
 * function : calculate VB Block size of picture.
 ******************************************************************************/
 HI_U32 SAMPLE_COMM_SYS_CalcPicVbBlkSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, PIXEL_FORMAT_E enPixFmt, HI_U32 u32AlignWidth)
@@ -168,129 +145,6 @@ HI_U32 SAMPLE_COMM_SYS_CalcPicVbBlkSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSiz
     return (CEILING_2_POWER(stSize.u32Width, u32AlignWidth) * \
             CEILING_2_POWER(stSize.u32Height,u32AlignWidth) * \
            ((PIXEL_FORMAT_YUV_SEMIPLANAR_422 == enPixFmt)?2:1.5));
-}
-
-/******************************************************************************
-* function : Set system memory location
-******************************************************************************/
-HI_S32 SAMPLE_COMM_SYS_MemConfig(HI_VOID)
-{
-    HI_S32 i = 0;
-    HI_S32 s32Ret = HI_SUCCESS;
-
-    HI_CHAR * pcMmzName;
-    MPP_CHN_S stMppChnVI;
-    MPP_CHN_S stMppChnVO;
-    MPP_CHN_S stMppChnVPSS;
-    MPP_CHN_S stMppChnGRP;
-    MPP_CHN_S stMppChnVENC;
-    MPP_CHN_S stMppChnRGN;
-    MPP_CHN_S stMppChnVDEC;
-
-    /*VI,VDEC最大通道数为32*/
-    for(i=0;i<32;i++)
-    {
-        stMppChnVI.enModId = HI_ID_VIU;
-        stMppChnVI.s32DevId = 0;
-        stMppChnVI.s32ChnId = i;
-        
-        stMppChnVDEC.enModId = HI_ID_VDEC;
-        stMppChnVDEC.s32DevId = 0;
-        stMppChnVDEC.s32ChnId = i;
-        
-        if(0 == (i%2))
-        {
-            pcMmzName = NULL;  
-        }
-        else
-        {
-            pcMmzName = "ddr1";
-        }
-
-        /*vi*/
-        s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnVI,pcMmzName);
-        if (s32Ret)
-        {
-            SAMPLE_PRT("HI_MPI_SYS_SetMemConf ERR !\n");
-            return HI_FAILURE;
-        }
-
-        /*vdec*/
-        s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnVDEC,pcMmzName);
-        if (s32Ret)
-        {
-            SAMPLE_PRT("HI_MPI_SYS_SetMemConf ERR !\n");
-            return HI_FAILURE;
-        }
-
-    }  
-
-    /*vpss,grp,venc最大通道为64*/
-    for(i=0;i<64;i++)
-    {
-        stMppChnVPSS.enModId  = HI_ID_VPSS;
-        stMppChnVPSS.s32DevId = i;
-        stMppChnVPSS.s32ChnId = 0;
-
-        stMppChnGRP.enModId  = HI_ID_GROUP;
-        stMppChnGRP.s32DevId = i;
-        stMppChnGRP.s32ChnId = 0;
-
-        stMppChnVENC.enModId = HI_ID_VENC;
-        stMppChnVENC.s32DevId = 0;
-        stMppChnVENC.s32ChnId = i;
-
-        if(0 == (i%2))
-        {
-            pcMmzName = NULL;  
-        }
-        else
-        {
-            pcMmzName = "ddr1";
-        }
-
-        /*vpss*/
-        s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnVPSS,pcMmzName);
-        if (s32Ret)
-        {
-            SAMPLE_PRT("HI_MPI_SYS_SetMemConf ERR !\n");
-            return HI_FAILURE;
-        }
-
-        /*grp*/
-        s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnGRP,pcMmzName);
-        if (s32Ret)
-        {
-            SAMPLE_PRT("HI_MPI_SYS_SetMemConf ERR !\n");
-            return HI_FAILURE;
-        } 
-
-        /*venc*/
-        s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnVENC,pcMmzName);
-        if (s32Ret)
-        {
-            SAMPLE_PRT("HI_MPI_SYS_SetMemConf ERR !\n");
-            return HI_FAILURE;
-        }
-
-    }
-    
-    stMppChnRGN.enModId  = HI_ID_RGN;
-    stMppChnRGN.s32DevId = 0;
-    stMppChnRGN.s32ChnId = 0;
-        
-    /*配置VO内存*/
-    stMppChnVO.enModId  = HI_ID_VOU;
-    stMppChnVO.s32DevId = 0;
-    stMppChnVO.s32ChnId = 0;
-    s32Ret = HI_MPI_SYS_SetMemConf(&stMppChnVO,"ddr1");
-    if (s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_SYS_SetMemConf ERR !\n");
-        return HI_FAILURE;
-    } 
-    
-    return s32Ret;
 }
 
 /******************************************************************************
@@ -339,31 +193,6 @@ HI_S32 SAMPLE_COMM_SYS_Init(VB_CONF_S *pstVbConf)
         return HI_FAILURE;
     }
 
-    return HI_SUCCESS;
-}
-
-/******************************************************************************
-* function : vb init & MPI system init
-******************************************************************************/
-HI_S32 SAMPLE_COMM_SYS_Payload2FilePostfix(PAYLOAD_TYPE_E enPayload, HI_CHAR* szFilePostfix)
-{
-    if (PT_H264 == enPayload)
-    {
-        strcpy(szFilePostfix, ".h264");
-    }
-    else if (PT_JPEG == enPayload)
-    {
-        strcpy(szFilePostfix, ".jpg");
-    }
-    else if (PT_MJPEG == enPayload)
-    {
-        strcpy(szFilePostfix, ".mjp");
-    }
-    else
-    {
-        SAMPLE_PRT("payload type err!\n");
-        return HI_FAILURE;
-    }
     return HI_SUCCESS;
 }
 

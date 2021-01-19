@@ -28,12 +28,9 @@ extern "C"{
 
 #include "ad_cfg.h"
 
+HI_S32 VI_WISDOM_NVP6134_GetVideoFMT(nvp6134_input_videofmt *pstVideofmt);
 
-/************** Add By LianZiHao For NVP6134 2017-02-28 Start**********************/
-
-HI_S32 VI_WISDOM_NVP6134_GetVideoState(unsigned int *pu32VideoState,
-    HI_S32 s32CodecNum)
-{
+HI_S32 VI_WISDOM_NVP6134_GetVideoState(unsigned int *pu32VideoState, HI_S32 s32CodecNum) {
     if(NULL == pu32VideoState)
     {
         printf("[%s:%d] Para Error!\n", __func__, __LINE__);
@@ -75,10 +72,8 @@ HI_S32 VI_WISDOM_NVP6134_GetVideoState(unsigned int *pu32VideoState,
 }
 
 
-/*HI_S32 VI_WISDOM_NVP6134_GetVideoFMT(nvp6124_input_videofmt *pstVideofmt)
-{
-    if(NULL == pstVideofmt)
-    {
+HI_S32 VI_WISDOM_NVP6134_GetVideoFMT(nvp6134_input_videofmt *pstVideofmt) {
+    if(NULL == pstVideofmt) {
         printf("[%s:%d] Para Error!\n", __func__, __LINE__);
         return -1;
     }
@@ -100,30 +95,8 @@ HI_S32 VI_WISDOM_NVP6134_GetVideoState(unsigned int *pu32VideoState,
 
     return 0;
 }
-*/
 
-/************** Add By LianZiHao For NVP6134 2017-02-28 End **********************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/************** Modify By LianZiHao For NVP6134 2017-08-10 Start**********************/
-HI_S32 VI_WISDOM_NVP6134_CfgV(VIDEO_NORM_E enVideoMode,SAMPLE_VI_6134_MODE_E enViMode, HI_S32 s32CodecNum) {
+HI_S32 VI_WISDOM_NVP6134_CfgV(VIDEO_NORM_E enVideoMode, HI_S32 s32CodecNum) {
     int fd, i;
     int video_mode;
     nvp6134_opt_mode optmode;
@@ -138,397 +111,53 @@ HI_S32 VI_WISDOM_NVP6134_CfgV(VIDEO_NORM_E enVideoMode,SAMPLE_VI_6134_MODE_E enV
         return -1;
     }
 
+    nvp6134_input_videofmt pstVideofmt;
+    VI_WISDOM_NVP6134_GetVideoFMT(&pstVideofmt);
+
     video_mode = (VIDEO_ENCODING_MODE_PAL == enVideoMode) ? 1 : 0 ;
 
     SAMPLE_PRT("enVideoMode : %d\n", enVideoMode);
+    SAMPLE_PRT("SAMPLE_VI_MODE_6134_2MUX_MIX!!!\n");
 
-    switch(enViMode) {
-        case SAMPLE_VI_MODE_6134_2MUX_D1:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_2MUX_D1!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_720H;
-                printf(" ch %d vformat %d chmode %d \n",schnmode.ch,schnmode.vformat,schnmode.chmode);
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_SD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.chipsel = i;
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_SD;
-                optmode.chid = 1;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_4MUX_D1:
-        {//add by lianzihao 2017.8.11
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_4MUX_D1!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_720H;
-                printf(" ch %d vformat %d chmode %d \n",schnmode.ch,schnmode.vformat,schnmode.chmode);
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_SD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.chipsel = i;
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_SD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_960H:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_960H!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_720H;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_SD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.chipsel = i;
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_SD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_HDX:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_HDX!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_720P_2530;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_HD_X;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_HD_X;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_HD:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_HD!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_720P_2530;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_HD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_HD;
-                optmode.chid = 1;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_FHDX:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_FHDX!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_1080P_2530;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_FHD_X;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_FHD_X;
-                optmode.chid = 1;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_FHD:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_FHD!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_1080P_2530;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_1MUX_FHD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_1MUX_FHD;
-                optmode.chid = 1;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_960H_720P_2MUX:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_960H_720P_2MUX!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = i%2?NVP6134_VI_720P_2530:NVP6134_VI_1920H;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_HD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_HD;
-                optmode.chid = 1;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            SAMPLE_PRT("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_2MUX_MIX:
-        {
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_2MUX_MIX!!!\n");
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_1080P_2530;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;
-                optmode.portsel = 2;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_MIX;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_2MUX_MIX;
-                optmode.chid = 1;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
-            break;
-        }
-        case SAMPLE_VI_MODE_6134_4MUX_HD:
-        {
-            //add by lianzihao 2017_11_15
-            SAMPLE_PRT("SAMPLE_VI_MODE_6134_4MUX_HD!!!\n");
-
-            for(i=0;i<chip_cnt*4;i++)
-            {
-                schnmode.ch = i;
-                schnmode.vformat = video_mode;
-                schnmode.chmode = NVP6134_VI_720P_2530;
-                ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
-            }
-
-            for(i=0;i<chip_cnt;i++)
-            {
-                optmode.chipsel = i;// 0 1
-                //optmode.portsel = 2;
-                //optmode.portmode = NVP6134_OUTMODE_4MUX_HD;
-                //optmode.chid = 0;
-                //ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-                optmode.portsel = 1;
-                optmode.portmode = NVP6134_OUTMODE_4MUX_HD;
-                optmode.chid = 0;
-                ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
-            }
-            break;
-        }
-        default:
-        {
-            SAMPLE_PRT("enViMode %d not supported!!!\n", enViMode);
-            break;
-        }
-
-        close(fd);
+    for(i=0;i<chip_cnt*4;i++)
+    {
+        schnmode.ch = i;
+        schnmode.vformat = video_mode;
+        schnmode.chmode = NVP6134_VI_1080P_2530;
+        ioctl(fd, IOC_VDEC_SET_CHNMODE, &schnmode);
     }
+
+    for(i=0;i<chip_cnt;i++)
+    {
+        optmode.chipsel = i;
+        optmode.portsel = 2;
+        optmode.portmode = NVP6134_OUTMODE_2MUX_MIX;
+        optmode.chid = 0;
+        ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
+        optmode.portsel = 1;
+        optmode.portmode = NVP6134_OUTMODE_2MUX_MIX;
+        optmode.chid = 1;
+        ioctl(fd, IOC_VDEC_SET_OUTPORTMODE, &optmode);
+    }
+    printf("[%s:%d] SET OK!!!\n", __func__, __LINE__);
+
+    close(fd);
+
 
     return 0;
 }
-/************** Add By LianZiHao For NVP6134 2017-02-20 End **********************/
 
-/************** Add By LianZiHao For NVP6134 2017-02-20 Start**********************/
-HI_S32 SAMPLE_WISDOM_VI_ADStart(SAMPLE_VI_MODE_E enViMode,
-    VIDEO_NORM_E enNorm,  HI_S32 s32CodecNum)
-{
-    VI_WORK_MODE_E enWorkMode;
-    HI_S32 s32Ret;
-    SAMPLE_VI_6134_MODE_E enMode;
+HI_S32 SAMPLE_WISDOM_VI_ADStart(VIDEO_NORM_E enNorm,  HI_S32 s32CodecNum) {
+    HI_S32 s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, s32CodecNum);
 
-    switch (enViMode)
-    {
-        case SAMPLE_VI_MODE_4_D1:
-        {
-            SAMPLE_PRT("enViMode SAMPLE_VI_MODE_4_D1\n");
-
-            enMode = SAMPLE_VI_MODE_6134_2MUX_D1;
-            SAMPLE_PRT("enWorkMode SAMPLE_VI_MODE_6134_2MUX_D1\n");
-
-            s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, enMode, s32CodecNum);
-            if (s32Ret != HI_SUCCESS)
-            {
-                SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
-                        s32Ret);
-                return HI_FAILURE;
-            }
-            break;
-        }
-        case SAMPLE_VI_MODE_8_D1:
-        {
-            //add by lianzihao 2017.8.11
-            SAMPLE_PRT("enViMode SAMPLE_VI_MODE_8_D1\n");
-
-            enWorkMode = SAMPLE_VI_MODE_6134_4MUX_D1;
-
-            SAMPLE_PRT("enWorkMode SAMPLE_VI_MODE_6134_4MUX_D1\n");
-            s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, enWorkMode, s32CodecNum);
-            if (s32Ret != HI_SUCCESS)
-            {
-                SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
-                        s32Ret);
-                return HI_FAILURE;
-            }
-            break;
-        }
-        case SAMPLE_VI_MODE_16_960H:
-        {
-            enMode = SAMPLE_VI_MODE_6134_960H;
-            s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, enMode, s32CodecNum);
-            if (s32Ret != HI_SUCCESS)
-            {
-                SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
-                        s32Ret);
-                return HI_FAILURE;
-            }
-            break;
-        }
-        case SAMPLE_VI_MODE_4_720P:
-        {
-            SAMPLE_PRT("enViMode SAMPLE_VI_MODE_4_720P\n");
-            enMode = SAMPLE_VI_MODE_6134_HD;
-            SAMPLE_PRT("enWorkMode SAMPLE_VI_MODE_6134_HD\n");
-
-            s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, enMode, s32CodecNum);
-            if (s32Ret != HI_SUCCESS)
-            {
-                SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
-                        s32Ret);
-                return HI_FAILURE;
-            }
-            break;
-        }
-/*        case SAMPLE_VI_MODE_8_720P:
-        {   //add by lianzihao 2017.8.11
-            SAMPLE_PRT("enViMode SAMPLE_VI_MODE_8_720P\n");
-
-            enMode = SAMPLE_VI_MODE_6134_4MUX_HD;
-
-            SAMPLE_PRT("enWorkMode SAMPLE_VI_MODE_6134_4MUX_HD\n");
-            s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, enMode, s32CodecNum);
-            if (s32Ret != HI_SUCCESS)
-            {
-                SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
-                        s32Ret);
-                return HI_FAILURE;
-            }
-            break;
-        }
-        case SAMPLE_VI_MODE_8_1080P:
-        {
-            SAMPLE_PRT("AD nvp6134 not support 8 ch 1080P!\n");
-            break;
-        }*/
-        case SAMPLE_VI_MODE_4_1080P:
-        {
-            enMode = SAMPLE_VI_MODE_6134_2MUX_MIX;
-            s32Ret = VI_WISDOM_NVP6134_CfgV(enNorm, enMode, s32CodecNum);
-            if (s32Ret != HI_SUCCESS)
-            {
-                SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
-                        s32Ret);
-                return HI_FAILURE;
-            }
-            break;
-        }
-        default:
-            SAMPLE_PRT("AD not support!\n");
-            return HI_FAILURE;
+    if (s32Ret != HI_SUCCESS) {
+        SAMPLE_PRT("VI_WISDOM_NVP6134_CfgV failed with %#x!\n",\
+                   s32Ret);
+        return HI_FAILURE;
     }
 
     return HI_SUCCESS;
 }
-/************** Add By LianZiHao For NVP6134 2017-02-20 End **********************/
-
 
 #ifdef __cplusplus
 #if __cplusplus
