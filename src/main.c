@@ -44,7 +44,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     HI_U32 u32ViChnCnt = 4 ;
     HI_S32 s32VpssGrpCnt = 4 ;
     PAYLOAD_TYPE_E enPayLoad[2]= {PT_H264, PT_H264};
-    PIC_SIZE_E enSize[2] = {/*PIC_D1*/ PIC_HD1080, PIC_CIF};
+    PIC_SIZE_E enSize[2] = {PIC_HD1080, PIC_CIF};
 
     VB_CONF_S stVbConf;
     VPSS_GRP VpssGrp;
@@ -127,7 +127,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
         goto END_VENC_8D1_1;
     }
 
-    s32Ret = SAMPLE_COMM_VI_BindVpss(enViMode);
+    s32Ret = SAMPLE_COMM_VI_BindVpss();
 
     if (HI_SUCCESS != s32Ret) {
         SAMPLE_PRT("Vi bind Vpss failed!\n");
@@ -210,7 +210,7 @@ END_VENC_8D1_3:
         SAMPLE_COMM_VENC_UnBindVpss(VencGrp, VpssGrp, VpssChn);
         SAMPLE_COMM_VENC_Stop(VencGrp,VencChn);
     }
-    SAMPLE_COMM_VI_UnBindVpss(enViMode);
+    SAMPLE_COMM_VI_UnBindVpss();
 END_VENC_8D1_2:	//vpss stop
     SAMPLE_COMM_VPSS_Stop(s32VpssGrpCnt, VPSS_MAX_CHN_NUM);
 END_VENC_8D1_1:	//vi stop

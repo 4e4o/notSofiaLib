@@ -32,13 +32,13 @@ extern "C"{
 
 VI_DEV_ATTR_S DEV_ATTR_BT656D1_2MUX =
 {
-    /*接口模式*/
+    /*陆脫驴脷脛拢脢陆*/
     VI_MODE_BT656,
-    /*1、2、4路工作模式*/
+    /*1隆垄2隆垄4脗路鹿陇脳梅脛拢脢陆*/
     VI_WORK_MODE_2Multiplex,
     /* r_mask    g_mask    b_mask*/
     {0xFF000000,    0x0},
-    /*逐行or隔行输入*/
+    /*脰冒脨脨or赂么脨脨脢盲脠毛*/
     VI_SCAN_PROGRESSIVE,
     /*AdChnId*/
     {-1, -1, -1, -1}
@@ -147,7 +147,7 @@ HI_VOID SAMPLE_COMM_VI_SetMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr)
                     if ((VI_MODE_BT1120_STANDARD != pstDevAttr->enIntfMode)
                         && (VI_MODE_BT1120_INTERLEAVED != pstDevAttr->enIntfMode))
                     {
-                        /* 3531的ASIC板是两个BT1120口出16D1，此时dev2/6要设成dev1/5的MASK */
+                        /* 3531碌脛ASIC掳氓脢脟脕陆赂枚BT1120驴脷鲁枚16D1拢卢麓脣脢卤dev2/6脪陋脡猫鲁脡dev1/5碌脛MASK */
                         pstDevAttr->au32CompMask[0] = 0xFF0000; 
                     }
                 #endif
@@ -600,7 +600,7 @@ HI_S32 SAMPLE_COMM_VI_Stop(SAMPLE_VI_MODE_E enViMode)
 /*****************************************************************************
 * function : Vi chn bind vpss group
 *****************************************************************************/
-HI_S32 SAMPLE_COMM_VI_BindVpss(SAMPLE_VI_MODE_E enViMode)
+HI_S32 SAMPLE_COMM_VI_BindVpss()
 {
     HI_S32 j, s32Ret;
     VPSS_GRP VpssGrp;
@@ -645,7 +645,7 @@ HI_S32 SAMPLE_COMM_VI_BindVpss(SAMPLE_VI_MODE_E enViMode)
 /*****************************************************************************
 * function : Vi chn unbind vpss group
 *****************************************************************************/
-HI_S32 SAMPLE_COMM_VI_UnBindVpss(SAMPLE_VI_MODE_E enViMode)
+HI_S32 SAMPLE_COMM_VI_UnBindVpss()
 {
     HI_S32 i, j, s32Ret;
     VPSS_GRP VpssGrp;

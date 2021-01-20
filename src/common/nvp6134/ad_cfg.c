@@ -1,16 +1,3 @@
-/******************************************************************************
-  Some simple Hisilicon HI3531 video input functions.
-
-  Copyright (C), 2010-2011, Hisilicon Tech. Co., Ltd.
- ******************************************************************************
-    Modification:  2011-8 Created
-******************************************************************************/
-#ifdef __cplusplus
-#if __cplusplus
-extern "C"{
-#endif
-#endif /* End of #ifdef __cplusplus */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -158,9 +145,3 @@ HI_S32 SAMPLE_WISDOM_VI_ADStart(VIDEO_NORM_E enNorm,  HI_S32 s32CodecNum) {
 
     return HI_SUCCESS;
 }
-
-#ifdef __cplusplus
-#if __cplusplus
-}
-#endif
-#endif /* End of #ifdef __cplusplus */
