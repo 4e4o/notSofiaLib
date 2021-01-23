@@ -1,16 +1,3 @@
-/******************************************************************************
-  Some simple Hisilicon HI3531 video input functions.
-
-  Copyright (C), 2010-2011, Hisilicon Tech. Co., Ltd.
- ******************************************************************************
-    Modification:  2011-2 Created
-******************************************************************************/
-#ifdef __cplusplus
-#if __cplusplus
-extern "C"{
-#endif
-#endif /* End of #ifdef __cplusplus */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,11 +14,12 @@ extern "C"{
 #include <signal.h>
 
 #include "sample_comm.h"
+#include "nvp6134/ad_cfg.h"
 
 /*****************************************************************************
 * function : start vpss. VPSS chn with frame
 *****************************************************************************/
-HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, SIZE_S *pstSize, HI_S32 s32ChnCnt,VPSS_GRP_ATTR_S *pstVpssGrpAttr)
+HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt)
 {
     VPSS_GRP VpssGrp;
     VPSS_CHN VpssChn;
@@ -40,30 +28,23 @@ HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, SIZE_S *pstSize, HI_S32 s32ChnCn
     VPSS_GRP_PARAM_S stVpssParam;
     HI_S32 s32Ret;
     HI_S32 i, j;
+    const struct ChannelInfo* channelInfo;
 
-    /*** Set Vpss Grp Attr ***/
+    stGrpAttr.bDrEn = HI_FALSE;
+    stGrpAttr.bDbEn = HI_FALSE;
+    stGrpAttr.bIeEn = HI_FALSE;
+    stGrpAttr.bNrEn = HI_TRUE;
+    stGrpAttr.bHistEn = HI_FALSE;
+    stGrpAttr.enDieMode = VPSS_DIE_MODE_AUTO;
+    stGrpAttr.enPixFmt = SAMPLE_PIXEL_FORMAT;
 
-    if(NULL == pstVpssGrpAttr)
+    for(i = 0; i < s32GrpCnt; i++)
     {
-        // TODO / 2 ???
-        stGrpAttr.u32MaxW = pstSize->u32Width / 2;
-        stGrpAttr.u32MaxH = pstSize->u32Height;
-        stGrpAttr.bDrEn = HI_FALSE;
-        stGrpAttr.bDbEn = HI_FALSE;
-        stGrpAttr.bIeEn = HI_TRUE;
-        stGrpAttr.bNrEn = HI_TRUE;
-        stGrpAttr.bHistEn = HI_FALSE;
-        stGrpAttr.enDieMode = VPSS_DIE_MODE_AUTO;
-        stGrpAttr.enPixFmt = SAMPLE_PIXEL_FORMAT;
-    }
-    else
-    {
-        memcpy(&stGrpAttr,pstVpssGrpAttr,sizeof(VPSS_GRP_ATTR_S));
-    }
-    
+        // TODO !!
+        channelInfo = getChannelInfo(i);
+        stGrpAttr.u32MaxW = /*960;//*/channelInfo->stDestSize.u32Width;
+        stGrpAttr.u32MaxH = /*1080;//*/channelInfo->stDestSize.u32Height;
 
-    for(i=0; i<s32GrpCnt; i++)
-    {
         VpssGrp = i;
         /*** create vpss group ***/
         s32Ret = HI_MPI_VPSS_CreateGrp(VpssGrp, &stGrpAttr);
@@ -112,7 +93,7 @@ HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, SIZE_S *pstSize, HI_S32 s32ChnCn
                 SAMPLE_PRT("HI_MPI_VPSS_SetChnAttr failed with %#x\n", s32Ret);
                 return HI_FAILURE;
             }
-    
+
             s32Ret = HI_MPI_VPSS_EnableChn(VpssGrp, VpssChn);
             if (s32Ret != HI_SUCCESS)
             {
@@ -162,7 +143,7 @@ HI_S32 SAMPLE_COMM_VPSS_Stop(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt)
                 return HI_FAILURE;
             }
         }
-    
+
         s32Ret = HI_MPI_VPSS_DestroyGrp(VpssGrp);
         if (s32Ret != HI_SUCCESS)
         {
@@ -177,17 +158,17 @@ HI_S32 SAMPLE_COMM_DisableVpssPreScale(VPSS_GRP VpssGrp,SIZE_S stSize)
 {
     HI_S32 s32Ret;
     VPSS_PRESCALE_INFO_S stPreScaleInfo;
-        
+
     stPreScaleInfo.bPreScale = HI_FALSE;
     stPreScaleInfo.enCapSel = VPSS_CAPSEL_BOTH;
     stPreScaleInfo.stDestSize.u32Width = stSize.u32Width;
     stPreScaleInfo.stDestSize.u32Height = stSize.u32Height;
     s32Ret = HI_MPI_VPSS_SetPreScale(VpssGrp, &stPreScaleInfo);
     if (s32Ret != HI_SUCCESS)
-	{
-	    SAMPLE_PRT("HI_MPI_VPSS_SetPreScale failed with %#x!\n", s32Ret);
-	    return HI_FAILURE;
-	}
+    {
+        SAMPLE_PRT("HI_MPI_VPSS_SetPreScale failed with %#x!\n", s32Ret);
+        return HI_FAILURE;
+    }
 
     return s32Ret;
 }
@@ -195,23 +176,17 @@ HI_S32 SAMPLE_COMM_EnableVpssPreScale(VPSS_GRP VpssGrp,SIZE_S stSize)
 {
     HI_S32 s32Ret;
     VPSS_PRESCALE_INFO_S stPreScaleInfo;
-        
+
     stPreScaleInfo.bPreScale = HI_TRUE;
     stPreScaleInfo.enCapSel = VPSS_CAPSEL_BOTH;
     stPreScaleInfo.stDestSize.u32Width = stSize.u32Width;
     stPreScaleInfo.stDestSize.u32Height = stSize.u32Height;
     s32Ret = HI_MPI_VPSS_SetPreScale(VpssGrp, &stPreScaleInfo);
     if (s32Ret != HI_SUCCESS)
-	{
-	    SAMPLE_PRT("HI_MPI_VPSS_SetPreScale failed with %#x!\n", s32Ret);
-	    return HI_FAILURE;
-	}
+    {
+        SAMPLE_PRT("HI_MPI_VPSS_SetPreScale failed with %#x!\n", s32Ret);
+        return HI_FAILURE;
+    }
 
     return s32Ret;
 }
-
-#ifdef __cplusplus
-#if __cplusplus
-}
-#endif
-#endif /* End of #ifdef __cplusplus */

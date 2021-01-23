@@ -1,15 +1,3 @@
-/******************************************************************************
-  A simple program of Hisilicon HI3531 video encode implementation.
-  Copyright (C), 2010-2011, Hisilicon Tech. Co., Ltd.
- ******************************************************************************
-    Modification:  2011-2 Created
-******************************************************************************/
-#ifdef __cplusplus
-#if __cplusplus
-extern "C"{
-#endif
-#endif /* End of #ifdef __cplusplus */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,8 +6,7 @@ extern "C"{
 #include <signal.h>
 
 #include "sample_comm.h"
-
-VIDEO_NORM_E gs_enNorm = VIDEO_ENCODING_MODE_NTSC;
+#include "nvp6134/ad_cfg.h"
 
 void SAMPLE_VENC_HandleSig(HI_S32 signo) {
     if (SIGINT == signo || SIGTSTP == signo) {
@@ -40,32 +27,28 @@ void SAMPLE_VENC_StreamHandleSig(HI_S32 signo) {
 }
 
 HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
-    SAMPLE_VI_MODE_E enViMode = SAMPLE_VI_MODE_4_1080P;
-    HI_U32 u32ViChnCnt = 4 ;
-    HI_S32 s32VpssGrpCnt = 4 ;
+    HI_U32 u32ViChnCnt = 4;
+    HI_S32 s32VpssGrpCnt = 4;
     PAYLOAD_TYPE_E enPayLoad[2]= {PT_H264, PT_H264};
-    PIC_SIZE_E enSize[2] = {PIC_HD1080, PIC_CIF};
-
     VB_CONF_S stVbConf;
     VPSS_GRP VpssGrp;
     VPSS_CHN VpssChn;
-    VPSS_GRP_ATTR_S stGrpAttr;
     VENC_GRP VencGrp;
     VENC_CHN VencChn;
-    SAMPLE_RC_E enRcMode;
-
+    SAMPLE_RC_E enRcMode = SAMPLE_RC_CBR;
     HI_S32 i;
     HI_S32 s32Ret = HI_SUCCESS;
     HI_U32 u32BlkSize;
-    SIZE_S stSize;
+
+    adInit();
 
     /******************************************
      step  1: init variable
     ******************************************/
     memset(&stVbConf,0,sizeof(VB_CONF_S));
 
-    u32BlkSize = SAMPLE_COMM_SYS_CalcPicVbBlkSize(gs_enNorm,\
-                enSize[0], SAMPLE_PIXEL_FORMAT, SAMPLE_SYS_ALIGN_WIDTH);
+    u32BlkSize = MaxPicVbBlkSize(SAMPLE_PIXEL_FORMAT, SAMPLE_SYS_ALIGN_WIDTH);
+
     stVbConf.u32MaxPoolCnt = 128;
 
     stVbConf.astCommPool[0].u32BlkSize = u32BlkSize;
@@ -92,7 +75,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     /******************************************
      step 3: start vi dev & chn to capture
     ******************************************/
-    s32Ret = SAMPLE_COMM_VI_Start(enViMode, gs_enNorm);
+    s32Ret = SAMPLE_COMM_VI_Start();
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("start vi failed!\n");
@@ -102,25 +85,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     /******************************************
      step 4: start vpss and vi bind vpss
     ******************************************/
-    s32Ret = SAMPLE_COMM_SYS_GetPicSize(gs_enNorm, enSize[0], &stSize);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("SAMPLE_COMM_SYS_GetPicSize failed!\n");
-        goto END_VENC_8D1_0;
-    }
-
-    // TODO / 2 ???
-    stGrpAttr.u32MaxW = stSize.u32Width / 2;
-    stGrpAttr.u32MaxH = stSize.u32Height;
-    stGrpAttr.bDrEn = HI_FALSE;
-    stGrpAttr.bDbEn = HI_FALSE;
-    stGrpAttr.bIeEn = HI_TRUE;
-    stGrpAttr.bNrEn = HI_TRUE;
-    stGrpAttr.bHistEn = HI_TRUE;
-    stGrpAttr.enDieMode = VPSS_DIE_MODE_AUTO;
-    stGrpAttr.enPixFmt = SAMPLE_PIXEL_FORMAT;
-
-    s32Ret = SAMPLE_COMM_VPSS_Start(s32VpssGrpCnt, &stSize, VPSS_MAX_CHN_NUM,NULL);
+    s32Ret = SAMPLE_COMM_VPSS_Start(s32VpssGrpCnt, VPSS_MAX_CHN_NUM);
 
     if (HI_SUCCESS != s32Ret) {
         SAMPLE_PRT("Start Vpss failed!\n");
@@ -135,20 +100,14 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     }
 
     /******************************************
-     step 5: select rc mode
-    ******************************************/
-    enRcMode = SAMPLE_RC_CBR;
-
-    /******************************************
      step 5: start stream venc (big + little)
     ******************************************/
-    for (i=0; i<u32ViChnCnt; i++) {
+    for (i = 0; i < u32ViChnCnt; i++) {
         /*** main stream **/
         VencGrp = i * 2;
         VencChn = i * 2;
         VpssGrp = i;
-        s32Ret = SAMPLE_COMM_VENC_Start(VencGrp, VencChn, enPayLoad[0],\
-                                       gs_enNorm, enSize[0], enRcMode);
+        s32Ret = SAMPLE_COMM_VENC_Start(VpssGrp, VencGrp, VencChn, enPayLoad[0], enRcMode);
         if (HI_SUCCESS != s32Ret)
         {
             SAMPLE_PRT("Start Venc failed!\n");
@@ -165,8 +124,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
         /*** Sub stream **/
         VencGrp ++;
         VencChn ++;
-        s32Ret = SAMPLE_COMM_VENC_Start(VencGrp, VencChn, enPayLoad[1], \
-                                        gs_enNorm, enSize[1], enRcMode);
+        s32Ret = SAMPLE_COMM_VENC_Start(VpssGrp, VencGrp, VencChn, enPayLoad[1], enRcMode);
         if (HI_SUCCESS != s32Ret)
         {
             SAMPLE_PRT("Start Venc failed!\n");
@@ -201,11 +159,11 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     SAMPLE_COMM_VENC_StopGetStream();
 
 END_VENC_8D1_3:
-    for (i=0; i<u32ViChnCnt*2 ; i++)
+    for (i = 0; i < u32ViChnCnt * 2 ; i++)
     {
         VencGrp = i;
         VencChn = i;
-        VpssGrp = i /2 ;
+        VpssGrp = i / 2;
         VpssChn = (VpssGrp%2)?VPSS_PRE0_CHN:VPSS_BSTR_CHN;
         SAMPLE_COMM_VENC_UnBindVpss(VencGrp, VpssGrp, VpssChn);
         SAMPLE_COMM_VENC_Stop(VencGrp,VencChn);
@@ -214,7 +172,7 @@ END_VENC_8D1_3:
 END_VENC_8D1_2:	//vpss stop
     SAMPLE_COMM_VPSS_Stop(s32VpssGrpCnt, VPSS_MAX_CHN_NUM);
 END_VENC_8D1_1:	//vi stop
-    SAMPLE_COMM_VI_Stop(enViMode);
+    SAMPLE_COMM_VI_Stop();
 END_VENC_8D1_0:	//system exit
     SAMPLE_COMM_SYS_Exit();
 
@@ -235,9 +193,3 @@ int main() {
 
     exit(s32Ret);
 }
-
-#ifdef __cplusplus
-#if __cplusplus
-}
-#endif
-#endif /* End of #ifdef __cplusplus */

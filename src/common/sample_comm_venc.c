@@ -28,6 +28,7 @@ extern "C"{
 #include <signal.h>
 
 #include "sample_comm.h"
+#include "nvp6134/ad_cfg.h"
  
 const HI_U8 g_SOI[2] = {0xFF, 0xD8};
 const HI_U8 g_EOI[2] = {0xFF, 0xD9};
@@ -200,7 +201,6 @@ HI_S32 SAMPLE_COMM_VENC_SaveH264(FILE* fpH264File, VENC_STREAM_S *pstStream)
 {
     HI_S32 i;
 
-    
     for (i = 0; i < pstStream->u32PackCount; i++)
     {
         fwrite(pstStream->pstPack[i].pu8Addr[0],
@@ -289,8 +289,7 @@ HI_S32 SAMPLE_COMM_VENC_SaveStream(PAYLOAD_TYPE_E enType,FILE *pFd, VENC_STREAM_
 
 static VB_POOL g_VbPool[8] = {0};
 
-HI_S32 SAMPLE_WISDOM_VENC_Creat_VBPool(VENC_CHN VencChn,
-            SIZE_S stPicSize)
+HI_S32 SAMPLE_WISDOM_VENC_Creat_VBPool(VENC_CHN VencChn, SIZE_S stPicSize)
 {
     VB_POOL VbPool;
     HI_U32 u32BlkSize = (stPicSize.u32Height) * (stPicSize.u32Width) * 2;
@@ -348,7 +347,7 @@ HI_S32 SAMPLE_WISDOM_VENC_Destory_VBPool(VENC_CHN VencChn)
 * funciton : Start venc stream mode (h264, mjpeg)
 * note      : rate control parameter need adjust, according your case.
 ******************************************************************************/
-HI_S32 SAMPLE_COMM_VENC_Start(VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E enType, VIDEO_NORM_E enNorm, PIC_SIZE_E enSize, SAMPLE_RC_E enRcMode)
+HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencChn, PAYLOAD_TYPE_E enType, SAMPLE_RC_E enRcMode)
 {
     HI_S32 s32Ret;
     VENC_CHN_ATTR_S stVencChnAttr;
@@ -356,17 +355,11 @@ HI_S32 SAMPLE_COMM_VENC_Start(VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E 
     VENC_ATTR_H264_CBR_S    stH264Cbr;
     VENC_ATTR_H264_VBR_S    stH264Vbr;
     VENC_ATTR_H264_FIXQP_S  stH264FixQp;
-    VENC_ATTR_MJPEG_S stMjpegAttr;
-    VENC_ATTR_MJPEG_FIXQP_S stMjpegeFixQp;
-    VENC_ATTR_JPEG_S stJpegAttr;
-    SIZE_S stPicSize;
+    const struct ChannelInfo* chI = getChannelInfo(Vpssgrp);
+    const SIZE_S *stPicSize = &(chI->stPicSize);
+    VIDEO_NORM_E enNorm = chI->norm;
+    PIC_SIZE_E enSize = chI->sizeType;
 
-    s32Ret = SAMPLE_COMM_SYS_GetPicSize(enNorm, enSize, &stPicSize);
-     if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("Get picture size failed!\n");
-        return HI_FAILURE;
-    }
     /******************************************
      step 1: Greate Venc Group
     ******************************************/
@@ -386,12 +379,11 @@ HI_S32 SAMPLE_COMM_VENC_Start(VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E 
     {
         case PT_H264:
         {
-        // TODO / 2 ????
-            stH264Attr.u32MaxPicWidth = stPicSize.u32Width / 2;
-            stH264Attr.u32MaxPicHeight = stPicSize.u32Height;
-            stH264Attr.u32PicWidth = stPicSize.u32Width  / 2;/*the picture width*/
-            stH264Attr.u32PicHeight = stPicSize.u32Height;/*the picture height*/
-            stH264Attr.u32BufSize  = stPicSize.u32Width * stPicSize.u32Height * 2;/*stream buffer size*/
+            stH264Attr.u32MaxPicWidth = stPicSize->u32Width;
+            stH264Attr.u32MaxPicHeight = stPicSize->u32Height;
+            stH264Attr.u32PicWidth = stPicSize->u32Width;/*the picture width*/
+            stH264Attr.u32PicHeight = stPicSize->u32Height;/*the picture height*/
+            stH264Attr.u32BufSize  = stPicSize->u32Width * stPicSize->u32Height * 2;/*stream buffer size*/
             stH264Attr.u32Profile  = 0;/*0: baseline; 1:MP; 2:HP   ? */
             stH264Attr.bByFrame = HI_TRUE;/*get stream mode is slice mode or frame mode?*/
             stH264Attr.bField = HI_FALSE;  /* surpport frame code only for hi3516, bfield = HI_FALSE */
@@ -403,10 +395,10 @@ HI_S32 SAMPLE_COMM_VENC_Start(VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E 
             if(SAMPLE_RC_CBR == enRcMode)
             {
                 stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
-                stH264Cbr.u32Gop            = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
+                stH264Cbr.u32Gop            = (VIDEO_ENCODING_MODE_PAL== enNorm) ? 25 : 30;
                 stH264Cbr.u32StatTime       = 1; /* stream rate statics time(s) */
-                stH264Cbr.u32ViFrmRate      = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;/* input (vi) frame rate */
-                stH264Cbr.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;/* target frame rate */
+                stH264Cbr.u32ViFrmRate      = (VIDEO_ENCODING_MODE_PAL== enNorm) ? 25 : 30;/* input (vi) frame rate */
+                stH264Cbr.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm) ? 25 : 30;/* target frame rate */
                 switch (enSize)
                 {
                   case PIC_QCIF:
@@ -487,109 +479,6 @@ HI_S32 SAMPLE_COMM_VENC_Start(VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E 
         }
         break;
         
-        case PT_MJPEG:
-        {
-            stMjpegAttr.u32MaxPicWidth = stPicSize.u32Width;
-            stMjpegAttr.u32MaxPicHeight = stPicSize.u32Height;
-            stMjpegAttr.u32PicWidth = stPicSize.u32Width;
-            stMjpegAttr.u32PicHeight = stPicSize.u32Height;
-            stMjpegAttr.u32BufSize = stPicSize.u32Width * stPicSize.u32Height * 2;
-            stMjpegAttr.bByFrame = HI_TRUE;  /*get stream mode is field mode  or frame mode*/
-            stMjpegAttr.bMainStream = HI_TRUE;  /*main stream or minor stream types?*/
-            stMjpegAttr.bVIField = HI_FALSE;  /*the sign of the VI picture is field or frame?*/
-            stMjpegAttr.u32Priority = 0;/*channels precedence level*/
-            memcpy(&stVencChnAttr.stVeAttr.stAttrMjpeg, &stMjpegAttr, sizeof(VENC_ATTR_MJPEG_S));
-
-            if(SAMPLE_RC_FIXQP == enRcMode)
-            {
-                stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_MJPEGFIXQP;
-                stMjpegeFixQp.u32Qfactor        = 90;
-                stMjpegeFixQp.u32ViFrmRate      = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stMjpegeFixQp.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                memcpy(&stVencChnAttr.stRcAttr.stAttrMjpegeFixQp, &stMjpegeFixQp,
-                       sizeof(VENC_ATTR_MJPEG_FIXQP_S));
-            }
-            else if (SAMPLE_RC_CBR == enRcMode)
-            {
-                stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_MJPEGCBR;
-                stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32StatTime       = 1;
-                stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32ViFrmRate      = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stVencChnAttr.stRcAttr.stAttrMjpegeCbr.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32FluctuateLevel = 0;
-                switch (enSize)
-                {
-                  case PIC_QCIF:
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32BitRate = 384*3; /* average bit rate */
-                	   break;
-                  case PIC_QVGA:    /* 320 * 240 */
-                  case PIC_CIF:
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32BitRate = 768*3;
-                       break;
-                  case PIC_D1:
-                  case PIC_VGA:	   /* 640 * 480 */
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32BitRate = 1024*3*3;
-                       break;
-                  case PIC_HD720:   /* 1280 * 720 */
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32BitRate = 1024*5*3;
-                	   break;
-                  case PIC_HD1080:  /* 1920 * 1080 */
-                  	   stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32BitRate = 1024*10*3;
-                	   break;
-                  default :
-                       stVencChnAttr.stRcAttr.stAttrMjpegeCbr.u32BitRate = 1024*7*3;
-                       break;
-                }
-            }
-            else if (SAMPLE_RC_VBR == enRcMode) 
-            {
-                stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_MJPEGVBR;
-                stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32StatTime = 1;
-                stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32ViFrmRate = (VIDEO_ENCODING_MODE_PAL == enNorm)?25:30;
-                stVencChnAttr.stRcAttr.stAttrMjpegeVbr.fr32TargetFrmRate = 5;
-                stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MinQfactor = 50;
-                stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxQfactor = 95;
-                switch (enSize)
-                {
-                  case PIC_QCIF:
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxBitRate= 256*3; /* average bit rate */
-                	   break;
-                  case PIC_QVGA:    /* 320 * 240 */
-                  case PIC_CIF:
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxBitRate = 512*3;
-                       break;
-                  case PIC_D1:
-                  case PIC_VGA:	   /* 640 * 480 */
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxBitRate = 1024*2*3;
-                       break;
-                  case PIC_HD720:   /* 1280 * 720 */
-                	   stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxBitRate = 1024*3*3;
-                	   break;
-                  case PIC_HD1080:  /* 1920 * 1080 */
-                  	   stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxBitRate = 1024*6*3;
-                	   break;
-                  default :
-                       stVencChnAttr.stRcAttr.stAttrMjpegeVbr.u32MaxBitRate = 1024*4*3;
-                       break;
-                }
-            }
-            else 
-            {
-                SAMPLE_PRT("cann't support other mode in this version!\n");
-
-                return HI_FAILURE;
-            }
-        }
-        break;
-            
-        case PT_JPEG:
-            stJpegAttr.u32PicWidth  = stPicSize.u32Width;
-            stJpegAttr.u32PicHeight = stPicSize.u32Height;
-            stJpegAttr.u32BufSize = stPicSize.u32Width * stPicSize.u32Height * 2;
-            stJpegAttr.bByFrame = HI_TRUE;/*get stream mode is field mode  or frame mode*/
-            stJpegAttr.bVIField = HI_FALSE;/*the sign of the VI picture is field or frame?*/
-            stJpegAttr.u32Priority = 0;/*channels precedence level*/
-            memcpy(&stVencChnAttr.stVeAttr.stAttrMjpeg, &stMjpegAttr, sizeof(VENC_ATTR_MJPEG_S));
-            break;
         default:
             return HI_ERR_VENC_NOT_SUPPORT;
     }
@@ -602,7 +491,7 @@ HI_S32 SAMPLE_COMM_VENC_Start(VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E 
         return s32Ret;
     }
 
-    s32Ret = SAMPLE_WISDOM_VENC_Creat_VBPool(VencChn, stPicSize);
+    s32Ret = SAMPLE_WISDOM_VENC_Creat_VBPool(VencChn, *stPicSize);
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("SAMPLE_WISDOM_VENC_Creat_VBPool [%d] faild with %#x!\n",\

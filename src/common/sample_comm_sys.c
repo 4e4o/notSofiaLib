@@ -27,14 +27,13 @@ extern "C"{
 #include <signal.h>
 
 #include "sample_comm.h"
+#include "nvp6134/ad_cfg.h"
 
 /******************************************************************************
 * function : get picture size(w*h), according Norm and enPicSize
 ******************************************************************************/
-HI_S32 SAMPLE_COMM_SYS_GetPicSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, SIZE_S *pstSize)
-{
-    switch (enPicSize)
-    {
+HI_S32 SAMPLE_COMM_SYS_GetPicSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, SIZE_S *pstSize) {
+    switch (enPicSize) {
         case PIC_QCIF:
             pstSize->u32Width = D1_WIDTH / 4;
             pstSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?144:120;
@@ -145,6 +144,27 @@ HI_U32 SAMPLE_COMM_SYS_CalcPicVbBlkSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSiz
     return (CEILING_2_POWER(stSize.u32Width, u32AlignWidth) * \
             CEILING_2_POWER(stSize.u32Height,u32AlignWidth) * \
            ((PIXEL_FORMAT_YUV_SEMIPLANAR_422 == enPixFmt)?2:1.5));
+}
+
+HI_U32 MaxPicVbBlkSize(PIXEL_FORMAT_E enPixFmt, HI_U32 u32AlignWidth) {
+    int ch = 0;
+    HI_U32 result = 0;
+    HI_U32 tmp = 0;
+    const struct ChannelInfo* inf;
+
+    for (; ch < 4 ; ch++) {
+        inf = getChannelInfo(ch);
+
+        if (inf == NULL)
+            continue;
+
+        tmp = SAMPLE_COMM_SYS_CalcPicVbBlkSize(inf->norm, inf->sizeType, enPixFmt, u32AlignWidth);
+
+        if (result < tmp)
+            result = tmp;
+    }
+
+    return result;
 }
 
 /******************************************************************************
