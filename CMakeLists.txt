@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(${PROJECT_NAME} "")
 
-set(HI_SDK_PATH "/home/computer/workspace/info/manuals/hisilicon_dvr/hisilicon_sdk/Hi3520D_SDK_V1.0.5.1")
+set(HI_SDK_PATH "/mnt/disk2/workspace/devices/mars/dvr/hisilicon_sdk_and_tools/Hi3520D_SDK_V1.0.5.1")
 set(NVP6134_PATH "${HI_SDK_PATH}/../NVP6134C/02_SDK/")
 
 set(HI_SDK_INCLUDE "${HI_SDK_PATH}/mpp/include")
