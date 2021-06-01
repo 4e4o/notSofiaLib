@@ -1,16 +1,3 @@
-/******************************************************************************
-  Some simple Hisilicon Hi3531 system functions.
-
-  Copyright (C), 2010-2011, Hisilicon Tech. Co., Ltd.
- ******************************************************************************
-    Modification:  2011-2 Created
-******************************************************************************/
-#ifdef __cplusplus
-#if __cplusplus
-extern "C"{
-#endif
-#endif /* End of #ifdef __cplusplus */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -225,9 +212,3 @@ HI_VOID SAMPLE_COMM_SYS_Exit(void)
     HI_MPI_VB_Exit();
     return;
 }
-
-#ifdef __cplusplus
-#if __cplusplus
-}
-#endif
-#endif /* End of #ifdef __cplusplus */

@@ -1,0 +1,4 @@
+gdbserver 127.0.0.1:1234 notSofia
+gdbserver --attach :1234 1635
+ssh -L 127.0.0.1:1234:127.0.0.1:1234 dvr
+ssh -L 127.0.0.1:55400:127.0.0.1:554 dvr

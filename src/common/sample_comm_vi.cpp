@@ -346,14 +346,6 @@ HI_S32 SAMPLE_COMM_VI_Start()
         SAMPLE_PRT("vi get param failed!\n");
         return HI_FAILURE;
     }
-
-    /*** Start AD ***/
-    s32Ret = SAMPLE_WISDOM_VI_ADStart(1);
-    if (HI_SUCCESS !=s32Ret)
-    {
-        SAMPLE_PRT("Start AD failed!\n");
-        return HI_FAILURE;
-    }
     
     /*** Start VI Dev ***/
     for(i=0; i<stViParam.s32ViDevCnt; i++)

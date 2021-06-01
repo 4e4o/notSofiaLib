@@ -1,17 +1,3 @@
-/******************************************************************************
-  Some simple Hisilicon Hi3531 video encode functions.
-
-  Copyright (C), 2010-2011, Hisilicon Tech. Co., Ltd.
- ******************************************************************************
-    Modification:  2011-2 Created
-******************************************************************************/
-
-#ifdef __cplusplus
-#if __cplusplus
-extern "C"{
-#endif
-#endif /* End of #ifdef __cplusplus */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1216,8 +1202,8 @@ HI_S32 SAMPLE_COMM_VENC_PlanToSemi(HI_U8 *pY, HI_S32 yStride,
     HI_S32 s32HafH = picHeight >>1 ;
     HI_S32 s32Size = s32HafW*s32HafH;
         
-    pTmpU = malloc( s32Size ); ptu = pTmpU;
-    pTmpV = malloc( s32Size ); ptv = pTmpV;
+    pTmpU = (HI_U8*) malloc( s32Size ); ptu = pTmpU;
+    pTmpV = (HI_U8*) malloc( s32Size ); ptv = pTmpV;
     
     memcpy(pTmpU,pU,s32Size);
     memcpy(pTmpV,pV,s32Size);
@@ -1240,9 +1226,3 @@ HI_S32 SAMPLE_COMM_VENC_PlanToSemi(HI_U8 *pY, HI_S32 yStride,
     return HI_SUCCESS;
 }
 
-
-#ifdef __cplusplus
-#if __cplusplus
-}
-#endif
-#endif /* End of #ifdef __cplusplus */
