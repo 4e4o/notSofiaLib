@@ -23,7 +23,7 @@ VI_DEV_ATTR_S DEV_ATTR_BT656D1_2MUX = {
     { 0xFF000000, 0x0 },
     VI_SCAN_PROGRESSIVE,
     { -1, -1, -1, -1 },
- //   { 2, 3, 0, 1 },
+    //   { 2, 3, 0, 1 },
     VI_INPUT_DATA_YVYU,
     {
         VI_VSYNC_FIELD, VI_VSYNC_NEG_HIGH, VI_HSYNC_VALID_SINGNAL,
@@ -250,27 +250,24 @@ HI_S32 SAMPLE_COMM_VI_StartChn(int chIndex, VI_CHN ViChn, SAMPLE_VI_CHN_SET_E en
     VI_CHN_BIND_ATTR_S stChnBindAttr;
     const struct ChannelInfo* channelInfo = getChannelInfo(chIndex);
 
-    /*    if ((SAMPLE_VI_MODE_4_720P == enViMode)
-        || (SAMPLE_VI_MODE_4_1080P == enViMode))
-    {*/
-    if(2 == ViChn)
-    {
-        s32Ret = HI_MPI_VI_ChnUnBind(ViChn);
-        if (s32Ret != HI_SUCCESS)
-        {
-            SAMPLE_PRT("HI_MPI_VI_ChnUnBind failed with %#x!\n", s32Ret);
-            return HI_FAILURE;
-        }
+    // TODO
+    // HiMPP Media Processing Software Development Reference.pdf
+    // page 121
+
+    if (chIndex == 0) {
+        stChnBindAttr.ViDev = 0;
+        stChnBindAttr.ViWay = 0;
+    } else if (chIndex == 1) {
         stChnBindAttr.ViDev = 0;
         stChnBindAttr.ViWay = 1;
-        s32Ret = HI_MPI_VI_ChnBind(ViChn, &stChnBindAttr);
-        if (s32Ret != HI_SUCCESS)
-        {
-            SAMPLE_PRT("HI_MPI_VI_ChnBind failed with %#x!\n", s32Ret);
-            return HI_FAILURE;
-        }
+    } else if (chIndex == 2) {
+        stChnBindAttr.ViDev = 1;
+        stChnBindAttr.ViWay = 0;
+    } else if (chIndex == 3) {
+        stChnBindAttr.ViDev = 1;
+        stChnBindAttr.ViWay = 1;
     }
-    else if(6 == ViChn)
+
     {
         s32Ret = HI_MPI_VI_ChnUnBind(ViChn);
         if (s32Ret != HI_SUCCESS)
@@ -278,8 +275,6 @@ HI_S32 SAMPLE_COMM_VI_StartChn(int chIndex, VI_CHN ViChn, SAMPLE_VI_CHN_SET_E en
             SAMPLE_PRT("HI_MPI_VI_ChnUnBind failed with %#x!\n", s32Ret);
             return HI_FAILURE;
         }
-        stChnBindAttr.ViDev = 1;
-        stChnBindAttr.ViWay = 1;
         s32Ret = HI_MPI_VI_ChnBind(ViChn, &stChnBindAttr);
         if (s32Ret != HI_SUCCESS)
         {
@@ -287,7 +282,6 @@ HI_S32 SAMPLE_COMM_VI_StartChn(int chIndex, VI_CHN ViChn, SAMPLE_VI_CHN_SET_E en
             return HI_FAILURE;
         }
     }
-    //	}
 
     /* step  5: config & start vicap dev */
 

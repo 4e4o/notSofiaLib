@@ -126,7 +126,7 @@ static void initPicSize(struct ChannelInfo* chi) {
     }
 }
 
-int fromMPPChannelIndexToNvp(int index) {
+static int fromMPPChannelIndexToNvp(int index) {
     switch(index) {
     case 0:
         return 2;
@@ -174,6 +174,9 @@ void adInit() {
     // mix/не mix исходя из пункта 2.11 страница 25
     // mux/не mux исходя из наличия сигналов
     // а выходной формат какой? в случае с mux+mix
+
+    // TODO HiMPP Media Processing Software Development Reference.pdf
+    // page 121
 
     auto& vo = g_chip->voChannels();
 
