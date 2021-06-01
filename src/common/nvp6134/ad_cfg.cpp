@@ -126,26 +126,13 @@ static void initPicSize(struct ChannelInfo* chi) {
     }
 }
 
-static int fromMPPChannelIndexToNvp(int index) {
-    switch(index) {
-    case 0:
-        return 2;
-    case 1:
-        return 3;
-    case 2:
-        return 0;
-    case 3:
-        return 1;
-    }
-
-    throw std::runtime_error("Invalid mpp channel index");
-}
-
 static ChannelInfo g_channelInfo[4];
 
 const ChannelInfo* getChannelInfo(int ch) {
-    const int chIndex = fromMPPChannelIndexToNvp(ch);
-    return &g_channelInfo[chIndex];
+    if ((ch < 0) || (ch > 4))
+            throw std::runtime_error("Invalid mpp channel index");
+
+    return &g_channelInfo[ch];
 }
 
 void adInit() {
@@ -180,6 +167,11 @@ void adInit() {
 
     auto& vo = g_chip->voChannels();
 
-    vo[0]->setMode(1, NVP6134_OUTMODE_2MUX_MIX);
-    vo[1]->setMode(0, NVP6134_OUTMODE_2MUX_MIX);
+    // для NVP6134_OUTMODE_2MUX_MIX режима chid = номеру пары каналов
+    // 0 - 0,1
+    // !0 - 2,3
+    // это в драйвере так сделано
+    for (int i = 0 ; i < (int) vo.size() ; i++) {
+        vo[i]->setMode(i, NVP6134_OUTMODE_2MUX_MIX);
+    }
 }
