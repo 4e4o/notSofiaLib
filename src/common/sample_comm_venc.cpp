@@ -342,7 +342,7 @@ HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencC
     VENC_ATTR_H264_VBR_S    stH264Vbr;
     VENC_ATTR_H264_FIXQP_S  stH264FixQp;
     const struct ChannelInfo* chI = getChannelInfo(Vpssgrp);
-    const SIZE_S *stPicSize = &(chI->stPicSize);
+    const SIZE_S *stPicSize = &(chI->stVencSize);
     VIDEO_NORM_E enNorm = chI->norm;
     PIC_SIZE_E enSize = chI->sizeType;
 

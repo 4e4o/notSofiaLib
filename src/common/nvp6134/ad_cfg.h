@@ -19,14 +19,18 @@ void adInit();
 
 struct ChannelInfo {
     int hasSignal;
-    VIDEO_NORM_E norm;
-    PIC_SIZE_E sizeType;
+    VIDEO_NORM_E norm;    
     VI_SCAN_MODE_E scanMode;
 
-    SIZE_S stPicSize;
+
+    //TODO УДАЛИТЬ ЭТО, СДЕЛАТЬ ЧТОБ ЮЗАЮЩИЕ ЭТО ЮЗАЛИ stCapRect/stDestSize/stVencSize
+    PIC_SIZE_E sizeType;
+
 
     RECT_S stCapRect;
     SIZE_S stDestSize;
+
+    SIZE_S stVencSize;
 };
 
 const ChannelInfo* getChannelInfo(int ch);

@@ -16,7 +16,7 @@ static enum _nvp6134_vi_mode fmtToNvpMode(ViChannel::TVideoFormat df) {
     switch(df) {
     case ViChannel::DF_CVBS_NTSC:
     case ViChannel::DF_CVBS_PAL:
-        //        return NVP6134_VI_960H;
+//                return NVP6134_VI_720H;
         //        return NVP6134_VI_1280H; // работает !!!
         //                return NVP6134_VI_1440H;
         // TODO
@@ -30,8 +30,13 @@ static enum _nvp6134_vi_mode fmtToNvpMode(ViChannel::TVideoFormat df) {
     }
 }
 
-static HI_S32 SAMPLE_COMM_SYS_GetPicSizeMYs(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, SIZE_S *pstSize)
-{
+static HI_S32 getCaptureRect(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, RECT_S *pstSize) {
+    pstSize->s32X = 0;
+    pstSize->s32Y = 0;
+
+    // TODO return rect based on nvp vi input channel mode (fmtToNvpMode) !!!!
+    // and vdo output mode
+
     switch (enPicSize)
     {
     case PIC_CIF:
@@ -42,7 +47,7 @@ static HI_S32 SAMPLE_COMM_SYS_GetPicSizeMYs(VIDEO_NORM_E enNorm, PIC_SIZE_E enPi
     case PIC_D1:
         //1920x576i(480)
         // TODO fix it !!!!! wtf ????
-        pstSize->u32Width = 1920 / 2 ;//960;//1280;//1920;
+        pstSize->u32Width = 1920;//960;//1280;//1920;
         //  pstSize->u32Width = D1_WIDTH;
         pstSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
         break;
@@ -59,6 +64,62 @@ static HI_S32 SAMPLE_COMM_SYS_GetPicSizeMYs(VIDEO_NORM_E enNorm, PIC_SIZE_E enPi
 }
 
 
+SIZE_S getRealPicFormat(struct ChannelInfo* chi) {
+    SIZE_S stdFormat;
+
+    if (SAMPLE_COMM_SYS_GetPicSize(chi->norm, chi->sizeType, &(stdFormat)) != HI_SUCCESS)
+        throw std::runtime_error("not implemented size type");
+
+    // TODO return format based on nvp x_format mode
+
+    if (stdFormat.u32Width > 960)
+        // and (nvp in 2mux_mix mode)
+    stdFormat.u32Width = 960;
+
+    return stdFormat;
+}
+
+static void setMPPDestForHi3520d(struct ChannelInfo* chi) {
+    chi->stDestSize.u32Width = chi->stCapRect.u32Width;
+    chi->stDestSize.u32Height = chi->stCapRect.u32Height;
+
+    // HiMPP Media Processing Software Development Reference.pdf
+    // page 136/135
+    // for hi3520d:
+    /** For primary attributes, the width and height
+        in stCapRect are static attributes, and others
+        are dynamic attributes. For secondary
+        attributes, it is meaningless to set stCapRect
+        and control the frame rate. Other attributes
+        are dynamic attributes.
+
+        stCapRect is based on the source picture. The
+        width of stDestSize can be the same as or half
+        of the width of stCapRect. The height of
+        stDestSize must be half of the height of
+        stCapRect in single-field capture mode. In
+        dual-field capture mode, the heights must be
+        the same.
+
+        In interlaced capture mode, s32Y and
+        u32Height must be 4-pixel aligned.
+   */
+
+    // т.е получается stDestSize выставляется в зависимости от хики чипа!
+
+
+    // тут смотрим на формат результирующего изображения
+    // если width влазеет в cap::width/2 то юзаем cap::width/2
+    // если не влазеет то юзаем cap::width
+    // это спец. случай для hi3520d, читай наверху
+
+    HI_U32 halfW = chi->stCapRect.u32Width / 2;
+    SIZE_S fmt = getRealPicFormat(chi);
+
+    if (fmt.u32Width <= halfW)
+        chi->stDestSize.u32Width = halfW;
+}
+
 static PIC_SIZE_E fmtToPicSizeType(enum ViChannel::TVideoFormat df) {
 
     switch(df) {
@@ -72,52 +133,20 @@ static PIC_SIZE_E fmtToPicSizeType(enum ViChannel::TVideoFormat df) {
     }
 }
 
-SIZE_S limitedByHI3520DChSize(SIZE_S s) {
-    SIZE_S res = s;
-
-    if(res.u32Width > 960)
-        res.u32Width = 960;
-
-    return res;
-}
-
 static void initPicSize(struct ChannelInfo* chi) {
-    if (SAMPLE_COMM_SYS_GetPicSizeMYs(chi->norm, chi->sizeType, &(chi->stDestSize)) != HI_SUCCESS) {
+    if (getCaptureRect(chi->norm, chi->sizeType, &(chi->stCapRect)) != HI_SUCCESS) {
         SAMPLE_PRT("1. not implemented size type %i !\n", chi->sizeType);
         return;
     }
 
-    if (SAMPLE_COMM_SYS_GetPicSize(chi->norm, chi->sizeType, &(chi->stPicSize)) != HI_SUCCESS) {
-        SAMPLE_PRT("2. not implemented size type %i !\n", chi->sizeType);
-        return;
-    }
+    setMPPDestForHi3520d(chi);
 
-    chi->stPicSize = limitedByHI3520DChSize(chi->stPicSize);
-
-    // TODO fix it !!!
-    // ну здесь понятно мы ограничиваем макс возможным сайзом
-    /*    if (chi->stDestSize.u32Width > 960) {
-        chi->stDestSize.u32Width = 960;
-    }
-
-    if (chi->stDestSize.u32Height > 1080) {
-        chi->stDestSize.u32Height = 1080;
-    }
-*/
-
-    chi->stCapRect.s32X = 0;
-    chi->stCapRect.s32Y = 0;
-    chi->stCapRect.u32Width = chi->stDestSize.u32Width;
-    chi->stCapRect.u32Height = chi->stDestSize.u32Height;
+    chi->stVencSize = getRealPicFormat(chi);
 
     // здесь тоже всё понятно
-    //
     switch(chi->sizeType) {
     case PIC_D1: {
         chi->scanMode = VI_SCAN_INTERLACED;
-        // TODO whyyyyy????
-        // MPP page 136
-        chi->stCapRect.u32Width *= 2;
         break;
     }
     default: {
@@ -131,7 +160,7 @@ static ChannelInfo g_channelInfo[4];
 
 const ChannelInfo* getChannelInfo(int ch) {
     if ((ch < 0) || (ch > 4))
-            throw std::runtime_error("Invalid mpp channel index");
+        throw std::runtime_error("Invalid mpp channel index");
 
     return &g_channelInfo[ch];
 }
