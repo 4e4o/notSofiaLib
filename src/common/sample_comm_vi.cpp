@@ -25,16 +25,7 @@ VI_DEV_ATTR_S DEV_ATTR_BT656D1_2MUX = {
     { -1, -1, -1, -1 },
     //   { 2, 3, 0, 1 },
     VI_INPUT_DATA_YVYU,
-    {
-        VI_VSYNC_FIELD, VI_VSYNC_NEG_HIGH, VI_HSYNC_VALID_SINGNAL,
-        VI_HSYNC_NEG_HIGH, VI_VSYNC_VALID_SINGAL, VI_VSYNC_VALID_NEG_HIGH,
-
-        {
-            0, 0, 0,
-            0, 0, 0,
-            0, 0, 0
-        }
-    },
+    {},
     VI_PATH_BYPASS,
     VI_DATA_TYPE_YUV,
     HI_TRUE
