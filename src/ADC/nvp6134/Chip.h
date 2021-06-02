@@ -14,6 +14,10 @@ class ViChannel;
 class VoChannel;
 class DriverCommunicator;
 
+// Тут прикольная анимация как работает bt656 от adc к hisilicon'у
+// и вообще принципы описаны
+// https://www.programmersought.com/article/35434438458/
+
 // single nvp6134 chip
 
 class Chip : public IdHolder {
