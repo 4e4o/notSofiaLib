@@ -5,12 +5,16 @@
 
 #include "ChipChild.h"
 #include "Utils/IdHolder.h"
+#include "Utils/Size.h"
 
 namespace nvp6134 {
+
+class VoChannel;
 
 class ViChannel : public ChipChild, public IdHolder {
 public:
     // значения взяты из nvp6134_ex_170306/video.c, см. тело функции nvp6134_vfmt_convert
+    // https://github.com/4e4o/nvp6134_ex_170306/blob/master/video.c#L332
     enum TVideoFormat {
         DF_NOT_DETECTED = 0x00,
 
@@ -64,11 +68,20 @@ public:
     void setMode(NVP6134_VI_MODE m);
 
     TVideoFormat videoFormat() const;
+    TSize captureSize() const;
+    TSize imageSize() const;
+
+    void setOutChannel(VoChannel*);
 
 private:
     void init();
+    TSize modeToSize() const;
+    TSize videoFormatSize() const;
+    bool inXFormatMode() const;
 
     TVideoFormat m_videoFormat;
+    NVP6134_VI_MODE m_mode;
+    VoChannel* m_outChannel;
 };
 
 }

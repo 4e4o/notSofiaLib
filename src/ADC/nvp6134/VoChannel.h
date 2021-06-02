@@ -13,7 +13,15 @@ public:
     VoChannel(Chip*, int id);
     ~VoChannel();
 
+    bool is1MuxMode() const;
+    bool is2MuxMode() const;
+    bool is4MuxMode() const;
+    bool isMixMode() const;
+
     bool setMode(unsigned char chid, NVP6134_OUTMODE_SEL mode);
+
+private:
+    NVP6134_OUTMODE_SEL m_mode;
 };
 
 }
