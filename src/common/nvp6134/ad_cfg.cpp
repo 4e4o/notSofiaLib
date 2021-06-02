@@ -43,12 +43,12 @@ static HI_S32 SAMPLE_COMM_SYS_GetPicSizeMYs(VIDEO_NORM_E enNorm, PIC_SIZE_E enPi
         //1920x576i(480)
         // TODO fix it !!!!! wtf ????
         pstSize->u32Width = 1920 / 2 ;//960;//1280;//1920;
-        pstSize->u32Height = 480;//576;
         //  pstSize->u32Width = D1_WIDTH;
-        //pstSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
+        pstSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
         break;
     case PIC_HD1080:
         // TODO / 2 ???
+        // because nvp works in 2mux_mix + x_format mode
         pstSize->u32Width = 1920  / 2 ;
         pstSize->u32Height = 1080;
         break;
