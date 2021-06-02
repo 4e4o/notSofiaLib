@@ -2,10 +2,10 @@
 #include <stdexcept>
 
 #include "ad_cfg.h"
-#include "nvp6134/DriverCommunicator.h"
-#include "nvp6134/Chip.h"
-#include "nvp6134/ViChannel.h"
-#include "nvp6134/VoChannel.h"
+#include "ADC/nvp6134/DriverCommunicator.h"
+#include "ADC/nvp6134/Chip.h"
+#include "ADC/nvp6134/ViChannel.h"
+#include "ADC/nvp6134/VoChannel.h"
 
 using namespace nvp6134;
 
@@ -116,6 +116,7 @@ static void initPicSize(struct ChannelInfo* chi) {
     case PIC_D1: {
         chi->scanMode = VI_SCAN_INTERLACED;
         // TODO whyyyyy????
+        // MPP page 136
         chi->stCapRect.u32Width *= 2;
         break;
     }
