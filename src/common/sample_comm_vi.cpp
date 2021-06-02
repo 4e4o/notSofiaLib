@@ -17,13 +17,12 @@
 
 #include "sample_comm.h"
 
-VI_DEV_ATTR_S DEV_ATTR_BT656D1_2MUX = {
+static VI_DEV_ATTR_S DEV_ATTR_BT656D1_2MUX = {
     VI_MODE_BT656,
     VI_WORK_MODE_2Multiplex,
     { 0xFF000000, 0x0 },
     VI_SCAN_PROGRESSIVE,
     { -1, -1, -1, -1 },
-    //   { 2, 3, 0, 1 },
     VI_INPUT_DATA_YVYU,
     {},
     VI_PATH_BYPASS,
