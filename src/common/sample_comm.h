@@ -152,7 +152,6 @@ typedef struct sample_venc_getstream_s
 /*******************************************************
     function announce  
 *******************************************************/
-HI_S32 SAMPLE_COMM_SYS_GetPicSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, SIZE_S *pstSize);
 
 HI_U32 MaxPicVbBlkSize(PIXEL_FORMAT_E enPixFmt, HI_U32 u32AlignWidth);
 

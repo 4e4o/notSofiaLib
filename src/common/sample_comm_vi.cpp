@@ -88,77 +88,7 @@ HI_S32 SAMPLE_COMM_VI_Mode2Param(SAMPLE_VI_PARAM_S *pstViParam) {
     return HI_SUCCESS;
 }
 
-/*****************************************************************************
-* function : get vi parameter, according to vi type
-*****************************************************************************/
-/*HI_S32 SAMPLE_COMM_VI_Mode2Size(SAMPLE_VI_MODE_E enViMode, VIDEO_NORM_E enNorm, RECT_S *pstCapRect, SIZE_S *pstDestSize)
-{
-    pstCapRect->s32X = 0;
-    pstCapRect->s32Y = 0;
-    switch (enViMode)
-    {
-    case SAMPLE_VI_MODE_1_D1:
-    case SAMPLE_VI_MODE_16_D1:
-    case SAMPLE_VI_MODE_8_D1:
-        pstDestSize->u32Width = D1_WIDTH;
-        pstDestSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        pstCapRect->u32Width = D1_WIDTH;
-        pstCapRect->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        break;
-    case SAMPLE_VI_MODE_16_960H:
-        pstDestSize->u32Width = 960;
-        pstDestSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        pstCapRect->u32Width = 960;
-        pstCapRect->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        break;
-    case SAMPLE_VI_MODE_4_720P:
-    case SAMPLE_VI_MODE_1_720P:
-        pstDestSize->u32Width = 1280;
-        pstDestSize->u32Height = 720;
-        pstCapRect->u32Width = 1280;
-        pstCapRect->u32Height = 720;
-        break;
-    case SAMPLE_VI_MODE_4_1080P:
-    case SAMPLE_VI_MODE_1_1080P:
-        pstDestSize->u32Width = 1920 / 2;
-        pstDestSize->u32Height = 1080;
-        pstCapRect->u32Width = 1920 / 2;
-        pstCapRect->u32Height = 1080;
-        break;
-        /*For Hi3521*/
-/*   case SAMPLE_VI_MODE_16_2Cif:
-        pstDestSize->u32Width = D1_WIDTH / 2;
-        pstDestSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        pstCapRect->u32Width = D1_WIDTH;
-        pstCapRect->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        break;
-        /*For Hi3520A*/
-/* case SAMPLE_VI_MODE_16_Cif:
-        pstDestSize->u32Width = D1_WIDTH /2 ;
-        pstDestSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?288:240;
-        pstCapRect->u32Width = D1_WIDTH;
-        pstCapRect->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        break;
-    case SAMPLE_VI_MODE_4_D1:
-        pstDestSize->u32Width = D1_WIDTH;
-        pstDestSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        pstCapRect->u32Width = D1_WIDTH;
-        pstCapRect->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        break;
-    case SAMPLE_VI_MODE_8_2Cif:
-        pstDestSize->u32Width = D1_WIDTH / 2;
-        pstDestSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        pstCapRect->u32Width = D1_WIDTH;
-        pstCapRect->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-        break;
-    default:
-        SAMPLE_PRT("vi mode invaild!\n");
-        return HI_FAILURE;
-    }
-    
-    return HI_SUCCESS;
-}
-*/
+
 HI_S32 SAMPLE_COMM_VI_GetSubChnSize(VI_CHN ViChn_Sub, VIDEO_NORM_E enNorm, SIZE_S *pstSize)
 {
     VI_CHN ViChn;
