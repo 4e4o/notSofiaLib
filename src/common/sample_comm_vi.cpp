@@ -342,6 +342,12 @@ HI_S32 SAMPLE_COMM_VI_Start()
             return HI_FAILURE;
         }
     }
+
+    // TODO
+    // id каналов фиксированы и зависят от хики чипа И режима его работы!
+    // в нашем случае 4channel 720p режим для hi3520d v200
+    // Hi3520D／Hi3515A／Hi3515C H.264 CODEC Processor Data Sheet.pdf
+    // page 616
     
     /*** Start VI Chn ***/
     for(i=0; i<stViParam.s32ViChnCnt; i++)
