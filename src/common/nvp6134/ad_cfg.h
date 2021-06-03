@@ -15,7 +15,13 @@
  */
 
 
-void adInit();
+namespace boards {
+namespace lm7004v3 {
+class Lm7004v3Board;
+}
+}
+
+void initAdCompatLayer(boards::lm7004v3::Lm7004v3Board *);
 
 struct ChannelInfo {
     int hasSignal;

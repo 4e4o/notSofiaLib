@@ -3,27 +3,32 @@
 
 #include <memory>
 
-#include "Boards/ABoard.h"
+#include "Boards/nvp6134/Board.h"
 
 namespace nvp6134 {
 class Chip;
 class DriverCommunicator;
 }
 
+namespace hisilicon {
+namespace mpp {
+class MPP;
+}
+}
+
 namespace boards {
 namespace lm7004v3 {
 
-class Lm7004v3Board : public ABoard {
+class Lm7004v3Board : public boards::nvp6134::BoardWithNvp6134 {
 public:
     Lm7004v3Board();
 
     bool configure();
-    ::nvp6134::Chip* nvp() const;
 
 private:
+    ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i);
 
-    std::unique_ptr<nvp6134::DriverCommunicator> m_nvpDriver;
-    std::unique_ptr<nvp6134::Chip> m_nvpChip;
+    std::unique_ptr<hisilicon::mpp::MPP> m_mpp;
 };
 
 }

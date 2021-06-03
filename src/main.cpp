@@ -6,31 +6,16 @@
 #include <signal.h>
 
 #include "sample_comm.h"
+
+#include "Boards/7004_lm_v3/lm7004v3.h"
 #include "nvp6134/ad_cfg.h"
 
-void SAMPLE_VENC_HandleSig(HI_S32 signo) {
-    if (SIGINT == signo || SIGTSTP == signo) {
-        SAMPLE_COMM_SYS_Exit();
-        printf("\033[0;31mprogram termination abnormally!\033[0;39m\n");
-    }
-
-    exit(-1);
-}
-
-void SAMPLE_VENC_StreamHandleSig(HI_S32 signo) {
-    if (SIGINT == signo || SIGTSTP == signo) {
-        SAMPLE_COMM_SYS_Exit();
-        printf("\033[0;31mprogram exit abnormally!\033[0;39m\n");
-    }
-
-    exit(0);
-}
 
 HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     HI_U32 u32ViChnCnt = 4;
     HI_S32 s32VpssGrpCnt = 4;
     PAYLOAD_TYPE_E enPayLoad[2]= {PT_H264, PT_H264};
-    VB_CONF_S stVbConf;
+  //  VB_CONF_S stVbConf;
     VPSS_GRP VpssGrp;
     VPSS_CHN VpssChn;
     VENC_GRP VencGrp;
@@ -38,39 +23,6 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     SAMPLE_RC_E enRcMode = SAMPLE_RC_CBR;
     HI_S32 i;
     HI_S32 s32Ret = HI_SUCCESS;
-    HI_U32 u32BlkSize;
-
-    adInit();
-
-    /******************************************
-     step  1: init variable
-    ******************************************/
-    memset(&stVbConf,0,sizeof(VB_CONF_S));
-
-    u32BlkSize = MaxPicVbBlkSize(SAMPLE_PIXEL_FORMAT, SAMPLE_SYS_ALIGN_WIDTH);
-
-    stVbConf.u32MaxPoolCnt = 128;
-
-    stVbConf.astCommPool[0].u32BlkSize = u32BlkSize;
-    stVbConf.astCommPool[0].u32BlkCnt = u32ViChnCnt * 6;
-    memset(stVbConf.astCommPool[0].acMmzName,0,
-        sizeof(stVbConf.astCommPool[0].acMmzName));
-
-    /* hist buf*/
-    stVbConf.astCommPool[1].u32BlkSize = (196*4);
-    stVbConf.astCommPool[1].u32BlkCnt = u32ViChnCnt * 6;
-    memset(stVbConf.astCommPool[1].acMmzName,0,
-        sizeof(stVbConf.astCommPool[1].acMmzName));
-
-    /******************************************
-     step 2: mpp system init.
-    ******************************************/
-    s32Ret = SAMPLE_COMM_SYS_Init(&stVbConf);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("system init failed with %d!\n", s32Ret);
-        goto END_VENC_8D1_0;
-    }
 
     /******************************************
      step 3: start vi dev & chn to capture
@@ -174,18 +126,20 @@ END_VENC_8D1_2:	//vpss stop
 END_VENC_8D1_1:	//vi stop
     SAMPLE_COMM_VI_Stop();
 END_VENC_8D1_0:	//system exit
-    SAMPLE_COMM_SYS_Exit();
 
     return s32Ret;
 }
 
 int main() {
-    HI_S32 s32Ret;
+    boards::lm7004v3::Lm7004v3Board* board;
 
-    signal(SIGINT, SAMPLE_VENC_HandleSig);
-    signal(SIGTERM, SAMPLE_VENC_HandleSig);
+    board = new boards::lm7004v3::Lm7004v3Board();
+    board->configure();
 
-    s32Ret = SAMPLE_VENC_4D1_H264();
+    // это временное явление
+    initAdCompatLayer(board);
+
+    HI_S32 s32Ret = SAMPLE_VENC_4D1_H264();
     if (HI_SUCCESS == s32Ret)
         printf("program exit normally!\n");
     else

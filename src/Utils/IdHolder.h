@@ -1,15 +1,15 @@
 #ifndef ID_HOLDER_H
 #define ID_HOLDER_H
 
-class IdHolder {
+#include "Holder.h"
+
+class IdHolder : public Holder<int> {
 public:
-    IdHolder(int id);
+    IdHolder(int id) : Holder<int>(id) { }
 
-    int id() const;
-
-private:
-
-    int m_id;
+    int id() const {
+        return Holder<int>::value();
+    }
 };
 
 #endif // ID_HOLDER_H

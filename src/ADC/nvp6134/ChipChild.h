@@ -1,19 +1,14 @@
 #ifndef CHIP_CHILD_H
 #define CHIP_CHILD_H
 
+#include "Utils/Child.h"
+#include "Chip.h"
+
 namespace nvp6134 {
 
-class Chip;
-
-class ChipChild {
+class ChipChild : public Child<Chip> {
 public:
-    ChipChild(Chip* parent);
-    ~ChipChild();
-
-    Chip* parent() const;
-
-private:
-    Chip *m_parent;
+    ChipChild(Chip* c) : Child<Chip>(c) { }
 };
 
 }

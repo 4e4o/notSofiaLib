@@ -98,33 +98,26 @@ const ChannelInfo* getChannelInfo(int ch) {
     return &g_channelInfo[ch];
 }
 
-static boards::lm7004v3::Lm7004v3Board* g_board;
+void initAdCompatLayer(boards::lm7004v3::Lm7004v3Board *board) {
+    auto& c = board->nvp()->viChannels();
 
-void adInit() {
-    g_board = new boards::lm7004v3::Lm7004v3Board();
-    g_board->configure();
-
-    {
-        auto& c = g_board->nvp()->viChannels();
-
-        for (int i = 0 ; i < (int) c.size() ; i++) {
-            if (c[i]->videoFormat() == ViChannel::DF_NOT_DETECTED) {
-                g_channelInfo[i].hasSignal = 0;
-                g_channelInfo[i].norm = VIDEO_ENCODING_MODE_NTSC;
-                g_channelInfo[i].scanMode = VI_SCAN_PROGRESSIVE;
-                g_channelInfo[i].sizeType = PIC_CIF;
-                g_channelInfo[i].stCapRect.s32X = g_channelInfo[i].stCapRect.s32Y = 0;
-                g_channelInfo[i].stCapRect.u32Width = D1_WIDTH / 2;
-                g_channelInfo[i].stCapRect.u32Height = 240;
-                g_channelInfo[i].stDestSize.u32Height = g_channelInfo[i].stCapRect.u32Height;
-                g_channelInfo[i].stDestSize.u32Width = g_channelInfo[i].stCapRect.u32Width;
-                g_channelInfo[i].stVencSize = g_channelInfo[i].stDestSize;
-            } else {
-                g_channelInfo[i].hasSignal = 1;
-                g_channelInfo[i].norm = c[i]->pal() ? VIDEO_ENCODING_MODE_PAL : VIDEO_ENCODING_MODE_NTSC;
-                g_channelInfo[i].sizeType = fmtToPicSizeType(c[i]->videoFormat());
-                initPicSize(c[i].get(), &g_channelInfo[i]);
-            }
+    for (int i = 0 ; i < (int) c.size() ; i++) {
+        if (!c[i]->formatDetected()) {
+            g_channelInfo[i].hasSignal = 0;
+            g_channelInfo[i].norm = VIDEO_ENCODING_MODE_NTSC;
+            g_channelInfo[i].scanMode = VI_SCAN_PROGRESSIVE;
+            g_channelInfo[i].sizeType = PIC_CIF;
+            g_channelInfo[i].stCapRect.s32X = g_channelInfo[i].stCapRect.s32Y = 0;
+            g_channelInfo[i].stCapRect.u32Width = D1_WIDTH / 2;
+            g_channelInfo[i].stCapRect.u32Height = 240;
+            g_channelInfo[i].stDestSize.u32Height = g_channelInfo[i].stCapRect.u32Height;
+            g_channelInfo[i].stDestSize.u32Width = g_channelInfo[i].stCapRect.u32Width;
+            g_channelInfo[i].stVencSize = g_channelInfo[i].stDestSize;
+        } else {
+            g_channelInfo[i].hasSignal = 1;
+            g_channelInfo[i].norm = c[i]->pal() ? VIDEO_ENCODING_MODE_PAL : VIDEO_ENCODING_MODE_NTSC;
+            g_channelInfo[i].sizeType = fmtToPicSizeType(c[i]->videoFormat());
+            initPicSize(c[i].get(), &g_channelInfo[i]);
         }
     }
 }

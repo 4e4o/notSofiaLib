@@ -60,6 +60,10 @@ public:
         DF_3M_EXT_NRT_18P = 0x93
     };
 
+    enum class OutPixelFormat {
+        YUV_422
+    };
+
     ViChannel(Chip*, int id);
     ~ViChannel();
 
@@ -67,6 +71,9 @@ public:
 
     void setMode(NVP6134_VI_MODE m);
 
+    bool formatDetected() const;
+
+    OutPixelFormat pixelFormat() const;
     TVideoFormat videoFormat() const;
     TSize captureSize() const;
     TSize imageSize() const;

@@ -45,7 +45,7 @@ extern "C"{
 *******************************************************/
 #define ALIGN_BACK(x, a)              ((a) * (((x) / (a))))
 #define SAMPLE_SYS_ALIGN_WIDTH      64
-#define SAMPLE_PIXEL_FORMAT         PIXEL_FORMAT_YUV_SEMIPLANAR_420
+#define SAMPLE_PIXEL_FORMAT         PIXEL_FORMAT_YUV_SEMIPLANAR_422
 #define SAMPLE_COMM_VI_GetSubChn(x) x+16
 
 #define D1_WIDTH 704

@@ -39,6 +39,11 @@ void ViChannel::init() {
     m_videoFormat = static_cast<TVideoFormat>(fmt->getvideofmt);
 }
 
+// По даташиту nvp6134 поддерживает только 4:2:2 yuv
+ViChannel::OutPixelFormat ViChannel::pixelFormat() const {
+    return OutPixelFormat::YUV_422;
+}
+
 ViChannel::TVideoFormat ViChannel::videoFormat() const {
     return m_videoFormat;
 }
@@ -169,6 +174,10 @@ bool ViChannel::pal() const{
 void ViChannel::setMode(NVP6134_VI_MODE m) {
     m_mode = m;
     parent()->driver()->setViChannelMode(this, pal(), m);
+}
+
+bool ViChannel::formatDetected() const {
+    return m_videoFormat != DF_NOT_DETECTED;
 }
 
 }
