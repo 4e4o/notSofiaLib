@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <hi_comm_video.h>
+#include <hi_comm_vi.h>
 
 #include "Utils/IdHolder.h"
 #include "Utils/Size.h"
@@ -27,7 +28,15 @@ public:
     TSize capSize() const;
     void setCapSize(const TSize &capSize);
 
+    VI_SCAN_MODE_E scanMode() const;
+    void setScanMode(const VI_SCAN_MODE_E &scanMode);
+
+    bool pal() const;
+    void setPal(bool pal);
+
 private:
+    bool m_pal;
+    VI_SCAN_MODE_E m_scanMode;
     PIXEL_FORMAT_E m_pixelFormat;
     TSize m_imgSize;
     TSize m_capSize;

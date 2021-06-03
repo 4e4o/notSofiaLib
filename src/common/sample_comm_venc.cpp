@@ -16,6 +16,8 @@
 #include "sample_comm.h"
 #include "nvp6134/ad_cfg.h"
  
+#include "Hisilicon/MPP/Vi/ViChannel.h"
+
 const HI_U8 g_SOI[2] = {0xFF, 0xD8};
 const HI_U8 g_EOI[2] = {0xFF, 0xD9};
 static pthread_t gs_VencPid;
@@ -221,8 +223,9 @@ HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencC
     VENC_ATTR_H264_VBR_S    stH264Vbr;
     VENC_ATTR_H264_FIXQP_S  stH264FixQp;
     const struct ChannelInfo* chI = getChannelInfo(Vpssgrp);
-    const SIZE_S *stPicSize = &(chI->stVencSize);
-    VIDEO_NORM_E enNorm = chI->norm;
+    hisilicon::mpp::ViChannel* ccc = getViChannel(Vpssgrp);
+    const SIZE_S stPicSize = ccc->imgSize();
+    VIDEO_NORM_E enNorm = ccc->pal() ? VIDEO_ENCODING_MODE_PAL : VIDEO_ENCODING_MODE_NTSC;
     PIC_SIZE_E enSize = chI->sizeType;
 
     /******************************************
@@ -244,11 +247,11 @@ HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencC
     {
         case PT_H264:
         {
-            stH264Attr.u32MaxPicWidth = stPicSize->u32Width;
-            stH264Attr.u32MaxPicHeight = stPicSize->u32Height;
-            stH264Attr.u32PicWidth = stPicSize->u32Width;/*the picture width*/
-            stH264Attr.u32PicHeight = stPicSize->u32Height;/*the picture height*/
-            stH264Attr.u32BufSize  = stPicSize->u32Width * stPicSize->u32Height * 2;/*stream buffer size*/
+            stH264Attr.u32MaxPicWidth = stPicSize.u32Width;
+            stH264Attr.u32MaxPicHeight = stPicSize.u32Height;
+            stH264Attr.u32PicWidth = stPicSize.u32Width;/*the picture width*/
+            stH264Attr.u32PicHeight = stPicSize.u32Height;/*the picture height*/
+            stH264Attr.u32BufSize  = stPicSize.u32Width * stPicSize.u32Height * 2;/*stream buffer size*/
             stH264Attr.u32Profile  = 0;/*0: baseline; 1:MP; 2:HP   ? */
             stH264Attr.bByFrame = HI_TRUE;/*get stream mode is slice mode or frame mode?*/
             stH264Attr.bField = HI_FALSE;  /* surpport frame code only for hi3516, bfield = HI_FALSE */
@@ -356,7 +359,7 @@ HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencC
         return s32Ret;
     }
 
-    s32Ret = SAMPLE_WISDOM_VENC_Creat_VBPool(VencChn, *stPicSize);
+    s32Ret = SAMPLE_WISDOM_VENC_Creat_VBPool(VencChn, stPicSize);
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("SAMPLE_WISDOM_VENC_Creat_VBPool [%d] faild with %#x!\n",\

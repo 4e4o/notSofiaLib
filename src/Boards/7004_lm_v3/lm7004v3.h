@@ -22,8 +22,11 @@ namespace lm7004v3 {
 class Lm7004v3Board : public boards::nvp6134::BoardWithNvp6134 {
 public:
     Lm7004v3Board();
+    ~Lm7004v3Board();
 
     bool configure();
+
+    hisilicon::mpp::MPP* mpp() const;
 
 private:
     ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i);

@@ -1,6 +1,8 @@
 #include "MPP.h"
-#include "Source/ViInfoProvider.h"
+#include "Vi/Source/ViInfoProvider.h"
+#include "Vi/ViSubsystem.h"
 #include "VideoBuffer.h"
+#include "ElementsFactory.h"
 
 #include <stdexcept>
 
@@ -16,7 +18,8 @@ namespace mpp {
 
 MPP::MPP(ViInfoProvider* v)
     : m_sourceViInfo(v),
-      m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN) {
+      m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
+      m_factory(new ElementsFactory()) {
     // TODO remove it
     HI_MPI_SYS_Exit();
 }
@@ -26,9 +29,11 @@ MPP::~MPP() {
 }
 
 bool MPP::configure() {
+    m_vi.reset(m_factory->vi(this));
     // сначала настраиваем видео пул
-    m_videoBuffer.reset(new VideoBuffer(this));
+    m_videoBuffer.reset(m_factory->videoBuffer(this));
     init();
+    m_vi->configure();
     return true;
 }
 
@@ -43,7 +48,15 @@ void MPP::init() {
         throw "HI_MPI_SYS_Init failed";
 }
 
-ViInfoProvider *MPP::viSourceInfo() const {
+ElementsFactory* MPP::factory() const {
+    return m_factory.get();
+}
+
+void MPP::setFactory(ElementsFactory* factory) {
+    m_factory.reset(factory);
+}
+
+ViInfoProvider* MPP::viSourceInfo() const {
     return m_sourceViInfo.get();
 }
 
@@ -62,6 +75,10 @@ void MPP::setSysWidthAlign(HI_U32 sa) {
 
 HI_U32 MPP::sysWidthAlign() const {
     return m_sysWidthAlign;
+}
+
+ViSubsystem* MPP::vi() const {
+    return m_vi.get();
 }
 
 }

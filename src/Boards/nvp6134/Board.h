@@ -16,6 +16,7 @@ namespace nvp6134 {
 class BoardWithNvp6134 : public ABoard {
 public:
     BoardWithNvp6134(int chipCount);
+    ~BoardWithNvp6134();
 
     ::nvp6134::Chip* nvp(int = 0) const;
     int nvpCount() const;

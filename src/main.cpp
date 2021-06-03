@@ -10,12 +10,111 @@
 #include "Boards/7004_lm_v3/lm7004v3.h"
 #include "nvp6134/ad_cfg.h"
 
+HI_S32 SAMPLE_COMM_VI_Mode2Param(SAMPLE_VI_PARAM_S *pstViParam) {
+    pstViParam->s32ViDevCnt = 2;
+    pstViParam->s32ViDevInterval = 1;
+    pstViParam->s32ViChnCnt = 4;
+    pstViParam->s32ViChnInterval = 2;
+
+    return HI_SUCCESS;
+}
+
+HI_S32 SAMPLE_COMM_VI_BindVpss()
+{
+    HI_S32 j, s32Ret;
+    VPSS_GRP VpssGrp;
+    MPP_CHN_S stSrcChn;
+    MPP_CHN_S stDestChn;
+    SAMPLE_VI_PARAM_S stViParam;
+    VI_CHN ViChn;
+
+    s32Ret = SAMPLE_COMM_VI_Mode2Param(&stViParam);
+    if (HI_SUCCESS !=s32Ret)
+    {
+        SAMPLE_PRT("SAMPLE_COMM_VI_Mode2Param failed!\n");
+        return HI_FAILURE;
+    }
+
+    VpssGrp = 0;
+    for (j=0; j<stViParam.s32ViChnCnt; j++)
+    {
+        ViChn = j * stViParam.s32ViChnInterval;
+
+        stSrcChn.enModId = HI_ID_VIU;
+        stSrcChn.s32DevId = 0;
+        stSrcChn.s32ChnId = ViChn;
+
+        stDestChn.enModId = HI_ID_VPSS;
+        stDestChn.s32DevId = VpssGrp;
+        stDestChn.s32ChnId = 0;
+
+        s32Ret = HI_MPI_SYS_Bind(&stSrcChn, &stDestChn);
+        if (s32Ret != HI_SUCCESS)
+        {
+            SAMPLE_PRT("failed with %#x!\n", s32Ret);
+            return HI_FAILURE;
+        }
+
+        VpssGrp ++;
+    }
+    return HI_SUCCESS;
+}
+
+
+/*****************************************************************************
+* function : Vi chn unbind vpss group
+*****************************************************************************/
+HI_S32 SAMPLE_COMM_VI_UnBindVpss()
+{
+    HI_S32 i, j, s32Ret;
+    VPSS_GRP VpssGrp;
+    MPP_CHN_S stSrcChn;
+    MPP_CHN_S stDestChn;
+    SAMPLE_VI_PARAM_S stViParam;
+    VI_DEV ViDev;
+    VI_CHN ViChn;
+
+    s32Ret = SAMPLE_COMM_VI_Mode2Param(&stViParam);
+    if (HI_SUCCESS !=s32Ret)
+    {
+        SAMPLE_PRT("SAMPLE_COMM_VI_Mode2Param failed!\n");
+        return HI_FAILURE;
+    }
+
+    VpssGrp = 0;
+    for (i=0; i<stViParam.s32ViDevCnt; i++)
+    {
+        ViDev = i * stViParam.s32ViDevInterval;
+
+        for (j=0; j<stViParam.s32ViChnCnt; j++)
+        {
+            ViChn = j * stViParam.s32ViChnInterval;
+
+            stSrcChn.enModId = HI_ID_VIU;
+            stSrcChn.s32DevId = ViDev;
+            stSrcChn.s32ChnId = ViChn;
+
+            stDestChn.enModId = HI_ID_VPSS;
+            stDestChn.s32DevId = VpssGrp;
+            stDestChn.s32ChnId = 0;
+
+            s32Ret = HI_MPI_SYS_UnBind(&stSrcChn, &stDestChn);
+            if (s32Ret != HI_SUCCESS)
+            {
+                SAMPLE_PRT("failed with %#x!\n", s32Ret);
+                return HI_FAILURE;
+            }
+
+            VpssGrp ++;
+        }
+    }
+    return HI_SUCCESS;
+}
 
 HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     HI_U32 u32ViChnCnt = 4;
     HI_S32 s32VpssGrpCnt = 4;
     PAYLOAD_TYPE_E enPayLoad[2]= {PT_H264, PT_H264};
-  //  VB_CONF_S stVbConf;
     VPSS_GRP VpssGrp;
     VPSS_CHN VpssChn;
     VENC_GRP VencGrp;
@@ -23,16 +122,6 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     SAMPLE_RC_E enRcMode = SAMPLE_RC_CBR;
     HI_S32 i;
     HI_S32 s32Ret = HI_SUCCESS;
-
-    /******************************************
-     step 3: start vi dev & chn to capture
-    ******************************************/
-    s32Ret = SAMPLE_COMM_VI_Start();
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("start vi failed!\n");
-        goto END_VENC_8D1_0;
-    }
 
     /******************************************
      step 4: start vpss and vi bind vpss
@@ -124,7 +213,6 @@ END_VENC_8D1_3:
 END_VENC_8D1_2:	//vpss stop
     SAMPLE_COMM_VPSS_Stop(s32VpssGrpCnt, VPSS_MAX_CHN_NUM);
 END_VENC_8D1_1:	//vi stop
-    SAMPLE_COMM_VI_Stop();
 END_VENC_8D1_0:	//system exit
 
     return s32Ret;
@@ -144,6 +232,8 @@ int main() {
         printf("program exit normally!\n");
     else
         printf("program exit abnormally!\n");
+
+    delete board;
 
     exit(s32Ret);
 }

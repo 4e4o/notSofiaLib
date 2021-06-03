@@ -24,6 +24,8 @@ public:
     const TViDevicesInfo& devices() const;
     int viChannelsCount() const;
 
+    ViChannelInfo* findChannelInfo(int devId, int chId);
+
 private:
     TViDevicesInfo m_devices;
 };

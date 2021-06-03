@@ -1,6 +1,6 @@
 #include "ViInfoProvider.h"
-#include "Hisilicon/MPP/Source/ViDeviceInfo.h"
-#include "Hisilicon/MPP/Source/ViChannelInfo.h"
+#include "Hisilicon/MPP/Vi/Source/ViDeviceInfo.h"
+#include "Hisilicon/MPP/Vi/Source/ViChannelInfo.h"
 #include "Board.h"
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
@@ -18,6 +18,25 @@ ViInfoNvp6134Provider::ViInfoNvp6134Provider(BoardWithNvp6134 *b) :
     ViInfoProvider(createViInfo(b)) {
 }
 
+static PIXEL_FORMAT_E toMppPixelFormat(ViChannel* ch) {
+    switch(ch->pixelFormat()) {
+    case ViChannel::OutPixelFormat::YUV_422:
+        return PIXEL_FORMAT_YUV_SEMIPLANAR_422;
+        break;
+    default:
+        throw std::runtime_error("Invalid pixel format from nvp");
+    }
+}
+
+static VI_SCAN_MODE_E toMppScanMode(ViChannel* ch) {
+    switch(ch->videoFormat()) {
+    case ViChannel::DF_1080P_NTSC:
+        return VI_SCAN_PROGRESSIVE;
+    default:
+        return VI_SCAN_INTERLACED;
+    }
+}
+
 hisilicon::mpp::ViInfoProvider::TViDevicesInfo ViInfoNvp6134Provider::createViInfo(BoardWithNvp6134* b) {
     hisilicon::mpp::ViInfoProvider::TViDevicesInfo result;
     const int chipsCount = b->nvpCount();
@@ -28,25 +47,32 @@ hisilicon::mpp::ViInfoProvider::TViDevicesInfo ViInfoNvp6134Provider::createViIn
         auto& ch = chip->viChannels();
 
         for (int j = 0 ; j < (int) ch.size() ; j++) {
-            ViChannelInfo* channel = new ViChannelInfo(dev, j);
+            ViChannelInfo* info = new ViChannelInfo(dev, j);
+            auto& channel = ch[j];
 
             if (ch[j]->formatDetected()) {
-                channel->setCapSize(ch[j]->captureSize());
-                channel->setImgSize(ch[j]->imageSize());
+                info->setCapSize(channel->captureSize());
+                info->setImgSize(channel->imageSize());
+                info->setPal(channel->pal());
+                info->setScanMode(toMppScanMode(channel.get()));
+                info->setPixelFormat(toMppPixelFormat(channel.get()));
+            } else {
+                // TODO remove it and don't append channel info
+                // фейковый конфиг чтоб пример пока работал
 
-/*                switch(ch[j]->pixelFormat()) {
-                case ViChannel::OutPixelFormat::YUV_422:
-                    channel->setPixelFormat(PIXEL_FORMAT_YUV_SEMIPLANAR_422);
-                    break;
-                default:
-                    throw std::runtime_error("Invalid pixel format from nvp");
-                }*/
+                TSize size;
+                size.width = 704 / 2;
+                size.height = 240;
+
+                info->setCapSize(size);
+                info->setImgSize(size);
+
+                info->setPal(false);
+                info->setScanMode(VI_SCAN_PROGRESSIVE);
+                info->setPixelFormat(PIXEL_FORMAT_YUV_SEMIPLANAR_422);
             }
 
-            // TODO remove it, uncomment upper code
-            channel->setPixelFormat(PIXEL_FORMAT_YUV_SEMIPLANAR_422);
-
-            dev->addChannel(channel);
+            dev->addChannel(info);
         }
 
         result.push_back(dev);

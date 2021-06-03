@@ -12,6 +12,8 @@ namespace mpp {
 
 class ViInfoProvider;
 class VideoBuffer;
+class ViSubsystem;
+class ElementsFactory;
 
 class MPP : public IConfigurable {
 public:
@@ -25,12 +27,19 @@ public:
 
     bool configure();
 
+    ElementsFactory* factory() const;
+    void setFactory(ElementsFactory* factory);
+
+    ViSubsystem* vi() const;
+
 private:
     void init();
 
     std::unique_ptr<ViInfoProvider> m_sourceViInfo;
     HI_U32 m_sysWidthAlign;
     std::unique_ptr<VideoBuffer> m_videoBuffer;
+    std::unique_ptr<ViSubsystem> m_vi;
+    std::unique_ptr<ElementsFactory> m_factory;
 };
 
 }

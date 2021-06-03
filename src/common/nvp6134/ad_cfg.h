@@ -21,24 +21,23 @@ class Lm7004v3Board;
 }
 }
 
+namespace hisilicon {
+namespace mpp {
+
+class ViChannel;
+
+}
+}
+
 void initAdCompatLayer(boards::lm7004v3::Lm7004v3Board *);
 
 struct ChannelInfo {
-    int hasSignal;
-    VIDEO_NORM_E norm;    
-    VI_SCAN_MODE_E scanMode;
-
-
     //TODO УДАЛИТЬ ЭТО, СДЕЛАТЬ ЧТОБ ЮЗАЮЩИЕ ЭТО ЮЗАЛИ stCapRect/stDestSize/stVencSize
     PIC_SIZE_E sizeType;
-
-
-    RECT_S stCapRect;
-    SIZE_S stDestSize;
-
-    SIZE_S stVencSize;
 };
 
 const ChannelInfo* getChannelInfo(int ch);
+
+hisilicon::mpp::ViChannel* getViChannel(int ch);
 
 #endif // NVP_SAMPLE_DEFS_H

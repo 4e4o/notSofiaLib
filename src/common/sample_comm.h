@@ -152,15 +152,6 @@ typedef struct sample_venc_getstream_s
 /*******************************************************
     function announce  
 *******************************************************/
-
-HI_S32 SAMPLE_COMM_VI_Mode2Param(SAMPLE_VI_PARAM_S *pstViParam);
-HI_S32 SAMPLE_COMM_VI_StartDev(VI_DEV ViDev);
-HI_S32 SAMPLE_COMM_VI_StartChn(int chIndex, VI_CHN ViChn, SAMPLE_VI_CHN_SET_E enViChnSet);
-HI_S32 SAMPLE_COMM_VI_Start();
-HI_S32 SAMPLE_COMM_VI_Stop();
-HI_S32 SAMPLE_COMM_VI_BindVpss();
-HI_S32 SAMPLE_COMM_VI_UnBindVpss();
-HI_S32 SAMPLE_COMM_VI_GetSubChnSize(VI_CHN ViChn_Sub, VIDEO_NORM_E enNorm, SIZE_S *pstSize);
 	
 HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt);
 HI_S32 SAMPLE_COMM_VPSS_Stop(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt) ;

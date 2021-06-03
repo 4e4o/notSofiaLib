@@ -3,23 +3,13 @@
 
 #include <vector>
 
-#include "Utils/IConfigurable.h"
+#include "Utils/AConfigurator.h"
 
 namespace boards {
 
-class ABoard : public IConfigurable {
+class ABoard : public AConfigurator {
 public:
-    ~ABoard();
-
-    bool configure();
-    IConfigurable* item(int = 0) const;
-
-protected:
-    void addItem(IConfigurable*);
-    int itemsCount() const;
-
-private:
-    std::vector<IConfigurable*> m_items;
+    ~ABoard() {}
 };
 
 }
