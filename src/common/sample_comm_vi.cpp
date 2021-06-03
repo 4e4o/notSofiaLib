@@ -88,50 +88,6 @@ HI_S32 SAMPLE_COMM_VI_Mode2Param(SAMPLE_VI_PARAM_S *pstViParam) {
     return HI_SUCCESS;
 }
 
-
-HI_S32 SAMPLE_COMM_VI_GetSubChnSize(VI_CHN ViChn_Sub, VIDEO_NORM_E enNorm, SIZE_S *pstSize)
-{
-    VI_CHN ViChn;
-    
-    ViChn = ViChn_Sub - 16;
-
-    if (0==(ViChn%4)) //(0,4,8,12) subchn max size is 960x1600
-    {
-        pstSize->u32Width = 720;
-        pstSize->u32Height = (VIDEO_ENCODING_MODE_PAL==enNorm)?576:480;
-    }
-    else if (0==(ViChn%2)) //(2,6,10,14) subchn max size is 640x720
-    {
-        pstSize->u32Width = SAMPLE_VI_SUBCHN_2_W;
-        pstSize->u32Height = SAMPLE_VI_SUBCHN_2_H;
-    }
-    else
-    {
-        SAMPLE_PRT("Vi odd sub_chn(%d) is invaild!\n", ViChn_Sub);
-        return HI_FAILURE;
-    }
-    return HI_SUCCESS;
-}
-
-/*****************************************************************************
-* function : Get Vi Dev No. according to Vi_Chn No.
-*****************************************************************************/
-VI_DEV SAMPLE_COMM_VI_GetDev(VI_CHN ViChn)
-{
-    HI_S32 s32Ret, s32ChnPerDev;
-    SAMPLE_VI_PARAM_S stViParam;
-
-    s32Ret = SAMPLE_COMM_VI_Mode2Param(&stViParam);
-    if (HI_SUCCESS !=s32Ret)
-    {
-        SAMPLE_PRT("vi get param failed!\n");
-        return (VI_DEV)-1;
-    }
-
-    s32ChnPerDev = stViParam.s32ViChnCnt / stViParam.s32ViDevCnt;
-    return (VI_DEV)(ViChn /stViParam.s32ViChnInterval / s32ChnPerDev * stViParam.s32ViDevInterval);
-}
-
 /*****************************************************************************
 * function : star vi dev (cfg vi_dev_attr; set_dev_cfg; enable dev)
 *****************************************************************************/

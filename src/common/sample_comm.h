@@ -153,15 +153,7 @@ typedef struct sample_venc_getstream_s
     function announce  
 *******************************************************/
 
-HI_U32 MaxPicVbBlkSize(PIXEL_FORMAT_E enPixFmt, HI_U32 u32AlignWidth);
-
-HI_U32 SAMPLE_COMM_SYS_CalcPicVbBlkSize(VIDEO_NORM_E enNorm, PIC_SIZE_E enPicSize, PIXEL_FORMAT_E enPixFmt, HI_U32 u32AlignWidth);
-HI_VOID SAMPLE_COMM_SYS_Exit(void);
-HI_S32 SAMPLE_COMM_SYS_Init(VB_CONF_S *pstVbConf);
-
 HI_S32 SAMPLE_COMM_VI_Mode2Param(SAMPLE_VI_PARAM_S *pstViParam);
-//HI_S32 SAMPLE_COMM_VI_Mode2Size(SAMPLE_VI_MODE_E enViMode, VIDEO_NORM_E enNorm, RECT_S *pstCapRect, SIZE_S *pstDestSize);
-VI_DEV SAMPLE_COMM_VI_GetDev(VI_CHN ViChn);
 HI_S32 SAMPLE_COMM_VI_StartDev(VI_DEV ViDev);
 HI_S32 SAMPLE_COMM_VI_StartChn(int chIndex, VI_CHN ViChn, SAMPLE_VI_CHN_SET_E enViChnSet);
 HI_S32 SAMPLE_COMM_VI_Start();
@@ -172,8 +164,6 @@ HI_S32 SAMPLE_COMM_VI_GetSubChnSize(VI_CHN ViChn_Sub, VIDEO_NORM_E enNorm, SIZE_
 	
 HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt);
 HI_S32 SAMPLE_COMM_VPSS_Stop(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt) ;
-HI_S32 SAMPLE_COMM_DisableVpssPreScale(VPSS_GRP VpssGrp,SIZE_S stSize);
-HI_S32 SAMPLE_COMM_EnableVpssPreScale(VPSS_GRP VpssGrp,SIZE_S stSize);
 
 HI_S32 SAMPLE_COMM_VENC_MemConfig(HI_VOID);
 HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp,VENC_CHN VencChn, PAYLOAD_TYPE_E enType, SAMPLE_RC_E enRcMode);

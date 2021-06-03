@@ -154,39 +154,3 @@ HI_S32 SAMPLE_COMM_VPSS_Stop(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt)
 
     return HI_SUCCESS;
 }
-HI_S32 SAMPLE_COMM_DisableVpssPreScale(VPSS_GRP VpssGrp,SIZE_S stSize)
-{
-    HI_S32 s32Ret;
-    VPSS_PRESCALE_INFO_S stPreScaleInfo;
-
-    stPreScaleInfo.bPreScale = HI_FALSE;
-    stPreScaleInfo.enCapSel = VPSS_CAPSEL_BOTH;
-    stPreScaleInfo.stDestSize.u32Width = stSize.u32Width;
-    stPreScaleInfo.stDestSize.u32Height = stSize.u32Height;
-    s32Ret = HI_MPI_VPSS_SetPreScale(VpssGrp, &stPreScaleInfo);
-    if (s32Ret != HI_SUCCESS)
-    {
-        SAMPLE_PRT("HI_MPI_VPSS_SetPreScale failed with %#x!\n", s32Ret);
-        return HI_FAILURE;
-    }
-
-    return s32Ret;
-}
-HI_S32 SAMPLE_COMM_EnableVpssPreScale(VPSS_GRP VpssGrp,SIZE_S stSize)
-{
-    HI_S32 s32Ret;
-    VPSS_PRESCALE_INFO_S stPreScaleInfo;
-
-    stPreScaleInfo.bPreScale = HI_TRUE;
-    stPreScaleInfo.enCapSel = VPSS_CAPSEL_BOTH;
-    stPreScaleInfo.stDestSize.u32Width = stSize.u32Width;
-    stPreScaleInfo.stDestSize.u32Height = stSize.u32Height;
-    s32Ret = HI_MPI_VPSS_SetPreScale(VpssGrp, &stPreScaleInfo);
-    if (s32Ret != HI_SUCCESS)
-    {
-        SAMPLE_PRT("HI_MPI_VPSS_SetPreScale failed with %#x!\n", s32Ret);
-        return HI_FAILURE;
-    }
-
-    return s32Ret;
-}
