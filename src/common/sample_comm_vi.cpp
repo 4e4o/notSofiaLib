@@ -422,20 +422,6 @@ HI_S32 SAMPLE_COMM_VI_Stop()
     return HI_SUCCESS;
 }
 
-static int vppsGroupIndexToViChannelIndex(int vpssGrp) {
-    switch(vpssGrp) {
-    case 0:
-        return 4;
-    case 1:
-        return 6;
-    case 2:
-        return 0;
-    case 3:
-        return 2;
-    }
-
-    return -1;
-}
 /*****************************************************************************
 * function : Vi chn bind vpss group
 *****************************************************************************/
@@ -462,7 +448,7 @@ HI_S32 SAMPLE_COMM_VI_BindVpss()
         
         stSrcChn.enModId = HI_ID_VIU;
         stSrcChn.s32DevId = 0;
-        stSrcChn.s32ChnId = ViChn;//vppsGroupIndexToViChannelIndex(VpssGrp);
+        stSrcChn.s32ChnId = ViChn;
 
         stDestChn.enModId = HI_ID_VPSS;
         stDestChn.s32DevId = VpssGrp;
