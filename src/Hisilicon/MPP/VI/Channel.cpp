@@ -27,13 +27,12 @@ static VI_CHN_ATTR_S* createStandardAttr() {
 
 Channel::Channel(MPP *p, Device* d, int id)
     : MPPChild(p), IdHolder(id), Holder<Device*>(d),
-      m_enabled(false),
       m_info(NULL),
       m_attr(createStandardAttr()) {
 }
 
 Channel::~Channel() {
-    if (m_enabled)
+    if (configured())
         HI_MPI_VI_DisableChn(id());
 }
 
@@ -52,10 +51,7 @@ VI_CHN_BIND_ATTR_S Channel::createBindAttrs() const {
     return attrs;
 }
 
-bool Channel::configure() {
-    if (m_enabled)
-        throw std::runtime_error("vi::Channel already configured");
-
+bool Channel::configureImpl() {
     if (m_info == NULL)
         throw std::runtime_error("[vi::Channel] Vi info is not set");
 
@@ -90,8 +86,6 @@ bool Channel::configure() {
         if (HI_MPI_VI_EnableChn(id()) != HI_SUCCESS)
             throw std::runtime_error("HI_MPI_VI_EnableChn failed");
     }
-
-    m_enabled = true;
 
     return true;
 }

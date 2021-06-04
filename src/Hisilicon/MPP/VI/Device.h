@@ -7,7 +7,7 @@
 
 #include "Hisilicon/MPP/MPPChild.h"
 #include "Utils/IdHolder.h"
-#include "Utils/AConfigurator.h"
+#include "Utils/Configurable/Configurator.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -15,16 +15,16 @@ namespace vi {
 
 class Channel;
 
-class Device : public MPPChild, public IdHolder, public AConfigurator {
+class Device : public MPPChild, public IdHolder, public Configurator {
 public:
     Device(MPP*, int id);
     ~Device();
 
     void setAttr(VI_DEV_ATTR_S* attr);
 
-    bool configure();
-
     Channel* addChannel(int id);
+protected:
+    bool configureImpl();
 
 private:
     typedef std::vector<Channel*> TChannels;

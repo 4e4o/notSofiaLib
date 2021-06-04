@@ -12,8 +12,9 @@ class Device : public mpp::vi::Device {
 public:
     Device(mpp::MPP *, int id);
 
-    bool configure();
 private:
+    bool configureImpl();
+
     VI_DEV_ATTR_S m_attr;
 };
 

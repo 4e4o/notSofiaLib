@@ -7,7 +7,7 @@
 #include <nvp6134_ex_170306/video.h>
 
 #include "Utils/IdHolder.h"
-#include "Utils/IConfigurable.h"
+#include "Utils/Configurable/Configurable.h"
 #include "ChipSpecs.h"
 
 namespace nvp6134 {
@@ -22,7 +22,7 @@ class DriverCommunicator;
 
 // single nvp6134 chip
 
-class Chip : public IdHolder, public IConfigurable {
+class Chip : public IdHolder, public Configurable {
 public:
     typedef std::array<std::unique_ptr<ViChannel>, ChipSpecs::CS_VI_CHANNELS_COUNT> TViChannels;
     typedef std::array<std::unique_ptr<VoChannel>, ChipSpecs::CS_VO_CHANNELS_COUNT> TVoChannels;
@@ -34,8 +34,6 @@ public:
     TViChannels& viChannels();
     TVoChannels& voChannels();
 
-    bool configure();
-
     virtual NVP6134_VI_MODE getViChannelMode(ViChannel*);
     virtual NVP6134_OUTMODE_SEL getVoChannelMode(VoChannel*);
 
@@ -44,7 +42,7 @@ protected:
     Chip(DriverCommunicator*, int id);
 
 private:
-    void init();
+    bool configureImpl();
 
     DriverCommunicator *m_driver;
     TViChannels m_viChannels;

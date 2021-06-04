@@ -36,9 +36,9 @@ Device::Device(mpp::MPP* p, int id)
     setMask(id, &m_attr);
 }
 
-bool Device::configure() {
+bool Device::configureImpl() {
     setAttr(&m_attr);
-    return mpp::vi::Device::configure();
+    return mpp::vi::Device::configureImpl();
 }
 
 }

@@ -21,8 +21,8 @@ Lm7004v3Board::Lm7004v3Board()
 Lm7004v3Board::~Lm7004v3Board(){
 }
 
-bool Lm7004v3Board::configure() {
-    BoardWithNvp6134::configure();
+bool Lm7004v3Board::configureImpl() {
+    BoardWithNvp6134::configureImpl();
 
     m_mpp.reset(new MPP(new ViInfoProvider(this)));
     m_mpp->configure();

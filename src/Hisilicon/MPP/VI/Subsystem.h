@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Hisilicon/MPP/MPPChild.h"
-#include "Utils/AConfigurator.h"
+#include "Utils/Configurable/Configurator.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -12,7 +12,7 @@ namespace vi {
 
 class Device;
 
-class Subsystem : public MPPChild, public AConfigurator {
+class Subsystem : public MPPChild, public Configurator {
 public:
     Subsystem(MPP*);
     ~Subsystem();

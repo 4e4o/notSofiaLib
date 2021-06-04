@@ -1,11 +1,11 @@
-#include "AConfigurator.h"
+#include "Configurator.h"
 #include "Utils/Utils.h"
 
-AConfigurator::~AConfigurator() {
+Configurator::~Configurator() {
     clear();
 }
 
-bool AConfigurator::configure() {
+bool Configurator::configureImpl() {
     bool res = false;
 
     for (int i = 0 ; i < (int) m_items.size() ; i++)
@@ -14,19 +14,19 @@ bool AConfigurator::configure() {
     return res;
 }
 
-IConfigurable *AConfigurator::item(int ind) const {
+Configurable *Configurator::item(int ind) const {
     return m_items[ind];
 }
 
-void AConfigurator::addItem(IConfigurable *it) {
+void Configurator::addItem(Configurable *it) {
     m_items.push_back(it);
 }
 
-int AConfigurator::itemsCount() const {
+int Configurator::itemsCount() const {
     return m_items.size();
 }
 
-void AConfigurator::clear() {
+void Configurator::clear() {
     Utils::clearPtrContainer(m_items);
 }
 

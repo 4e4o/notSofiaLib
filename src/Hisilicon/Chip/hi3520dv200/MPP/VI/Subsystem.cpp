@@ -30,7 +30,7 @@ static void addChannel(Device* dev, InfoProvider* inf, int chId, int infoDevId, 
     ch->setInfo(i);
 }
 
-bool Subsystem::configure() {
+bool Subsystem::configureImpl() {
     InfoProvider* inf = parent()->viSourceInfo();
 
     // id каналов фиксированы и зависят от хики чипа И режима его работы!
@@ -49,7 +49,7 @@ bool Subsystem::configure() {
     addChannel(dev1, inf, 4, 0, 2);
     addChannel(dev1, inf, 6, 0, 3);
 
-    return mpp::vi::Subsystem::configure();
+    return mpp::vi::Subsystem::configureImpl();
 }
 
 }

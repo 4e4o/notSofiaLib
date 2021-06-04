@@ -13,7 +13,8 @@ public:
     Subsystem(mpp::MPP*);
     ~Subsystem();
 
-    bool configure();
+private:
+    bool configureImpl();
 };
 
 }

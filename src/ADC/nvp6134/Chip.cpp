@@ -42,7 +42,7 @@ NVP6134_OUTMODE_SEL Chip::getVoChannelMode(VoChannel*) {
     throw std::runtime_error("Unimplemented getVoChannelMode");
 }
 
-bool Chip::configure() {
+bool Chip::configureImpl() {
     // создаём каналы
     for (int i = 0 ; i < (int) m_viChannels.size() ; i++)
         m_viChannels[i].reset(new ViChannel(this, i));

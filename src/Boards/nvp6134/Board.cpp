@@ -15,11 +15,11 @@ BoardWithNvp6134::BoardWithNvp6134(int chipCount) :
 BoardWithNvp6134::~BoardWithNvp6134() {
 }
 
-bool BoardWithNvp6134::configure() {
+bool BoardWithNvp6134::configureImpl() {
     for (int i = 0 ; i < m_nvpCount ; i++)
         addItem(createNvpChip(m_nvpDriver.get(), i));
 
-    return ABoard::configure();
+    return ABoard::configureImpl();
 }
 
 int BoardWithNvp6134::nvpCount() const {

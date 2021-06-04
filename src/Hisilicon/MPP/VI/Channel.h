@@ -4,7 +4,7 @@
 #include <hi_comm_vi.h>
 
 #include "Hisilicon/MPP/MPPChild.h"
-#include "Utils/IConfigurable.h"
+#include "Utils/Configurable/Configurable.h"
 #include "Utils/IdHolder.h"
 #include "Utils/Size.h"
 
@@ -16,7 +16,7 @@ class Device;
 class ChannelInfo;
 
 class Channel : public MPPChild, public IdHolder,
-        public Holder<Device*>, public IConfigurable {
+        public Holder<Device*>, public Configurable {
 public:
     Channel(MPP*, Device*, int id);
     ~Channel();
@@ -28,8 +28,6 @@ public:
     // должен быть вызван после setAttr
     void setInfo(ChannelInfo* info);
 
-    bool configure();
-
     SIZE_S destSize() const;
     SIZE_S imgSize() const;
     bool pal() const;
@@ -39,10 +37,10 @@ protected:
     void bind(const VI_CHN_BIND_ATTR_S&);
 
 private:
+    bool configureImpl();
     virtual TSize createDestSize() const;
     virtual VI_CHN_BIND_ATTR_S createBindAttrs() const;
 
-    bool m_enabled;
     ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
 };

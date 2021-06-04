@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#include "Utils/AConfigurator.h"
+#include "Utils/Configurable/Configurator.h"
 
 namespace boards {
 
-class ABoard : public AConfigurator {
+class ABoard : public Configurator {
 public:
     ~ABoard() {}
 };

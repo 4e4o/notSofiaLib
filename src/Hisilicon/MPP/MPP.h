@@ -5,7 +5,7 @@
 
 #include <hi_type.h>
 
-#include "Utils/IConfigurable.h"
+#include "Utils/Configurable/Configurable.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -18,7 +18,7 @@ class Subsystem;
 class VideoBuffer;
 class ElementsFactory;
 
-class MPP : public IConfigurable {
+class MPP : public Configurable {
 public:
     MPP(vi::InfoProvider*);
     ~MPP();
@@ -28,14 +28,13 @@ public:
     void setSysWidthAlign(HI_U32);
     HI_U32 sysWidthAlign() const;
 
-    bool configure();
-
     ElementsFactory* factory() const;
     void setFactory(ElementsFactory* factory);
 
     vi::Subsystem* vi() const;
 
 private:
+    bool configureImpl();
     void init();
 
     std::unique_ptr<vi::InfoProvider> m_sourceViInfo;

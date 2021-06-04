@@ -20,15 +20,13 @@ MPP::MPP(vi::InfoProvider* v)
     : m_sourceViInfo(v),
       m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
       m_factory(new ElementsFactory()) {
-    // TODO remove it
-    HI_MPI_SYS_Exit();
 }
 
 MPP::~MPP() {
     HI_MPI_SYS_Exit();
 }
 
-bool MPP::configure() {
+bool MPP::configureImpl() {
     m_vi.reset(m_factory->vi(this));
     // сначала настраиваем видео пул
     m_videoBuffer.reset(m_factory->videoBuffer(this));

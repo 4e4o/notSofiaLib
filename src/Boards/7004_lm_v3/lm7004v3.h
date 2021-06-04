@@ -24,11 +24,10 @@ public:
     Lm7004v3Board();
     ~Lm7004v3Board();
 
-    bool configure();
-
     hisilicon::mpp::MPP* mpp() const;
 
 private:
+    bool configureImpl();
     ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i);
 
     std::unique_ptr<hisilicon::mpp::MPP> m_mpp;

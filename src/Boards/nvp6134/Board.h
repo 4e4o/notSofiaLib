@@ -21,10 +21,10 @@ public:
     ::nvp6134::Chip* nvp(int = 0) const;
     int nvpCount() const;
 
-    bool configure();
-
 protected:
     virtual ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) = 0;
+protected:
+    bool configureImpl();
 
 private:
     std::unique_ptr< ::nvp6134::DriverCommunicator> m_nvpDriver;

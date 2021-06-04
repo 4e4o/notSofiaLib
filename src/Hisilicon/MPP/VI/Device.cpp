@@ -19,7 +19,7 @@ Device::Device(MPP *p, int id)
 
 Device::~Device() {
     // TODO order? channels/dev
-    AConfigurator::clear();
+    Configurator::clear();
 
     if (m_enabled)
         HI_MPI_VI_DisableDev(id());
@@ -31,7 +31,7 @@ Channel* Device::addChannel(int id) {
     return ch;
 }
 
-bool Device::configure() {
+bool Device::configureImpl() {
     if (m_enabled)
         throw std::runtime_error("vi::Device already configured");
 
@@ -46,7 +46,7 @@ bool Device::configure() {
 
     m_enabled = true;
 
-    return AConfigurator::configure();
+    return Configurator::configureImpl();
 }
 
 void Device::setAttr(VI_DEV_ATTR_S* attr) {
