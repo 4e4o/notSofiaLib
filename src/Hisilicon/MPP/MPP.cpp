@@ -1,6 +1,6 @@
 #include "MPP.h"
-#include "Vi/Source/ViInfoProvider.h"
-#include "Vi/ViSubsystem.h"
+#include "VI/Source/ViInfoProvider.h"
+#include "VI/ViSubsystem.h"
 #include "VideoBuffer.h"
 #include "ElementsFactory.h"
 

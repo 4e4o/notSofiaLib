@@ -7,9 +7,9 @@
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
 #include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/Vi/ViSubsystem.h"
-#include "Hisilicon/MPP/Vi/ViDevice.h"
-#include "Hisilicon/MPP/Vi/ViChannel.h"
+#include "Hisilicon/MPP/VI/ViSubsystem.h"
+#include "Hisilicon/MPP/VI/ViDevice.h"
+#include "Hisilicon/MPP/VI/ViChannel.h"
 
 using namespace nvp6134;
 

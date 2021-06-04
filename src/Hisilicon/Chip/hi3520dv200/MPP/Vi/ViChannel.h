@@ -1,7 +1,7 @@
 #ifndef MPP_HI3520DV200_VI_CHANNEL_H
 #define MPP_HI3520DV200_VI_CHANNEL_H
 
-#include "Hisilicon/MPP/Vi/ViChannel.h"
+#include "Hisilicon/MPP/VI/ViChannel.h"
 
 namespace hisilicon {
 namespace mpp {

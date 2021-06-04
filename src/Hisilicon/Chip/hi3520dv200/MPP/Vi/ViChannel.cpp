@@ -1,7 +1,7 @@
 #include "ViChannel.h"
 
-#include "Hisilicon/MPP/Vi/Source/ViChannelInfo.h"
-#include "Hisilicon/MPP/Vi/ViDevice.h"
+#include "Hisilicon/MPP/VI/Source/ViChannelInfo.h"
+#include "Hisilicon/MPP/VI/ViDevice.h"
 
 namespace hisilicon {
 namespace mpp {

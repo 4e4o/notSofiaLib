@@ -1,8 +1,8 @@
 #include "ViSubsystem.h"
-#include "Hisilicon/MPP/Vi/ViDevice.h"
-#include "Hisilicon/MPP/Vi/Source/ViInfoProvider.h"
-#include "Hisilicon/MPP/Vi/Source/ViDeviceInfo.h"
-#include "Hisilicon/MPP/Vi/Source/ViChannelInfo.h"
+#include "Hisilicon/MPP/VI/ViDevice.h"
+#include "Hisilicon/MPP/VI/Source/ViInfoProvider.h"
+#include "Hisilicon/MPP/VI/Source/ViDeviceInfo.h"
+#include "Hisilicon/MPP/VI/Source/ViChannelInfo.h"
 #include "ViChannel.h"
 
 #include <stdexcept>

@@ -1,7 +1,7 @@
 #ifndef MPP_HI3520DV200_VI_DEVICE_H
 #define MPP_HI3520DV200_VI_DEVICE_H
 
-#include "Hisilicon/MPP/Vi/ViDevice.h"
+#include "Hisilicon/MPP/VI/ViDevice.h"
 
 namespace hisilicon {
 namespace mpp {

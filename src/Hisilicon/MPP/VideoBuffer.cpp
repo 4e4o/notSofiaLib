@@ -1,7 +1,7 @@
 #include "VideoBuffer.h"
-#include "Vi/Source/ViInfoProvider.h"
-#include "Vi/Source/ViDeviceInfo.h"
-#include "Vi/Source/ViChannelInfo.h"
+#include "VI/Source/ViInfoProvider.h"
+#include "VI/Source/ViDeviceInfo.h"
+#include "VI/Source/ViChannelInfo.h"
 
 #include <string.h>
 #include <stdexcept>

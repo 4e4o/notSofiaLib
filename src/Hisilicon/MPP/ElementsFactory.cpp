@@ -1,8 +1,8 @@
 #include "ElementsFactory.h"
 #include "VideoBuffer.h"
-#include "Vi/ViSubsystem.h"
-#include "Vi/ViDevice.h"
-#include "Vi/ViChannel.h"
+#include "VI/ViSubsystem.h"
+#include "VI/ViDevice.h"
+#include "VI/ViChannel.h"
 
 namespace hisilicon {
 namespace mpp {

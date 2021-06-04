@@ -1,6 +1,6 @@
 #include "ViChannel.h"
 #include "ViDevice.h"
-#include "Hisilicon/MPP/Vi/Source/ViChannelInfo.h"
+#include "Hisilicon/MPP/VI/Source/ViChannelInfo.h"
 #include "Hisilicon/MPP/Utils.h"
 
 #include <stdexcept>
