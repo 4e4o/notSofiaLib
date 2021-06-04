@@ -11,7 +11,6 @@ namespace hi3520dv200 {
 class Channel : public mpp::vi::Channel {
 public:
     Channel(mpp::MPP*, mpp::vi::Device*, int id);
-    ~Channel();
 
 private:
     TSize createDestSize() const;

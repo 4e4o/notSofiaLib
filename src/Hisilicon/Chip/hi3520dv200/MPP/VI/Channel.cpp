@@ -12,9 +12,6 @@ Channel::Channel(mpp::MPP *p, Device *d, int id)
     : mpp::vi::Channel(p, d, id) {
 }
 
-Channel::~Channel() {
-}
-
 VI_CHN_BIND_ATTR_S Channel::createBindAttrs() const {
     VI_CHN_BIND_ATTR_S attrs;
     attrs.ViDev = device()->id();

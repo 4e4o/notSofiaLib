@@ -11,7 +11,6 @@ namespace hi3520dv200 {
 class Subsystem : public mpp::vi::Subsystem {
 public:
     Subsystem(mpp::MPP*);
-    ~Subsystem();
 
 private:
     bool configureImpl();

@@ -8,12 +8,6 @@ namespace hisilicon {
 namespace mpp {
 namespace hi3520dv200 {
 
-ElementsFactory::ElementsFactory() {
-}
-
-ElementsFactory::~ElementsFactory() {
-}
-
 mpp::vi::Device* ElementsFactory::viDevice(mpp::MPP* p, int id) {
     return new vi::hi3520dv200::Device(p, id);
 }

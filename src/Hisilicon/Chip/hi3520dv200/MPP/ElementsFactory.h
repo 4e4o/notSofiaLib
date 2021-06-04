@@ -11,9 +11,6 @@ class MPP;
 
 class ElementsFactory : public mpp::ElementsFactory {
 public:
-    ElementsFactory();
-    ~ElementsFactory();
-
     mpp::vi::Subsystem* vi(mpp::MPP*);
     mpp::vi::Device* viDevice(mpp::MPP*, int id);
     mpp::vi::Channel* viChannel(mpp::MPP*, mpp::vi::Device*, int id);

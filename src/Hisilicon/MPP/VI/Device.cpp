@@ -2,6 +2,9 @@
 #include "Channel.h"
 #include "Hisilicon/MPP/MPP.h"
 #include "Hisilicon/MPP/ElementsFactory.h"
+#include "Hisilicon/MPP/VI/Source/InfoProvider.h"
+#include "Hisilicon/MPP/VI/Source/DeviceInfo.h"
+#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
 
 #include <stdexcept>
 
@@ -27,6 +30,18 @@ Device::~Device() {
 Channel* Device::addChannel(int id) {
     Channel *ch = parent()->factory()->viChannel(parent(), this, id);
     addItem(ch);
+    return ch;
+}
+
+Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
+    InfoProvider* inf = parent()->viSourceInfo();
+    ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
+
+    if (i == NULL)
+        return NULL;
+
+    mpp::vi::Channel* ch = addChannel(id);
+    ch->setInfo(i);
     return ch;
 }
 

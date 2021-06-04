@@ -22,13 +22,14 @@ public:
 
     void setAttr(VI_DEV_ATTR_S* attr);
 
-    Channel* addChannel(int id);
+    Channel* addChannel(int id, int infoDevId, int infoChId);
 
 protected:
     bool configureImpl();
 
 private:
-    typedef std::vector<Channel*> TChannels;
+    Channel* addChannel(int id);
+
     VI_DEV_ATTR_S* m_attr;
 };
 
