@@ -64,7 +64,7 @@ TSize Channel::createDestSize() const {
     const TSize capSize = i->capSize();
     const HI_U32 halfWidth = capSize.width / 2;
     const TSize imgSize = i->imgSize();
-    TSize destSize = imgSize;
+    TSize destSize = capSize;
 
     if (imgSize.width <= halfWidth)
         destSize.width = halfWidth;
