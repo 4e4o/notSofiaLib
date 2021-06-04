@@ -10,6 +10,8 @@
 #include "Boards/7004_lm_v3/lm7004v3.h"
 #include "nvp6134/ad_cfg.h"
 
+#define VPSS_CHN_PER_GROUP 1
+
 HI_S32 SAMPLE_COMM_VI_Mode2Param(SAMPLE_VI_PARAM_S *pstViParam) {
     pstViParam->s32ViDevCnt = 2;
     pstViParam->s32ViDevInterval = 1;
@@ -126,7 +128,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     /******************************************
      step 4: start vpss and vi bind vpss
     ******************************************/
-    s32Ret = SAMPLE_COMM_VPSS_Start(s32VpssGrpCnt, VPSS_MAX_CHN_NUM);
+    s32Ret = SAMPLE_COMM_VPSS_Start(s32VpssGrpCnt, VPSS_CHN_PER_GROUP);
 
     if (HI_SUCCESS != s32Ret) {
         SAMPLE_PRT("Start Vpss failed!\n");
@@ -145,8 +147,8 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     ******************************************/
     for (i = 0; i < u32ViChnCnt; i++) {
         /*** main stream **/
-        VencGrp = i * 2;
-        VencChn = i * 2;
+        VencGrp = i /* * 2*/;
+        VencChn = i /* * 2 */;
         VpssGrp = i;
         s32Ret = SAMPLE_COMM_VENC_Start(VpssGrp, VencGrp, VencChn, enPayLoad[0], enRcMode);
         if (HI_SUCCESS != s32Ret)
@@ -163,7 +165,7 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
         }
 
         /*** Sub stream **/
-        VencGrp ++;
+/*        VencGrp ++;
         VencChn ++;
         s32Ret = SAMPLE_COMM_VENC_Start(VpssGrp, VencGrp, VencChn, enPayLoad[1], enRcMode);
         if (HI_SUCCESS != s32Ret)
@@ -177,13 +179,13 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
         {
             SAMPLE_PRT("Start Venc failed!\n");
             goto END_VENC_8D1_3;
-        }
+        }*/
     }
 
     /******************************************
      step 6: stream venc process -- get stream, then save it to file.
     ******************************************/
-    s32Ret = SAMPLE_COMM_VENC_StartGetStream(u32ViChnCnt *2 );
+    s32Ret = SAMPLE_COMM_VENC_StartGetStream(u32ViChnCnt/* *2 */);
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("Start Venc failed!\n");
@@ -200,18 +202,18 @@ HI_S32 SAMPLE_VENC_4D1_H264(HI_VOID) {
     SAMPLE_COMM_VENC_StopGetStream();
 
 END_VENC_8D1_3:
-    for (i = 0; i < u32ViChnCnt * 2 ; i++)
+    for (i = 0; i < u32ViChnCnt/* * 2 */; i++)
     {
         VencGrp = i;
         VencChn = i;
-        VpssGrp = i / 2;
+        VpssGrp = i;// / 2;
         VpssChn = (VpssGrp%2)?VPSS_PRE0_CHN:VPSS_BSTR_CHN;
         SAMPLE_COMM_VENC_UnBindVpss(VencGrp, VpssGrp, VpssChn);
         SAMPLE_COMM_VENC_Stop(VencGrp,VencChn);
     }
     SAMPLE_COMM_VI_UnBindVpss();
 END_VENC_8D1_2:	//vpss stop
-    SAMPLE_COMM_VPSS_Stop(s32VpssGrpCnt, VPSS_MAX_CHN_NUM);
+    SAMPLE_COMM_VPSS_Stop(s32VpssGrpCnt, VPSS_CHN_PER_GROUP);
 END_VENC_8D1_1:	//vi stop
 END_VENC_8D1_0:	//system exit
 
