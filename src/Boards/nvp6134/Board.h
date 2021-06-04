@@ -13,11 +13,14 @@ class DriverCommunicator;
 namespace boards {
 namespace nvp6134 {
 
+// Борда с nvp чипами
+
 class Board : public ABoard {
 public:
     Board(int chipCount);
     ~Board();
 
+    // TODO remove it
     ::nvp6134::Chip* nvp(int = 0) const;
     int nvpCount() const;
 

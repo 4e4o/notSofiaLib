@@ -1,6 +1,8 @@
 #ifndef MPP_VIDEO_BUFFER_H
 #define MPP_VIDEO_BUFFER_H
 
+#include <hi_type.h>
+
 #include "MPPChild.h"
 #include "Utils/Configurable/Configurable.h"
 

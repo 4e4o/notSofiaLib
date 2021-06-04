@@ -19,10 +19,13 @@ class MPP;
 namespace boards {
 namespace lm7004v3 {
 
+// lm7004v3 борда
+
 class Board : public boards::nvp6134::Board {
 public:
     Board();
 
+    // TODO remove it
     hisilicon::mpp::MPP* mpp() const;
 
 private:

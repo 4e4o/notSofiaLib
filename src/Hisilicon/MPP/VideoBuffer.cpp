@@ -2,6 +2,7 @@
 #include "VI/Source/InfoProvider.h"
 #include "VI/Source/DeviceInfo.h"
 #include "VI/Source/ChannelInfo.h"
+#include "Sys/Sys.h"
 
 #include <string.h>
 #include <stdexcept>
@@ -93,7 +94,7 @@ HI_U32 VideoBuffer::maxPicVbBlkSize() {
 // page 90
 
 HI_U32 VideoBuffer::picVbBlkSize(vi::ChannelInfo *ch) {
-    const HI_U32 sysAlignWidth = parent()->sysWidthAlign();
+    const HI_U32 sysAlignWidth = parent()->sys()->sysWidthAlign();
     const TSize imgSize = ch->imgSize();
     const PIXEL_FORMAT_E pixFmt = ch->pixelFormat();
 

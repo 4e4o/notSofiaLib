@@ -32,8 +32,7 @@ Channel::Channel(MPP *p, Device* d, int id)
 }
 
 Channel::~Channel() {
-    if (configured())
-        HI_MPI_VI_DisableChn(id());
+    HI_MPI_VI_DisableChn(id());
 }
 
 ChannelInfo* Channel::info() const {

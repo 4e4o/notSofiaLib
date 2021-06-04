@@ -20,11 +20,9 @@ Device::Device(MPP *p, int id)
 }
 
 Device::~Device() {
-    // delete channel first
+    // delete channels first
     Configurator::clear();
-
-    if (configured())
-        HI_MPI_VI_DisableDev(id());
+    HI_MPI_VI_DisableDev(id());
 }
 
 Channel* Device::addChannel(int id) {

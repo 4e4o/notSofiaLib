@@ -1,50 +1,24 @@
 #include "MPP.h"
 #include "VI/Source/InfoProvider.h"
 #include "VI/Subsystem.h"
+#include "Sys/Sys.h"
 #include "VideoBuffer.h"
 #include "ElementsFactory.h"
 
 #include <stdexcept>
 
-#include <mpi_sys.h>
-
-// TODO recommended value is 16
-// page 90 of
-// HiMPP Media Processing Software Development Reference.pdf
-#define DEFAULT_SYS_WIDTH_ALIGN 64
-
 namespace hisilicon {
 namespace mpp {
 
 MPP::MPP(ElementsFactory* f)
-    : m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
-      m_factory(f),
-      m_sourceViInfo(m_factory->viInfoProvider()),
-      m_videoBuffer(m_factory->videoBuffer(this)),
-      m_vi(m_factory->vi(this)) {
+    : m_factory(f) {
+    addItem(m_factory->viInfoProvider());
+    addItem(m_factory->videoBuffer(this));
+    addItem(new Sys(this));
+    addItem(m_factory->vi(this));
 }
 
 MPP::~MPP() {
-    HI_MPI_SYS_Exit();
-}
-
-bool MPP::configureImpl() {
-    m_sourceViInfo->configure();
-    m_videoBuffer->configure();
-    init();
-    m_vi->configure();
-    return true;
-}
-
-void MPP::init() {
-    MPP_SYS_CONF_S stSysConf{};
-    stSysConf.u32AlignWidth = sysWidthAlign();
-
-    if (HI_MPI_SYS_SetConf(&stSysConf) != HI_SUCCESS)
-        throw "HI_MPI_SYS_SetConf failed";
-
-    if (HI_MPI_SYS_Init() != HI_SUCCESS)
-        throw "HI_MPI_SYS_Init failed";
 }
 
 ElementsFactory* MPP::factory() const {
@@ -52,28 +26,15 @@ ElementsFactory* MPP::factory() const {
 }
 
 vi::InfoProvider* MPP::viSourceInfo() const {
-    return m_sourceViInfo.get();
+    return static_cast<vi::InfoProvider*>(item(0));
 }
 
-void MPP::setSysWidthAlign(HI_U32 sa) {
-    // resrictions:
-    // HiMPP Media Processing Software Development Reference.pdf
-    // page 90
-    if ((sa < 1) || (sa > 1024))
-        throw std::runtime_error("sys width align must be in [1:1024]");
-
-    if ((sa > 1) && ((sa % 16) != 0))
-        throw std::runtime_error("sys width align > 1 must be multiple of 16");
-
-    m_sysWidthAlign = sa;
-}
-
-HI_U32 MPP::sysWidthAlign() const {
-    return m_sysWidthAlign;
+Sys* MPP::sys() const {
+    return static_cast<Sys*>(item(2));
 }
 
 vi::Subsystem* MPP::vi() const {
-    return m_vi.get();
+    return static_cast<vi::Subsystem*>(item(3));
 }
 
 }

@@ -7,6 +7,8 @@
 
 namespace boards {
 
+// Абстрактная борда
+
 class ABoard : public Configurator {
 public:
     ~ABoard() {}
