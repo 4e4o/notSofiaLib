@@ -18,7 +18,10 @@ namespace mpp {
 
 MPP::MPP(ElementsFactory* f)
     : m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
-      m_factory(f) {
+      m_factory(f),
+      m_sourceViInfo(m_factory->viInfoProvider()),
+      m_videoBuffer(m_factory->videoBuffer(this)),
+      m_vi(m_factory->vi(this)) {
 }
 
 MPP::~MPP() {
@@ -26,10 +29,8 @@ MPP::~MPP() {
 }
 
 bool MPP::configureImpl() {
-    m_sourceViInfo.reset(m_factory->viInfoProvider());
-    m_vi.reset(m_factory->vi(this));
     m_sourceViInfo->configure();
-    m_videoBuffer.reset(m_factory->videoBuffer(this));
+    m_videoBuffer->configure();
     init();
     m_vi->configure();
     return true;

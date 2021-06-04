@@ -24,9 +24,13 @@ static void setPool(VB_CONF_S& conf, int i, HI_U32 blockSize, HI_U32 blkCount) {
 
 VideoBuffer::VideoBuffer(MPP* mpp)
     : MPPChild(mpp) {
-    // TODO remove it
-    HI_MPI_VB_Exit();
+}
 
+VideoBuffer::~VideoBuffer() {
+    HI_MPI_VB_Exit();
+}
+
+bool VideoBuffer::configureImpl() {
     const HI_U32 channelCount = parent()->viSourceInfo()->viChannelsCount();
 
     if (channelCount < 1)
@@ -60,10 +64,8 @@ VideoBuffer::VideoBuffer(MPP* mpp)
 
     if (HI_MPI_VB_Init() != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VB_Init failed");
-}
 
-VideoBuffer::~VideoBuffer() {
-    HI_MPI_VB_Exit();
+    return true;
 }
 
 HI_U32 VideoBuffer::maxPicVbBlkSize() {
