@@ -13,6 +13,7 @@ protected:
     virtual bool configureImpl() = 0;
 
     bool configured() const;
+
 private:
     bool m_configured;
 };

@@ -6,27 +6,27 @@
 namespace boards {
 namespace nvp6134 {
 
-BoardWithNvp6134::BoardWithNvp6134(int chipCount) :
+Board::Board(int chipCount) :
     m_nvpDriver(new ::nvp6134::DriverCommunicator(chipCount)),
     m_nvpStartIndex(itemsCount()),
     m_nvpCount(chipCount) {
 }
 
-BoardWithNvp6134::~BoardWithNvp6134() {
+Board::~Board() {
 }
 
-bool BoardWithNvp6134::configureImpl() {
+bool Board::configureImpl() {
     for (int i = 0 ; i < m_nvpCount ; i++)
         addItem(createNvpChip(m_nvpDriver.get(), i));
 
     return ABoard::configureImpl();
 }
 
-int BoardWithNvp6134::nvpCount() const {
+int Board::nvpCount() const {
     return m_nvpCount;
 }
 
-::nvp6134::Chip* BoardWithNvp6134::nvp(int i) const {
+::nvp6134::Chip* Board::nvp(int i) const {
     return static_cast< ::nvp6134::Chip*>(item(m_nvpStartIndex + i));
 }
 

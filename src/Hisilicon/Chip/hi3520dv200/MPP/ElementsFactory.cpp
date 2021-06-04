@@ -2,7 +2,6 @@
 #include "VI/Channel.h"
 #include "VI/Subsystem.h"
 #include "VI/Device.h"
-#include "MPP.h"
 
 namespace hisilicon {
 namespace mpp {

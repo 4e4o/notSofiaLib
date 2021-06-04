@@ -20,7 +20,7 @@ class ElementsFactory;
 
 class MPP : public Configurable {
 public:
-    MPP(vi::InfoProvider*);
+    MPP(ElementsFactory*);
     ~MPP();
 
     vi::InfoProvider* viSourceInfo() const;
@@ -29,7 +29,6 @@ public:
     HI_U32 sysWidthAlign() const;
 
     ElementsFactory* factory() const;
-    void setFactory(ElementsFactory* factory);
 
     vi::Subsystem* vi() const;
 

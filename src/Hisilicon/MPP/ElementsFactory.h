@@ -8,6 +8,7 @@ namespace vi {
 class Subsystem;
 class Device;
 class Channel;
+class InfoProvider;
 }
 
 class MPP;
@@ -19,6 +20,7 @@ public:
     ~ElementsFactory();
 
     virtual VideoBuffer* videoBuffer(MPP*);
+    virtual vi::InfoProvider* viInfoProvider() = 0;
     virtual vi::Subsystem* vi(MPP*);
     virtual vi::Device* viDevice(MPP*, int id);
     virtual vi::Channel* viChannel(MPP*, vi::Device*, int id);

@@ -17,7 +17,7 @@
 
 namespace boards {
 namespace lm7004v3 {
-class Lm7004v3Board;
+class Board;
 }
 }
 
@@ -30,7 +30,7 @@ class Channel;
 }
 }
 
-void initAdCompatLayer(boards::lm7004v3::Lm7004v3Board *);
+void initAdCompatLayer(boards::lm7004v3::Board *);
 
 struct ChannelInfo {
     //TODO УДАЛИТЬ ЭТО, СДЕЛАТЬ ЧТОБ ЮЗАЮЩИЕ ЭТО ЮЗАЛИ stCapRect/stDestSize/stVencSize

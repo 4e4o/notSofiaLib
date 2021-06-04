@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "ad_cfg.h"
-#include "Boards/7004_lm_v3/lm7004v3.h"
+#include "Boards/7004_lm_v3/Board.h"
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
 #include "Hisilicon/MPP/MPP.h"
@@ -34,7 +34,7 @@ const ChannelInfo* getChannelInfo(int ch) {
     return &g_channelInfo[ch];
 }
 
-static boards::lm7004v3::Lm7004v3Board* bbb;
+static boards::lm7004v3::Board* bbb;
 
 hisilicon::mpp::vi::Channel* getViChannel(int ch) {
     if ((ch < 0) || (ch > 4))
@@ -51,7 +51,7 @@ hisilicon::mpp::vi::Channel* getViChannel(int ch) {
     return (hisilicon::mpp::vi::Channel*)dev->item(ch);
 }
 
-void initAdCompatLayer(boards::lm7004v3::Lm7004v3Board *board) {
+void initAdCompatLayer(boards::lm7004v3::Board *board) {
     bbb = board;
     auto& c = board->nvp()->viChannels();
 

@@ -16,10 +16,9 @@
 namespace hisilicon {
 namespace mpp {
 
-MPP::MPP(vi::InfoProvider* v)
-    : m_sourceViInfo(v),
-      m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
-      m_factory(new ElementsFactory()) {
+MPP::MPP(ElementsFactory* f)
+    : m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
+      m_factory(f) {
 }
 
 MPP::~MPP() {
@@ -27,8 +26,9 @@ MPP::~MPP() {
 }
 
 bool MPP::configureImpl() {
+    m_sourceViInfo.reset(m_factory->viInfoProvider());
     m_vi.reset(m_factory->vi(this));
-    // сначала настраиваем видео пул
+    m_sourceViInfo->configure();
     m_videoBuffer.reset(m_factory->videoBuffer(this));
     init();
     m_vi->configure();
@@ -48,10 +48,6 @@ void MPP::init() {
 
 ElementsFactory* MPP::factory() const {
     return m_factory.get();
-}
-
-void MPP::setFactory(ElementsFactory* factory) {
-    m_factory.reset(factory);
 }
 
 vi::InfoProvider* MPP::viSourceInfo() const {

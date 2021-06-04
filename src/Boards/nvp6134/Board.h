@@ -13,10 +13,10 @@ class DriverCommunicator;
 namespace boards {
 namespace nvp6134 {
 
-class BoardWithNvp6134 : public ABoard {
+class Board : public ABoard {
 public:
-    BoardWithNvp6134(int chipCount);
-    ~BoardWithNvp6134();
+    Board(int chipCount);
+    ~Board();
 
     ::nvp6134::Chip* nvp(int = 0) const;
     int nvpCount() const;

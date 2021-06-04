@@ -7,7 +7,7 @@
 
 #include "sample_comm.h"
 
-#include "Boards/7004_lm_v3/lm7004v3.h"
+#include "Boards/7004_lm_v3/Board.h"
 #include "nvp6134/ad_cfg.h"
 
 #define VPSS_CHN_PER_GROUP 1
@@ -221,9 +221,9 @@ END_VENC_8D1_0:	//system exit
 }
 
 int main() {
-    boards::lm7004v3::Lm7004v3Board* board;
+    boards::lm7004v3::Board* board;
 
-    board = new boards::lm7004v3::Lm7004v3Board();
+    board = new boards::lm7004v3::Board();
     board->configure();
 
     // это временное явление

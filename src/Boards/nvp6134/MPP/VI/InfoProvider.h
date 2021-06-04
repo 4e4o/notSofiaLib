@@ -2,22 +2,29 @@
 #define BOARD_NVP6134_VI_INFO_PROVIDER_H
 
 #include "Hisilicon/MPP/VI/Source/InfoProvider.h"
+#include "Utils/Holder.h"
 
 #include <memory>
 
 namespace boards {
 namespace nvp6134 {
 
-class BoardWithNvp6134;
+class Board;
 
-class ViInfoProvider : public hisilicon::mpp::vi::InfoProvider {
+namespace mpp {
+namespace vi {
+
+class InfoProvider : public Holder<Board*>,
+        public hisilicon::mpp::vi::InfoProvider {
 public:
-    ViInfoProvider(BoardWithNvp6134*);
+    InfoProvider(Board*);
 
 private:
-    static TViDevicesInfo createViInfo(BoardWithNvp6134*);
+    bool configureImpl();
 };
 
+}
+}
 }
 }
 

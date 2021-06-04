@@ -19,10 +19,10 @@ class MPP;
 namespace boards {
 namespace lm7004v3 {
 
-class Lm7004v3Board : public boards::nvp6134::BoardWithNvp6134 {
+class Board : public boards::nvp6134::Board {
 public:
-    Lm7004v3Board();
-    ~Lm7004v3Board();
+    Board();
+    ~Board();
 
     hisilicon::mpp::MPP* mpp() const;
 

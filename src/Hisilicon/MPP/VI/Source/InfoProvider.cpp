@@ -6,11 +6,14 @@ namespace hisilicon {
 namespace mpp {
 namespace vi {
 
-InfoProvider::InfoProvider(const InfoProvider::TViDevicesInfo& d)
-    : m_devices(d) {
+InfoProvider::InfoProvider() {
 }
 
 InfoProvider::~InfoProvider() {
+}
+
+void InfoProvider::setDeviceInfo(const TViDevicesInfo& d) {
+    m_devices = d;
 }
 
 const InfoProvider::TViDevicesInfo& InfoProvider::devices() const {

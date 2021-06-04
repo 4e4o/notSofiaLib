@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 
+#include "Utils/Configurable/Configurable.h"
+
 namespace hisilicon {
 namespace mpp {
 namespace vi {
@@ -15,17 +17,20 @@ class ChannelInfo;
 // Передавать инфу из источника по Vi devices
 // и Vi channels в MPP
 
-class InfoProvider {
+class InfoProvider : public Configurable {
 public:
     typedef std::vector<DeviceInfo*> TViDevicesInfo;
 
-    InfoProvider(const TViDevicesInfo&);
+    InfoProvider();
     ~InfoProvider();
 
     const TViDevicesInfo& devices() const;
     int viChannelsCount() const;
 
     ChannelInfo* findChannelInfo(int devId, int chId);
+
+protected:
+    void setDeviceInfo(const TViDevicesInfo&);
 
 private:
     TViDevicesInfo m_devices;

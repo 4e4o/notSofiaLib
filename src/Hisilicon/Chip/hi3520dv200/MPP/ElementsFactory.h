@@ -7,8 +7,6 @@ namespace hisilicon {
 namespace mpp {
 namespace hi3520dv200 {
 
-class MPP;
-
 class ElementsFactory : public mpp::ElementsFactory {
 public:
     mpp::vi::Subsystem* vi(mpp::MPP*);
