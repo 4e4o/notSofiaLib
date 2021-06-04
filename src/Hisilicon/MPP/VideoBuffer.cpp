@@ -44,6 +44,11 @@ VideoBuffer::VideoBuffer(MPP* mpp)
     // TODO why * 4 ??
     // < 3 not works
 
+    // Значит тут имеется зависимость от кол-ва каналов на группу в vpps
+    // Сначало было 4 канала на группу, 4 группы vpps и работало только с channelCount * 4
+    // Потом сделал 1 канал на группу, 4 группы, стало работать с channelCount * 3,
+    // - с 2 уже не работает, зависимость пока не понятна
+
     setPool(stVbConf, 0, blockSize, channelCount * 4);
 
     // TODO what is it ?
