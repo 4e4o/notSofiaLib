@@ -14,27 +14,23 @@ namespace lm7004v3 {
 
 using hisilicon::mpp::MPP;
 using boards::nvp6134::mpp::ElementsFactory;
+typedef ElementsFactory<hisilicon::mpp::hi3520dv200::ElementsFactory> TElemFactory;
 
 Board::Board()
-    : boards::nvp6134::Board(NVP_CHIPS_COUNT),
-      m_mpp(new MPP(new ElementsFactory<hisilicon::mpp::hi3520dv200::ElementsFactory>(this))) {
-}
-
-Board::~Board(){
-}
-
-bool Board::configureImpl() {
-    boards::nvp6134::Board::configureImpl();
-    m_mpp->configure();
-    return true;
+    : boards::nvp6134::Board(NVP_CHIPS_COUNT) {
 }
 
 ::nvp6134::Chip* Board::createNvpChip(::nvp6134::DriverCommunicator* d, int i) {
     return new nvp6134::Chip(d, i);
 }
 
+void Board::onChipsCreated() {
+    addItem(new MPP(new TElemFactory(this)));
+}
+
+// TODO remove it
 hisilicon::mpp::MPP* Board::mpp() const {
-    return m_mpp.get();
+    return static_cast<hisilicon::mpp::MPP*>(item(1));
 }
 
 }

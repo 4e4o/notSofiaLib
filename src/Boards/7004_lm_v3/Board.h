@@ -22,15 +22,12 @@ namespace lm7004v3 {
 class Board : public boards::nvp6134::Board {
 public:
     Board();
-    ~Board();
 
     hisilicon::mpp::MPP* mpp() const;
 
 private:
-    bool configureImpl();
+    void onChipsCreated();
     ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i);
-
-    std::unique_ptr<hisilicon::mpp::MPP> m_mpp;
 };
 
 }
