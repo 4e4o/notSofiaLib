@@ -13,6 +13,14 @@ Channel::Channel(mpp::MPP *p, Device *d, int id)
 }
 
 VI_CHN_BIND_ATTR_S Channel::createBindAttrs() const {
+    // каналы имеют id 0,2,4,6
+    // viDev должен быть равен 0 или 1
+    // ViWay = 0 для 0 и 4 каналов
+    // ViWay = 1 для 2 и 6
+    // это всё задаётся режимом работы конкретного чипа
+    // в нашем случае 4channel 720p режим для hi3520d v200
+    // Hi3520D／Hi3515A／Hi3515C H.264 CODEC Processor Data Sheet.pdf
+    // page 616
     VI_CHN_BIND_ATTR_S attrs;
     attrs.ViDev = device()->id();
 
