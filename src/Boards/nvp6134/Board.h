@@ -23,7 +23,6 @@ public:
 
 protected:
     virtual ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) = 0;
-protected:
     bool configureImpl();
 
 private:

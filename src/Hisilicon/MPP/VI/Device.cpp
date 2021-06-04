@@ -13,15 +13,14 @@ namespace vi {
 
 Device::Device(MPP *p, int id)
     : MPPChild(p), IdHolder(id),
-      m_attr(NULL),
-      m_enabled(false) {
+      m_attr(NULL) {
 }
 
 Device::~Device() {
-    // TODO order? channels/dev
+    // delete channel first
     Configurator::clear();
 
-    if (m_enabled)
+    if (configured())
         HI_MPI_VI_DisableDev(id());
 }
 
@@ -32,9 +31,6 @@ Channel* Device::addChannel(int id) {
 }
 
 bool Device::configureImpl() {
-    if (m_enabled)
-        throw std::runtime_error("vi::Device already configured");
-
     if (m_attr == NULL)
         throw std::runtime_error("vi::Device attributes not set");
 
@@ -43,8 +39,6 @@ bool Device::configureImpl() {
 
     if (HI_MPI_VI_EnableDev(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_EnableDev failed");
-
-    m_enabled = true;
 
     return Configurator::configureImpl();
 }
