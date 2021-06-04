@@ -8,20 +8,22 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-class ViDevice;
+class Device;
 
-class ViSubsystem : public MPPChild, public AConfigurator {
+class Subsystem : public MPPChild, public AConfigurator {
 public:
-    ViSubsystem(MPP*);
-    ~ViSubsystem();
+    Subsystem(MPP*);
+    ~Subsystem();
 
-    ViDevice* addDevice(int id);
+    Device* addDevice(int id);
 
 private:
-    typedef std::vector<ViDevice*> TDevices;
+    typedef std::vector<Device*> TDevices;
 };
 
+}
 }
 }
 

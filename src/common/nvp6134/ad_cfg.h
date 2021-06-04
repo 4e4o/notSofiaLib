@@ -23,9 +23,10 @@ class Lm7004v3Board;
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
+class Channel;
 
-class ViChannel;
-
+}
 }
 }
 
@@ -38,6 +39,6 @@ struct ChannelInfo {
 
 const ChannelInfo* getChannelInfo(int ch);
 
-hisilicon::mpp::ViChannel* getViChannel(int ch);
+hisilicon::mpp::vi::Channel* getViChannel(int ch);
 
 #endif // NVP_SAMPLE_DEFS_H

@@ -1,5 +1,5 @@
-#include "ViDevice.h"
-#include "ViChannel.h"
+#include "Device.h"
+#include "Channel.h"
 #include "Hisilicon/MPP/MPP.h"
 #include "Hisilicon/MPP/ElementsFactory.h"
 
@@ -9,14 +9,15 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-ViDevice::ViDevice(MPP *p, int id)
+Device::Device(MPP *p, int id)
     : MPPChild(p), IdHolder(id),
       m_attr(NULL),
       m_enabled(false) {
 }
 
-ViDevice::~ViDevice() {
+Device::~Device() {
     // TODO order? channels/dev
     AConfigurator::clear();
 
@@ -24,18 +25,18 @@ ViDevice::~ViDevice() {
         HI_MPI_VI_DisableDev(id());
 }
 
-ViChannel* ViDevice::addChannel(int id) {
-    ViChannel *ch = parent()->factory()->viChannel(parent(), this, id);
+Channel* Device::addChannel(int id) {
+    Channel *ch = parent()->factory()->viChannel(parent(), this, id);
     addItem(ch);
     return ch;
 }
 
-bool ViDevice::configure() {
+bool Device::configure() {
     if (m_enabled)
-        throw std::runtime_error("ViDevice already configured");
+        throw std::runtime_error("vi::Device already configured");
 
     if (m_attr == NULL)
-        throw std::runtime_error("ViDevice attributes not set");
+        throw std::runtime_error("vi::Device attributes not set");
 
     if (HI_MPI_VI_SetDevAttr(id(), m_attr) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetDevAttr failed");
@@ -48,9 +49,10 @@ bool ViDevice::configure() {
     return AConfigurator::configure();
 }
 
-void ViDevice::setAttr(VI_DEV_ATTR_S* attr) {
+void Device::setAttr(VI_DEV_ATTR_S* attr) {
     m_attr = attr;
 }
 
+}
 }
 }

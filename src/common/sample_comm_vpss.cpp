@@ -16,7 +16,7 @@
 #include "sample_comm.h"
 #include "nvp6134/ad_cfg.h"
 
-#include "Hisilicon/MPP/VI/ViChannel.h"
+#include "Hisilicon/MPP/VI/Channel.h"
 
 /*****************************************************************************
 * function : start vpss. VPSS chn with frame
@@ -42,7 +42,7 @@ HI_S32 SAMPLE_COMM_VPSS_Start(HI_S32 s32GrpCnt, HI_S32 s32ChnCnt)
     for(i = 0; i < s32GrpCnt; i++)
     {
         // TODO !!
-        hisilicon::mpp::ViChannel* ccc = getViChannel(i);
+        hisilicon::mpp::vi::Channel* ccc = getViChannel(i);
         SIZE_S ddd = ccc->destSize();
 
         stGrpAttr.u32MaxW = ddd.u32Width;

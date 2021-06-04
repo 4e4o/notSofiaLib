@@ -1,8 +1,8 @@
 #include "ElementsFactory.h"
 #include "VideoBuffer.h"
-#include "VI/ViSubsystem.h"
-#include "VI/ViDevice.h"
-#include "VI/ViChannel.h"
+#include "VI/Subsystem.h"
+#include "VI/Device.h"
+#include "VI/Channel.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -17,16 +17,16 @@ VideoBuffer *ElementsFactory::videoBuffer(MPP *p) {
     return new VideoBuffer(p);
 }
 
-ViSubsystem *ElementsFactory::vi(MPP *p) {
-    return new ViSubsystem(p);
+vi::Subsystem *ElementsFactory::vi(MPP *p) {
+    return new vi::Subsystem(p);
 }
 
-ViDevice *ElementsFactory::viDevice(MPP * p, int id) {
-    return new ViDevice(p, id);
+vi::Device *ElementsFactory::viDevice(MPP * p, int id) {
+    return new vi::Device(p, id);
 }
 
-ViChannel *ElementsFactory::viChannel(MPP *m, ViDevice *d, int id) {
-    return new ViChannel(m, d, id);
+vi::Channel *ElementsFactory::viChannel(MPP *m, vi::Device *d, int id) {
+    return new vi::Channel(m, d, id);
 }
 
 }

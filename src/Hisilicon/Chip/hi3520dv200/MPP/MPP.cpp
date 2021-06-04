@@ -5,7 +5,7 @@ namespace hisilicon {
 namespace mpp {
 namespace hi3520dv200 {
 
-MPP::MPP(ViInfoProvider *inf) :
+MPP::MPP(vi::InfoProvider *inf) :
     mpp::MPP(inf) {
     setFactory(new ElementsFactory());
 }

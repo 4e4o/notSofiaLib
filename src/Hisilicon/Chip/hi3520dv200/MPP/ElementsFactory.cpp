@@ -1,7 +1,7 @@
 #include "ElementsFactory.h"
-#include "Vi/ViChannel.h"
-#include "Vi/ViSubsystem.h"
-#include "Vi/ViDevice.h"
+#include "VI/Channel.h"
+#include "VI/Subsystem.h"
+#include "VI/Device.h"
 #include "MPP.h"
 
 namespace hisilicon {
@@ -14,16 +14,16 @@ ElementsFactory::ElementsFactory() {
 ElementsFactory::~ElementsFactory() {
 }
 
-mpp::ViDevice* ElementsFactory::viDevice(mpp::MPP* p, int id) {
-    return new ViDevice(p, id);
+mpp::vi::Device* ElementsFactory::viDevice(mpp::MPP* p, int id) {
+    return new vi::hi3520dv200::Device(p, id);
 }
 
-mpp::ViChannel *ElementsFactory::viChannel(mpp::MPP *m, mpp::ViDevice *d, int id) {
-    return new ViChannel(m, d, id);
+mpp::vi::Channel *ElementsFactory::viChannel(mpp::MPP *m, mpp::vi::Device *d, int id) {
+    return new vi::hi3520dv200::Channel(m, d, id);
 }
 
-mpp::ViSubsystem *ElementsFactory::vi(mpp::MPP *p) {
-    return new ViSubsystem(p);
+mpp::vi::Subsystem *ElementsFactory::vi(mpp::MPP *p) {
+    return new vi::hi3520dv200::Subsystem(p);
 }
 
 }

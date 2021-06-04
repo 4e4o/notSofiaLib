@@ -1,7 +1,7 @@
 #include "VideoBuffer.h"
-#include "VI/Source/ViInfoProvider.h"
-#include "VI/Source/ViDeviceInfo.h"
-#include "VI/Source/ViChannelInfo.h"
+#include "VI/Source/InfoProvider.h"
+#include "VI/Source/DeviceInfo.h"
+#include "VI/Source/ChannelInfo.h"
 
 #include <string.h>
 #include <stdexcept>
@@ -90,7 +90,7 @@ HI_U32 VideoBuffer::maxPicVbBlkSize() {
 // HiMPP Media Processing Software Development Reference.pdf
 // page 90
 
-HI_U32 VideoBuffer::picVbBlkSize(ViChannelInfo *ch) {
+HI_U32 VideoBuffer::picVbBlkSize(vi::ChannelInfo *ch) {
     const HI_U32 sysAlignWidth = parent()->sysWidthAlign();
     const TSize imgSize = ch->imgSize();
     const PIXEL_FORMAT_E pixFmt = ch->pixelFormat();

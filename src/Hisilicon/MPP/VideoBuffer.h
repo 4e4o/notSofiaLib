@@ -6,7 +6,9 @@
 namespace hisilicon {
 namespace mpp {
 
-class ViChannelInfo;
+namespace vi {
+class ChannelInfo;
+}
 
 class VideoBuffer : public MPPChild {
 public:
@@ -15,7 +17,7 @@ public:
 
 private:
     HI_U32 maxPicVbBlkSize();
-    HI_U32 picVbBlkSize(ViChannelInfo *ch);
+    HI_U32 picVbBlkSize(vi::ChannelInfo *ch);
 };
 
 }

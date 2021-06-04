@@ -16,7 +16,7 @@
 #include "sample_comm.h"
 #include "nvp6134/ad_cfg.h"
  
-#include "Hisilicon/MPP/VI/ViChannel.h"
+#include "Hisilicon/MPP/VI/Channel.h"
 
 const HI_U8 g_SOI[2] = {0xFF, 0xD8};
 const HI_U8 g_EOI[2] = {0xFF, 0xD9};
@@ -223,7 +223,7 @@ HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencC
     VENC_ATTR_H264_VBR_S    stH264Vbr;
     VENC_ATTR_H264_FIXQP_S  stH264FixQp;
     const struct ChannelInfo* chI = getChannelInfo(Vpssgrp);
-    hisilicon::mpp::ViChannel* ccc = getViChannel(Vpssgrp);
+    hisilicon::mpp::vi::Channel* ccc = getViChannel(Vpssgrp);
     const SIZE_S stPicSize = ccc->imgSize();
     VIDEO_NORM_E enNorm = ccc->pal() ? VIDEO_ENCODING_MODE_PAL : VIDEO_ENCODING_MODE_NTSC;
     PIC_SIZE_E enSize = chI->sizeType;

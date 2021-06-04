@@ -1,6 +1,6 @@
 #include "ViInfoProvider.h"
-#include "Hisilicon/MPP/VI/Source/ViDeviceInfo.h"
-#include "Hisilicon/MPP/VI/Source/ViChannelInfo.h"
+#include "Hisilicon/MPP/VI/Source/DeviceInfo.h"
+#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
 #include "Board.h"
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
@@ -10,12 +10,12 @@
 namespace boards {
 namespace nvp6134 {
 
-using hisilicon::mpp::ViDeviceInfo;
-using hisilicon::mpp::ViChannelInfo;
+using hisilicon::mpp::vi::DeviceInfo;
+using hisilicon::mpp::vi::ChannelInfo;
 using ::nvp6134::ViChannel;
 
-ViInfoNvp6134Provider::ViInfoNvp6134Provider(BoardWithNvp6134 *b) :
-    ViInfoProvider(createViInfo(b)) {
+ViInfoProvider::ViInfoProvider(BoardWithNvp6134 *b) :
+    InfoProvider(createViInfo(b)) {
 }
 
 static PIXEL_FORMAT_E toMppPixelFormat(ViChannel* ch) {
@@ -37,17 +37,17 @@ static VI_SCAN_MODE_E toMppScanMode(ViChannel* ch) {
     }
 }
 
-hisilicon::mpp::ViInfoProvider::TViDevicesInfo ViInfoNvp6134Provider::createViInfo(BoardWithNvp6134* b) {
-    hisilicon::mpp::ViInfoProvider::TViDevicesInfo result;
+hisilicon::mpp::vi::InfoProvider::TViDevicesInfo ViInfoProvider::createViInfo(BoardWithNvp6134* b) {
+    hisilicon::mpp::vi::InfoProvider::TViDevicesInfo result;
     const int chipsCount = b->nvpCount();
 
     for (int i = 0 ; i < chipsCount ; i++) {
-        ViDeviceInfo *dev = new ViDeviceInfo(i);
+        DeviceInfo *dev = new DeviceInfo(i);
         ::nvp6134::Chip* chip = b->nvp(i);
         auto& ch = chip->viChannels();
 
         for (int j = 0 ; j < (int) ch.size() ; j++) {
-            ViChannelInfo* info = new ViChannelInfo(dev, j);
+            ChannelInfo* info = new ChannelInfo(dev, j);
             auto& channel = ch[j];
 
             if (ch[j]->formatDetected()) {

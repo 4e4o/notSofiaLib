@@ -1,6 +1,6 @@
 #include "MPP.h"
-#include "VI/Source/ViInfoProvider.h"
-#include "VI/ViSubsystem.h"
+#include "VI/Source/InfoProvider.h"
+#include "VI/Subsystem.h"
 #include "VideoBuffer.h"
 #include "ElementsFactory.h"
 
@@ -16,7 +16,7 @@
 namespace hisilicon {
 namespace mpp {
 
-MPP::MPP(ViInfoProvider* v)
+MPP::MPP(vi::InfoProvider* v)
     : m_sourceViInfo(v),
       m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN),
       m_factory(new ElementsFactory()) {
@@ -56,7 +56,7 @@ void MPP::setFactory(ElementsFactory* factory) {
     m_factory.reset(factory);
 }
 
-ViInfoProvider* MPP::viSourceInfo() const {
+vi::InfoProvider* MPP::viSourceInfo() const {
     return m_sourceViInfo.get();
 }
 
@@ -77,7 +77,7 @@ HI_U32 MPP::sysWidthAlign() const {
     return m_sysWidthAlign;
 }
 
-ViSubsystem* MPP::vi() const {
+vi::Subsystem* MPP::vi() const {
     return m_vi.get();
 }
 

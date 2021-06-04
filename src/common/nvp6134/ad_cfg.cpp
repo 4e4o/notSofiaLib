@@ -7,9 +7,9 @@
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
 #include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/VI/ViSubsystem.h"
-#include "Hisilicon/MPP/VI/ViDevice.h"
-#include "Hisilicon/MPP/VI/ViChannel.h"
+#include "Hisilicon/MPP/VI/Subsystem.h"
+#include "Hisilicon/MPP/VI/Device.h"
+#include "Hisilicon/MPP/VI/Channel.h"
 
 using namespace nvp6134;
 
@@ -36,7 +36,7 @@ const ChannelInfo* getChannelInfo(int ch) {
 
 static boards::lm7004v3::Lm7004v3Board* bbb;
 
-hisilicon::mpp::ViChannel* getViChannel(int ch) {
+hisilicon::mpp::vi::Channel* getViChannel(int ch) {
     if ((ch < 0) || (ch > 4))
         throw std::runtime_error("Invalid mpp channel index");
 
@@ -47,8 +47,8 @@ hisilicon::mpp::ViChannel* getViChannel(int ch) {
         ch -= 2;
     }
 
-    hisilicon::mpp::ViDevice* dev = (hisilicon::mpp::ViDevice*)bbb->mpp()->vi()->item(devInd);
-    return (hisilicon::mpp::ViChannel*)dev->item(ch);
+    hisilicon::mpp::vi::Device* dev = (hisilicon::mpp::vi::Device*)bbb->mpp()->vi()->item(devInd);
+    return (hisilicon::mpp::vi::Channel*)dev->item(ch);
 }
 
 void initAdCompatLayer(boards::lm7004v3::Lm7004v3Board *board) {

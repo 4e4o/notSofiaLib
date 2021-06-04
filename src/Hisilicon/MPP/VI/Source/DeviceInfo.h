@@ -7,23 +7,25 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-class ViChannelInfo;
+class ChannelInfo;
 
-class ViDeviceInfo : public IdHolder {
+class DeviceInfo : public IdHolder {
 public:
-    typedef std::vector<ViChannelInfo*> TViChannelsInfo;
+    typedef std::vector<ChannelInfo*> TViChannelsInfo;
 
-    ViDeviceInfo(int id);
-    ~ViDeviceInfo();
+    DeviceInfo(int id);
+    ~DeviceInfo();
 
-    void addChannel(ViChannelInfo*);
+    void addChannel(ChannelInfo*);
     const TViChannelsInfo& channels() const;
 
 private:
     TViChannelsInfo m_channels;
 };
 
+}
 }
 }
 

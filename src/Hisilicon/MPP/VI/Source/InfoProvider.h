@@ -6,30 +6,32 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-class ViDeviceInfo;
-class ViChannelInfo;
+class DeviceInfo;
+class ChannelInfo;
 
 // Задача класса -
 // Передавать инфу из источника по Vi devices
 // и Vi channels в MPP
 
-class ViInfoProvider {
+class InfoProvider {
 public:
-    typedef std::vector<ViDeviceInfo*> TViDevicesInfo;
+    typedef std::vector<DeviceInfo*> TViDevicesInfo;
 
-    ViInfoProvider(const TViDevicesInfo&);
-    ~ViInfoProvider();
+    InfoProvider(const TViDevicesInfo&);
+    ~InfoProvider();
 
     const TViDevicesInfo& devices() const;
     int viChannelsCount() const;
 
-    ViChannelInfo* findChannelInfo(int devId, int chId);
+    ChannelInfo* findChannelInfo(int devId, int chId);
 
 private:
     TViDevicesInfo m_devices;
 };
 
+}
 }
 }
 

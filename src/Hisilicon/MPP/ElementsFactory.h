@@ -4,11 +4,14 @@
 namespace hisilicon {
 namespace mpp {
 
+namespace vi {
+class Subsystem;
+class Device;
+class Channel;
+}
+
 class MPP;
 class VideoBuffer;
-class ViSubsystem;
-class ViDevice;
-class ViChannel;
 
 class ElementsFactory {
 public:
@@ -16,9 +19,9 @@ public:
     ~ElementsFactory();
 
     virtual VideoBuffer* videoBuffer(MPP*);
-    virtual ViSubsystem* vi(MPP*);
-    virtual ViDevice* viDevice(MPP*, int id);
-    virtual ViChannel* viChannel(MPP*, ViDevice*, int id);
+    virtual vi::Subsystem* vi(MPP*);
+    virtual vi::Device* viDevice(MPP*, int id);
+    virtual vi::Channel* viChannel(MPP*, vi::Device*, int id);
 
 
 };

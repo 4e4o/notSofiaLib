@@ -9,7 +9,7 @@ namespace hi3520dv200 {
 
 class MPP : public mpp::MPP {
 public:
-    MPP(ViInfoProvider*);
+    MPP(vi::InfoProvider*);
 };
 
 }

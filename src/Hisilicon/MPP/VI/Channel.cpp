@@ -1,6 +1,6 @@
-#include "ViChannel.h"
-#include "ViDevice.h"
-#include "Hisilicon/MPP/VI/Source/ViChannelInfo.h"
+#include "Channel.h"
+#include "Device.h"
+#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
 #include "Hisilicon/MPP/Utils.h"
 
 #include <stdexcept>
@@ -10,6 +10,7 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
 static VI_CHN_ATTR_S* createStandardAttr() {
     VI_CHN_ATTR_S* attr = new VI_CHN_ATTR_S{};
@@ -24,42 +25,42 @@ static VI_CHN_ATTR_S* createStandardAttr() {
     return attr;
 }
 
-ViChannel::ViChannel(MPP *p, ViDevice* d, int id)
-    : MPPChild(p), IdHolder(id), Holder<ViDevice*>(d),
+Channel::Channel(MPP *p, Device* d, int id)
+    : MPPChild(p), IdHolder(id), Holder<Device*>(d),
       m_enabled(false),
       m_info(NULL),
       m_attr(createStandardAttr()) {
 }
 
-ViChannel::~ViChannel() {
+Channel::~Channel() {
     if (m_enabled)
         HI_MPI_VI_DisableChn(id());
 }
 
-ViChannelInfo* ViChannel::info() const {
+ChannelInfo* Channel::info() const {
     return m_info;
 }
 
-TSize ViChannel::createDestSize() const {
+TSize Channel::createDestSize() const {
     return m_info->imgSize();
 }
 
-VI_CHN_BIND_ATTR_S ViChannel::createBindAttrs() const {
+VI_CHN_BIND_ATTR_S Channel::createBindAttrs() const {
     VI_CHN_BIND_ATTR_S attrs;
     attrs.ViDev = device()->id();
     attrs.ViWay = id();
     return attrs;
 }
 
-bool ViChannel::configure() {
+bool Channel::configure() {
     if (m_enabled)
-        throw std::runtime_error("ViChannel already configured");
+        throw std::runtime_error("vi::Channel already configured");
 
     if (m_info == NULL)
-        throw std::runtime_error("[ViChannel] Vi info is not set");
+        throw std::runtime_error("[vi::Channel] Vi info is not set");
 
     if (m_attr.get() == NULL)
-        throw std::runtime_error("[ViChannel] Vi attr is not set");
+        throw std::runtime_error("[vi::Channel] Vi attr is not set");
 
     {
         // TODO
@@ -95,29 +96,30 @@ bool ViChannel::configure() {
     return true;
 }
 
-void ViChannel::setAttr(VI_CHN_ATTR_S* attr) {
+void Channel::setAttr(VI_CHN_ATTR_S* attr) {
     m_attr.reset(attr);
 }
 
-void ViChannel::setInfo(ViChannelInfo *info) {
+void Channel::setInfo(ChannelInfo *info) {
     m_info = info;
 }
 
-SIZE_S ViChannel::destSize() const {
+SIZE_S Channel::destSize() const {
     return m_attr->stDestSize;
 }
 
-SIZE_S ViChannel::imgSize() const {
+SIZE_S Channel::imgSize() const {
     return Utils::toMppSize(m_info->imgSize());
 }
 
-bool ViChannel::pal() const {
+bool Channel::pal() const {
     return m_info->pal();
 }
 
-ViDevice *ViChannel::device() const {
-    return Holder<ViDevice*>::value();
+Device *Channel::device() const {
+    return Holder<Device*>::value();
 }
 
+}
 }
 }

@@ -1,22 +1,23 @@
-#include "ViInfoProvider.h"
-#include "ViDeviceInfo.h"
-#include "ViChannelInfo.h"
+#include "InfoProvider.h"
+#include "DeviceInfo.h"
+#include "ChannelInfo.h"
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-ViInfoProvider::ViInfoProvider(const ViInfoProvider::TViDevicesInfo& d)
+InfoProvider::InfoProvider(const InfoProvider::TViDevicesInfo& d)
     : m_devices(d) {
 }
 
-ViInfoProvider::~ViInfoProvider() {
+InfoProvider::~InfoProvider() {
 }
 
-const ViInfoProvider::TViDevicesInfo& ViInfoProvider::devices() const {
+const InfoProvider::TViDevicesInfo& InfoProvider::devices() const {
     return m_devices;
 }
 
-int ViInfoProvider::viChannelsCount() const {
+int InfoProvider::viChannelsCount() const {
     int count = 0;
 
     for (int i = 0 ; i < (int) m_devices.size() ; i++)
@@ -25,7 +26,7 @@ int ViInfoProvider::viChannelsCount() const {
     return count;
 }
 
-ViChannelInfo* ViInfoProvider::findChannelInfo(int devId, int chId) {
+ChannelInfo* InfoProvider::findChannelInfo(int devId, int chId) {
     auto& devs = devices();
 
     for (int i = 0 ; i < (int)devs.size() ; i++) {
@@ -48,5 +49,6 @@ ViChannelInfo* ViInfoProvider::findChannelInfo(int devId, int chId) {
     return NULL;
 }
 
+}
 }
 }

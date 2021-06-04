@@ -11,13 +11,14 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-class ViDeviceInfo;
+class DeviceInfo;
 
-class ViChannelInfo : public Holder<ViDeviceInfo*>, public IdHolder {
+class ChannelInfo : public Holder<DeviceInfo*>, public IdHolder {
 public:
-    ViChannelInfo(ViDeviceInfo*, int id);
-    ~ViChannelInfo();
+    ChannelInfo(DeviceInfo*, int id);
+    ~ChannelInfo();
 
     void setPixelFormat(PIXEL_FORMAT_E);
     PIXEL_FORMAT_E pixelFormat() const;
@@ -42,6 +43,7 @@ private:
     TSize m_capSize;
 };
 
+}
 }
 }
 

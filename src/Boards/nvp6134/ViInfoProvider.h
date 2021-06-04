@@ -1,7 +1,7 @@
 #ifndef BOARD_NVP6134_VI_INFO_PROVIDER_H
 #define BOARD_NVP6134_VI_INFO_PROVIDER_H
 
-#include "Hisilicon/MPP/VI/Source/ViInfoProvider.h"
+#include "Hisilicon/MPP/VI/Source/InfoProvider.h"
 
 #include <memory>
 
@@ -10,9 +10,9 @@ namespace nvp6134 {
 
 class BoardWithNvp6134;
 
-class ViInfoNvp6134Provider : public hisilicon::mpp::ViInfoProvider {
+class ViInfoProvider : public hisilicon::mpp::vi::InfoProvider {
 public:
-    ViInfoNvp6134Provider(BoardWithNvp6134*);
+    ViInfoProvider(BoardWithNvp6134*);
 
 private:
     static TViDevicesInfo createViInfo(BoardWithNvp6134*);

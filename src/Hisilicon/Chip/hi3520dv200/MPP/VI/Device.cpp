@@ -1,7 +1,8 @@
-#include "ViDevice.h"
+#include "Device.h"
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 namespace hi3520dv200 {
 
 static VI_DEV_ATTR_S DEV_ATTR_BT656_2MUX = {
@@ -28,18 +29,19 @@ static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
     }
 }
 
-ViDevice::ViDevice(mpp::MPP* p, int id)
-    : mpp::ViDevice(p, id),
+Device::Device(mpp::MPP* p, int id)
+    : mpp::vi::Device(p, id),
       m_attr(DEV_ATTR_BT656_2MUX) {
     // TODO это маска только для hi3520d в нашем режиме
     setMask(id, &m_attr);
 }
 
-bool ViDevice::configure() {
+bool Device::configure() {
     setAttr(&m_attr);
-    return mpp::ViDevice::configure();
+    return mpp::vi::Device::configure();
 }
 
+}
 }
 }
 }

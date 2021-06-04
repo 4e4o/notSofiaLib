@@ -10,22 +10,23 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-class ViDevice;
-class ViChannelInfo;
+class Device;
+class ChannelInfo;
 
-class ViChannel : public MPPChild, public IdHolder,
-        public Holder<ViDevice*>, public IConfigurable {
+class Channel : public MPPChild, public IdHolder,
+        public Holder<Device*>, public IConfigurable {
 public:
-    ViChannel(MPP*, ViDevice*, int id);
-    ~ViChannel();
+    Channel(MPP*, Device*, int id);
+    ~Channel();
 
-    ViDevice* device() const;
+    Device* device() const;
 
     void setAttr(VI_CHN_ATTR_S* attr);
 
     // должен быть вызван после setAttr
-    void setInfo(ViChannelInfo* info);
+    void setInfo(ChannelInfo* info);
 
     bool configure();
 
@@ -34,7 +35,7 @@ public:
     bool pal() const;
 
 protected:
-    ViChannelInfo* info() const;
+    ChannelInfo* info() const;
     void bind(const VI_CHN_BIND_ATTR_S&);
 
 private:
@@ -42,10 +43,11 @@ private:
     virtual VI_CHN_BIND_ATTR_S createBindAttrs() const;
 
     bool m_enabled;
-    ViChannelInfo* m_info;
+    ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
 };
 
+}
 }
 }
 

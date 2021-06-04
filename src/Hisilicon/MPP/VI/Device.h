@@ -11,26 +11,28 @@
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 
-class ViChannel;
+class Channel;
 
-class ViDevice : public MPPChild, public IdHolder, public AConfigurator {
+class Device : public MPPChild, public IdHolder, public AConfigurator {
 public:
-    ViDevice(MPP*, int id);
-    ~ViDevice();
+    Device(MPP*, int id);
+    ~Device();
 
     void setAttr(VI_DEV_ATTR_S* attr);
 
     bool configure();
 
-    ViChannel* addChannel(int id);
+    Channel* addChannel(int id);
 
 private:
-    typedef std::vector<ViChannel*> TChannels;
+    typedef std::vector<Channel*> TChannels;
     VI_DEV_ATTR_S* m_attr;
     bool m_enabled;
 };
 
+}
 }
 }
 

@@ -12,7 +12,7 @@ namespace boards {
 namespace lm7004v3 {
 
 using hisilicon::mpp::hi3520dv200::MPP;
-using boards::nvp6134::ViInfoNvp6134Provider;
+using boards::nvp6134::ViInfoProvider;
 
 Lm7004v3Board::Lm7004v3Board()
     : boards::nvp6134::BoardWithNvp6134(NVP_CHIPS_COUNT) {
@@ -24,7 +24,7 @@ Lm7004v3Board::~Lm7004v3Board(){
 bool Lm7004v3Board::configure() {
     BoardWithNvp6134::configure();
 
-    m_mpp.reset(new MPP(new ViInfoNvp6134Provider(this)));
+    m_mpp.reset(new MPP(new ViInfoProvider(this)));
     m_mpp->configure();
 
     return true;

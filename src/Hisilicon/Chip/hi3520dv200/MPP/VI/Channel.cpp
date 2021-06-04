@@ -1,20 +1,21 @@
-#include "ViChannel.h"
+#include "Channel.h"
 
-#include "Hisilicon/MPP/VI/Source/ViChannelInfo.h"
-#include "Hisilicon/MPP/VI/ViDevice.h"
+#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
+#include "Hisilicon/MPP/VI/Device.h"
 
 namespace hisilicon {
 namespace mpp {
+namespace vi {
 namespace hi3520dv200 {
 
-ViChannel::ViChannel(mpp::MPP *p, ViDevice *d, int id)
-    : mpp::ViChannel(p, d, id) {
+Channel::Channel(mpp::MPP *p, Device *d, int id)
+    : mpp::vi::Channel(p, d, id) {
 }
 
-ViChannel::~ViChannel() {
+Channel::~Channel() {
 }
 
-VI_CHN_BIND_ATTR_S ViChannel::createBindAttrs() const {
+VI_CHN_BIND_ATTR_S Channel::createBindAttrs() const {
     VI_CHN_BIND_ATTR_S attrs;
     attrs.ViDev = device()->id();
 
@@ -26,7 +27,7 @@ VI_CHN_BIND_ATTR_S ViChannel::createBindAttrs() const {
     return attrs;
 }
 
-TSize ViChannel::createDestSize() const {
+TSize Channel::createDestSize() const {
     // HiMPP Media Processing Software Development Reference.pdf
     // page 136/135
     // for hi3520d:
@@ -66,6 +67,7 @@ TSize ViChannel::createDestSize() const {
     return destSize;
 }
 
+}
 }
 }
 }
