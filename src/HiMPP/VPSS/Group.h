@@ -8,6 +8,7 @@
 
 #include "Utils/IdHolder.h"
 #include "Utils/Configurator/Configurator.h"
+#include "Binder/BindItem.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -16,7 +17,8 @@ namespace vpss {
 class Channel;
 class Subsystem;
 
-class Group : public Holder<Subsystem*>, public IdHolder, public Configurator {
+class Group : public Holder<Subsystem*>, public IdHolder,
+        public Configurator, public VpssBindReceiver {
 public:
     Group(Subsystem*, int id);
     ~Group();
@@ -33,6 +35,8 @@ protected:
 
 private:
     Subsystem* subsystem() const;
+    HI_S32 receiverBindDeviceId();
+    HI_S32 receiverBindChannelId();
 
     std::vector<Channel*> m_channels;
     std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;

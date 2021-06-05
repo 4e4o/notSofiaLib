@@ -41,6 +41,14 @@ SIZE_S Channel::createDestSize() const {
     return Utils::toMppSize(m_info->imgSize());
 }
 
+HI_S32 Channel::sourceBindDeviceId() {
+    return device()->id();
+}
+
+HI_S32 Channel::sourceBindChannelId() {
+    return id();
+}
+
 bool Channel::configureImpl() {
     if (m_info == NULL)
         throw std::runtime_error("[vi::Channel] Vi info is not set");

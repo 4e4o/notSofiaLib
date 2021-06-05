@@ -9,6 +9,7 @@
 #include "Utils/Configurator/Configurable.h"
 #include "Utils/IdHolder.h"
 #include "Utils/Size.h"
+#include "HiMPP/VPSS/Binder/BindItem.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -18,7 +19,7 @@ class Device;
 class ChannelInfo;
 
 class Channel : public IdHolder, public Holder<Device*>,
-        public Configurable {
+        public Configurable, public vpss::ViBindSource {
 public:
     Channel(Device*, ChannelInfo*, int id);
     ~Channel();
@@ -38,6 +39,8 @@ private:
     bool configureImpl();
     bool startImpl();
     virtual SIZE_S createDestSize() const;
+    HI_S32 sourceBindDeviceId();
+    HI_S32 sourceBindChannelId();
 
     ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;

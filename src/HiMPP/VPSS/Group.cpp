@@ -47,6 +47,14 @@ Subsystem* Group::subsystem() const {
     return Holder<Subsystem*>::value();
 }
 
+HI_S32 Group::receiverBindDeviceId() {
+    return id();
+}
+
+HI_S32 Group::receiverBindChannelId() {
+    return 0;
+}
+
 Channel* Group::addChannel(int id) {
     Channel* ch = subsystem()->parent()->factory()->vpssChannel(this, id);
     addItem(ch);
