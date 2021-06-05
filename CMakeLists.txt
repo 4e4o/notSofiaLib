@@ -4,6 +4,10 @@ project(notSofia LANGUAGES CXX C)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# sudo dnf install gcc-c++-arm-linux-gnueabi
+# used compiler:
+# blabla/Hi3520D_SDK_V1.0.5.1/osdrv/toolchain/arm-hisiv100nptl-linux/install/opt/hisi-linux-nptl/arm-hisiv100-linux/bin/arm-hisiv100-linux-uclibcgnueabi-gcc
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
