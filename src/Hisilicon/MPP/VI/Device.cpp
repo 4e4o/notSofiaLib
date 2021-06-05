@@ -33,6 +33,7 @@ Subsystem* Device::subsystem() const {
 Channel* Device::addChannel(ChannelInfo* i, int id) {
     Channel* ch = subsystem()->parent()->factory()->viChannel(this, i, id);
     addItem(ch);
+    m_channels.push_back(ch);
     return ch;
 }
 
@@ -52,6 +53,10 @@ bool Device::startImpl() {
 
     bindChannels();
     return Configurator::startImpl();
+}
+
+const std::vector<Channel*>& Device::channels() const {
+    return m_channels;
 }
 
 Channel* Device::addChannel(int id, int infoDevId, int infoChId) {

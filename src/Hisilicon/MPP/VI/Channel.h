@@ -28,6 +28,7 @@ public:
     SIZE_S destSize() const;
     SIZE_S imgSize() const;
     bool pal() const;
+    PIXEL_FORMAT_E pixelFormat() const;
 
 protected:
     void setAttr(VI_CHN_ATTR_S* attr);

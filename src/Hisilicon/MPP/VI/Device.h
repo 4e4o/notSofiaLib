@@ -22,6 +22,7 @@ public:
     ~Device();
 
     Channel* addChannel(int id, int infoDevId, int infoChId);
+    const std::vector<Channel*>& channels() const;
 
 protected:
     bool configureImpl();
@@ -30,12 +31,12 @@ protected:
     void setAttr(VI_DEV_ATTR_S* attr);
 
 private:
+    virtual int getBindWay(int i, Channel*);
     Channel* addChannel(ChannelInfo*, int id);
     void bindChannels();
-    virtual int getBindWay(int i, Channel*);
-
     Subsystem* subsystem() const;
 
+    std::vector<Channel*> m_channels;
     VI_DEV_ATTR_S* m_attr;
 };
 

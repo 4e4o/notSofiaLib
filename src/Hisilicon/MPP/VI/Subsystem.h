@@ -24,9 +24,16 @@ public:
 
     // TODO remove it
     Device* device(int id);
+
+    const std::vector<Device*>& devices() const;
+    int channelsCount() const;
+
 protected:
     bool configureImpl();
     virtual void createDevices();
+
+private:
+    std::vector<Device*> m_devices;
 };
 
 }

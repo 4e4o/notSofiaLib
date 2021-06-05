@@ -88,6 +88,10 @@ bool Channel::pal() const {
     return m_info->pal();
 }
 
+PIXEL_FORMAT_E Channel::pixelFormat() const {
+    return m_attr->enPixFormat;
+}
+
 Device *Channel::device() const {
     return Holder<Device*>::value();
 }

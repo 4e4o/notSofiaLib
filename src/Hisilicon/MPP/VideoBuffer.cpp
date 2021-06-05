@@ -1,8 +1,7 @@
 #include "VideoBuffer.h"
-#include "VI/Source/InfoProvider.h"
-#include "VI/Source/DeviceInfo.h"
-#include "VI/Source/ChannelInfo.h"
 #include "VI/Subsystem.h"
+#include "VI/Device.h"
+#include "VI/Channel.h"
 #include "Sys/Sys.h"
 
 #include <string.h>
@@ -36,7 +35,7 @@ VideoBuffer::~VideoBuffer() {
 bool VideoBuffer::startImpl() {
     // на стадии конфигурации нет нужных данных
     // они есть только на стадии запуска
-    const HI_U32 channelCount = parent()->vi()->infoProvider()->viChannelsCount();
+    const HI_U32 channelCount = parent()->vi()->channelsCount();
 
     if (channelCount < 1)
         throw std::runtime_error("No channels to process");
@@ -60,10 +59,6 @@ bool VideoBuffer::startImpl() {
 
     setPool(stVbConf, 0, blockSize, channelCount * 4);
 
-    // TODO what is it ?
-    /* hist buf*/
-    setPool(stVbConf, 1, 196 * 4, channelCount * 4);
-
     if (HI_MPI_VB_SetConf(&stVbConf) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VB_SetConf failed");
 
@@ -75,7 +70,7 @@ bool VideoBuffer::startImpl() {
 
 HI_U32 VideoBuffer::maxPicVbBlkSize() {
     HI_U32 result = 0, tmp;
-    auto& devs = parent()->vi()->infoProvider()->devices();
+    auto& devs = parent()->vi()->devices();
 
     for (int i = 0 ; i < (int) devs.size() ; i++) {
         auto& channels = devs[i]->channels();
@@ -97,9 +92,9 @@ HI_U32 VideoBuffer::maxPicVbBlkSize() {
 // HiMPP Media Processing Software Development Reference.pdf
 // page 90
 
-HI_U32 VideoBuffer::picVbBlkSize(vi::ChannelInfo *ch) {
+HI_U32 VideoBuffer::picVbBlkSize(vi::Channel *ch) {
     const HI_U32 sysAlignWidth = parent()->sys()->sysWidthAlign();
-    const TSize imgSize = ch->imgSize();
+    const SIZE_S imgSize = ch->imgSize();
     const PIXEL_FORMAT_E pixFmt = ch->pixelFormat();
 
     if ((PIXEL_FORMAT_YUV_SEMIPLANAR_422 != pixFmt) &&
@@ -112,7 +107,7 @@ HI_U32 VideoBuffer::picVbBlkSize(vi::ChannelInfo *ch) {
     // https://wiki.videolan.org/YUV/
     // 16 bits for 422, 12 bits for 420
     const float bytesPerPixel = (PIXEL_FORMAT_YUV_SEMIPLANAR_422 == pixFmt) ? 2 : 1.5;
-    const HI_U32 bufSize = std::ceil(imgSize.width * imgSize.height * bytesPerPixel);
+    const HI_U32 bufSize = std::ceil(imgSize.u32Width * imgSize.u32Height * bytesPerPixel);
 
     // потому что степень для CEILING_2_POWER должна быть кратна 2
     if (sysAlignWidth > 1)

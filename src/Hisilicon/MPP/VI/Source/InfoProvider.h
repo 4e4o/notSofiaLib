@@ -25,7 +25,6 @@ public:
     ~InfoProvider();
 
     const TViDevicesInfo& devices() const;
-    int viChannelsCount() const;
 
     ChannelInfo* findChannelInfo(int devId, int chId);
 

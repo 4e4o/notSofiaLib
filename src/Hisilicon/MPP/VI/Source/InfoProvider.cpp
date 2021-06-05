@@ -20,15 +20,6 @@ const InfoProvider::TViDevicesInfo& InfoProvider::devices() const {
     return m_devices;
 }
 
-int InfoProvider::viChannelsCount() const {
-    int count = 0;
-
-    for (int i = 0 ; i < (int) m_devices.size() ; i++)
-        count += m_devices[i]->channels().size();
-
-    return count;
-}
-
 ChannelInfo* InfoProvider::findChannelInfo(int devId, int chId) {
     auto& devs = devices();
 

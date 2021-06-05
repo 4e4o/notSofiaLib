@@ -10,7 +10,7 @@ namespace hisilicon {
 namespace mpp {
 
 namespace vi {
-class ChannelInfo;
+class Channel;
 }
 
 class VideoBuffer : public MPPChild, public Configurable {
@@ -22,7 +22,7 @@ private:
     bool startImpl();
 
     HI_U32 maxPicVbBlkSize();
-    HI_U32 picVbBlkSize(vi::ChannelInfo *ch);
+    HI_U32 picVbBlkSize(vi::Channel *ch);
 };
 
 }
