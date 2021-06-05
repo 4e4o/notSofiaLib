@@ -23,7 +23,7 @@ Device::~Device() {
     // delete channels first
     Configurator::clear();
     HI_MPI_VI_DisableDev(id());
-    std::cout << "~Device " << this << " , " << id() << std::endl;
+    std::cout << "~vi::Device " << this << " , " << id() << std::endl;
 }
 
 Subsystem* Device::subsystem() const {

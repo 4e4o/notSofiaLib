@@ -2,6 +2,7 @@
 
 #include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
 #include "Hisilicon/MPP/VI/Device.h"
+#include "Hisilicon/MPP/Utils.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -12,7 +13,7 @@ Channel::Channel(Device *d, ChannelInfo* i, int id)
     : mpp::vi::Channel(d, i, id) {
 }
 
-TSize Channel::createDestSize() const {
+SIZE_S Channel::createDestSize() const {
     // HiMPP Media Processing Software Development Reference.pdf
     // page 136/135
     // for hi3520d:
@@ -39,17 +40,14 @@ TSize Channel::createDestSize() const {
     // если width влазеет в cap::width / 2 то юзаем cap::width / 2
     // если не влазеет то юзаем cap::width
 
-    auto i = info();
+    const RECT_S captureRect = capRect();
+    const HI_U32 halfCapWidth = captureRect.u32Width / 2;
+    SIZE_S dest = Utils::rectToSize(captureRect);
 
-    const TSize capSize = i->capSize();
-    const HI_U32 halfWidth = capSize.width / 2;
-    const TSize imgSize = i->imgSize();
-    TSize destSize = capSize;
+    if (imgSize().u32Width <= halfCapWidth)
+        dest.u32Width = halfCapWidth;
 
-    if (imgSize.width <= halfWidth)
-        destSize.width = halfWidth;
-
-    return destSize;
+    return dest;
 }
 
 }

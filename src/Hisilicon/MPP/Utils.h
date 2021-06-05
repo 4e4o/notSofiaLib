@@ -12,6 +12,7 @@ class Utils {
 public:
     static SIZE_S toMppSize(const TSize&);
     static RECT_S toMppRect(const TSize&);
+    static SIZE_S rectToSize(const RECT_S&r);
 };
 
 }

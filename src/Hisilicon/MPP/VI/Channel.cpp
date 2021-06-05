@@ -34,15 +34,11 @@ Channel::Channel(Device* d, ChannelInfo* info, int id)
 
 Channel::~Channel() {
     HI_MPI_VI_DisableChn(id());
-    std::cout << "~Channel " << this << " , " << id() << std::endl;
+    std::cout << "~vi::Channel " << this << " , " << id() << std::endl;
 }
 
-ChannelInfo* Channel::info() const {
-    return m_info;
-}
-
-TSize Channel::createDestSize() const {
-    return m_info->imgSize();
+SIZE_S Channel::createDestSize() const {
+    return Utils::toMppSize(m_info->imgSize());
 }
 
 bool Channel::configureImpl() {
@@ -52,9 +48,9 @@ bool Channel::configureImpl() {
     if (m_attr.get() == NULL)
         throw std::runtime_error("[vi::Channel] Vi attr is not set");
 
-    m_attr->stCapRect = Utils::toMppRect(m_info->capSize());
-    m_attr->stDestSize = Utils::toMppSize(createDestSize());
     m_attr->enPixFormat = m_info->pixelFormat();
+    m_attr->stCapRect = Utils::toMppRect(m_info->capSize());
+    m_attr->stDestSize = createDestSize();
 
     return true;
 }
@@ -72,12 +68,16 @@ bool Channel::startImpl() {
     return true;
 }
 
-void Channel::setAttr(VI_CHN_ATTR_S* attr) {
+void Channel::setAttributes(VI_CHN_ATTR_S* attr) {
     m_attr.reset(attr);
 }
 
 SIZE_S Channel::destSize() const {
     return m_attr->stDestSize;
+}
+
+RECT_S Channel::capRect() const {
+    return m_attr->stCapRect;
 }
 
 SIZE_S Channel::imgSize() const {

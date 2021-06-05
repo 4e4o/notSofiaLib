@@ -23,6 +23,8 @@ public:
     Channel(Device*, ChannelInfo*, int id);
     ~Channel();
 
+    void setAttributes(VI_CHN_ATTR_S* attr);
+
     const Device* device() const;
     SIZE_S destSize() const;
     SIZE_S imgSize() const;
@@ -30,13 +32,12 @@ public:
     PIXEL_FORMAT_E pixelFormat() const;
 
 protected:
-    void setAttr(VI_CHN_ATTR_S* attr);
-    ChannelInfo* info() const;
+    RECT_S capRect() const;
 
 private:
     bool configureImpl();
     bool startImpl();
-    virtual TSize createDestSize() const;
+    virtual SIZE_S createDestSize() const;
 
     ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;

@@ -13,7 +13,7 @@ public:
     Channel(mpp::vi::Device*, ChannelInfo*, int id);
 
 private:
-    TSize createDestSize() const;
+    SIZE_S createDestSize() const;
 };
 
 }
