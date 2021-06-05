@@ -8,6 +8,7 @@ namespace lm7004v3 {
 MPP::MPP(ElementsFactory* f)
     : mpp::MPP(f) {
     addViSubsystem();
+    addVpssSubsystem();
 }
 
 }

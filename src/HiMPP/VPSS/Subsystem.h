@@ -12,6 +12,9 @@ namespace vpss {
 
 class Group;
 
+class BindSource;
+class BindReceiver;
+
 class Subsystem : public MPPChild, public Configurator {
 public:
     Subsystem(MPP*);
@@ -24,8 +27,10 @@ public:
     const std::vector<Group*>& groups() const;
     int channelsCount() const;
 
+    void bind(vpss::BindSource*, vpss::BindReceiver*);
+
 protected:
-    bool configureImpl();
+    void addSourceFromVi1by1();
 
 private:
     std::vector<Group*> m_groups;
