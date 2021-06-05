@@ -1,6 +1,6 @@
 #include "Board.h"
 
-#include "HiMPP/MPP.h"
+#include "HiMPP/Configurations/7004_lm_v3/MPP.h"
 #include "ADC/nvp6134/DriverCommunicator.h"
 #include "ADC/nvp6134/Configurations/7004_lm_v3/Chip.h"
 #include "Boards/nvp6134/HiMPP/ElementsFactory.h"
@@ -11,7 +11,7 @@
 namespace boards {
 namespace lm7004v3 {
 
-using hisilicon::mpp::MPP;
+using hisilicon::mpp::lm7004v3::MPP;
 using boards::nvp6134::mpp::ElementsFactory;
 typedef ElementsFactory<hisilicon::mpp::hi3520dv200::ElementsFactory> TElemFactory;
 
@@ -27,9 +27,7 @@ Board::~Board() {
 }
 
 void Board::initialize() {
-    MPP* mpp = new MPP(new TElemFactory(this));
-    mpp->addViSubsystem();
-    addItem(mpp);
+    addItem(new MPP(new TElemFactory(this)));
 }
 
 // TODO remove it
