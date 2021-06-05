@@ -27,7 +27,6 @@ public:
 protected:
     bool configureImpl();
     bool startImpl();
-
     void setAttr(VI_DEV_ATTR_S* attr);
 
 private:

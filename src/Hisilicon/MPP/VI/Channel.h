@@ -23,8 +23,7 @@ public:
     Channel(Device*, ChannelInfo*, int id);
     ~Channel();
 
-    Device* device() const;
-
+    const Device* device() const;
     SIZE_S destSize() const;
     SIZE_S imgSize() const;
     bool pal() const;

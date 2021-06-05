@@ -92,7 +92,7 @@ PIXEL_FORMAT_E Channel::pixelFormat() const {
     return m_attr->enPixFormat;
 }
 
-Device *Channel::device() const {
+const Device* Channel::device() const {
     return Holder<Device*>::value();
 }
 
