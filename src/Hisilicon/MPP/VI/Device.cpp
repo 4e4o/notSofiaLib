@@ -71,9 +71,10 @@ Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
 
 void Device::bindChannels() {
     VI_CHN_BIND_ATTR_S attr;
+    auto& chnls = channels();
 
-    for (int i = 0 ; i < itemsCount() ; i++) {
-        Channel* ch = static_cast<Channel*>(item(i));
+    for (int i = 0 ; i < (int) chnls.size() ; i++) {
+        Channel* ch = chnls[i];
 
         // HiMPP Media Processing Software Development Reference.pdf
         // page 109
