@@ -11,12 +11,22 @@ namespace mpp {
 namespace vi {
 
 class Device;
+class InfoProvider;
 
 class Subsystem : public MPPChild, public Configurator {
 public:
     Subsystem(MPP*);
 
+    // TODO remove it
+    vi::InfoProvider* infoProvider() const;
+
     Device* addDevice(int id);
+
+    // TODO remove it
+    Device* device(int id);
+protected:
+    bool configureImpl();
+    virtual void createDevices();
 };
 
 }

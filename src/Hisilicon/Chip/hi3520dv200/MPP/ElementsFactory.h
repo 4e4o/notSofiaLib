@@ -10,8 +10,8 @@ namespace hi3520dv200 {
 class ElementsFactory : public mpp::ElementsFactory {
 public:
     mpp::vi::Subsystem* vi(mpp::MPP*);
-    mpp::vi::Device* viDevice(mpp::MPP*, int id);
-    mpp::vi::Channel* viChannel(mpp::MPP*, mpp::vi::Device*, int id);
+    mpp::vi::Device* viDevice(mpp::vi::Subsystem*, int id);
+    mpp::vi::Channel* viChannel(mpp::vi::Device*, mpp::vi::ChannelInfo*, int id);
 };
 
 }

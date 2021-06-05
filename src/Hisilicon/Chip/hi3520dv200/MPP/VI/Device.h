@@ -10,7 +10,7 @@ namespace hi3520dv200 {
 
 class Device : public mpp::vi::Device {
 public:
-    Device(mpp::MPP *, int id);
+    Device(mpp::vi::Subsystem*, int id);
 
 private:
     bool configureImpl();

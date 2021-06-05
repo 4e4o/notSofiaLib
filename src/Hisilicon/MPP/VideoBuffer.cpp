@@ -2,6 +2,7 @@
 #include "VI/Source/InfoProvider.h"
 #include "VI/Source/DeviceInfo.h"
 #include "VI/Source/ChannelInfo.h"
+#include "VI/Subsystem.h"
 #include "Sys/Sys.h"
 
 #include <string.h>
@@ -35,7 +36,7 @@ VideoBuffer::~VideoBuffer() {
 bool VideoBuffer::startImpl() {
     // на стадии конфигурации нет нужных данных
     // они есть только на стадии запуска
-    const HI_U32 channelCount = parent()->viSourceInfo()->viChannelsCount();
+    const HI_U32 channelCount = parent()->vi()->infoProvider()->viChannelsCount();
 
     if (channelCount < 1)
         throw std::runtime_error("No channels to process");
@@ -74,7 +75,7 @@ bool VideoBuffer::startImpl() {
 
 HI_U32 VideoBuffer::maxPicVbBlkSize() {
     HI_U32 result = 0, tmp;
-    auto& devs = parent()->viSourceInfo()->devices();
+    auto& devs = parent()->vi()->infoProvider()->devices();
 
     for (int i = 0 ; i < (int) devs.size() ; i++) {
         auto& channels = devs[i]->channels();

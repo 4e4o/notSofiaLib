@@ -29,10 +29,11 @@ static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
     }
 }
 
-Device::Device(mpp::MPP* p, int id)
+Device::Device(mpp::vi::Subsystem* p, int id)
     : mpp::vi::Device(p, id),
       m_attr(DEV_ATTR_BT656_2MUX) {
     // TODO это маска только для hi3520d в нашем режиме
+    // TODO это конфиг только для lm7004 получается
     setMask(id, &m_attr);
 }
 

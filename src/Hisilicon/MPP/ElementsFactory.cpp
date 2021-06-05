@@ -21,12 +21,12 @@ vi::Subsystem *ElementsFactory::vi(MPP *p) {
     return new vi::Subsystem(p);
 }
 
-vi::Device *ElementsFactory::viDevice(MPP * p, int id) {
+vi::Device *ElementsFactory::viDevice(vi::Subsystem* p, int id) {
     return new vi::Device(p, id);
 }
 
-vi::Channel *ElementsFactory::viChannel(MPP *m, vi::Device *d, int id) {
-    return new vi::Channel(m, d, id);
+vi::Channel *ElementsFactory::viChannel(vi::Device *d, vi::ChannelInfo* i, int id) {
+    return new vi::Channel(d, i, id);
 }
 
 }

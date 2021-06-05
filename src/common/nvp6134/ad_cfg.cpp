@@ -47,7 +47,7 @@ hisilicon::mpp::vi::Channel* getViChannel(int ch) {
         ch -= 2;
     }
 
-    hisilicon::mpp::vi::Device* dev = (hisilicon::mpp::vi::Device*)bbb->mpp()->vi()->item(devInd);
+    hisilicon::mpp::vi::Device* dev = bbb->mpp()->vi()->device(devInd);
     return (hisilicon::mpp::vi::Channel*)dev->item(ch);
 }
 

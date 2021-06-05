@@ -7,12 +7,12 @@ namespace hisilicon {
 namespace mpp {
 namespace hi3520dv200 {
 
-mpp::vi::Device* ElementsFactory::viDevice(mpp::MPP* p, int id) {
+mpp::vi::Device* ElementsFactory::viDevice(mpp::vi::Subsystem* p, int id) {
     return new vi::hi3520dv200::Device(p, id);
 }
 
-mpp::vi::Channel *ElementsFactory::viChannel(mpp::MPP *m, mpp::vi::Device *d, int id) {
-    return new vi::hi3520dv200::Channel(m, d, id);
+mpp::vi::Channel *ElementsFactory::viChannel(mpp::vi::Device *d, mpp::vi::ChannelInfo* i, int id) {
+    return new vi::hi3520dv200::Channel(d, i, id);
 }
 
 mpp::vi::Subsystem *ElementsFactory::vi(mpp::MPP *p) {

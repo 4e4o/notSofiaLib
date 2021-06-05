@@ -2,9 +2,8 @@
 #include "Channel.h"
 #include "Hisilicon/MPP/MPP.h"
 #include "Hisilicon/MPP/ElementsFactory.h"
+#include "Hisilicon/MPP/VI/Subsystem.h"
 #include "Hisilicon/MPP/VI/Source/InfoProvider.h"
-#include "Hisilicon/MPP/VI/Source/DeviceInfo.h"
-#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -15,8 +14,8 @@ namespace hisilicon {
 namespace mpp {
 namespace vi {
 
-Device::Device(MPP *p, int id)
-    : MPPChild(p), IdHolder(id),
+Device::Device(Subsystem* p, int id)
+    : Holder<Subsystem*>(p), IdHolder(id),
       m_attr(NULL) {
 }
 
@@ -27,21 +26,13 @@ Device::~Device() {
     std::cout << "~Device " << this << " , " << id() << std::endl;
 }
 
-Channel* Device::addChannel(int id) {
-    Channel *ch = parent()->factory()->viChannel(parent(), this, id);
-    addItem(ch);
-    return ch;
+Subsystem* Device::subsystem() const {
+    return Holder<Subsystem*>::value();
 }
 
-Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
-    InfoProvider* inf = parent()->viSourceInfo();
-    ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
-
-    if (i == NULL)
-        return NULL;
-
-    mpp::vi::Channel* ch = addChannel(id);
-    ch->setInfo(i);
+Channel* Device::addChannel(ChannelInfo* i, int id) {
+    Channel* ch = subsystem()->parent()->factory()->viChannel(this, i, id);
+    addItem(ch);
     return ch;
 }
 
@@ -59,7 +50,42 @@ bool Device::startImpl() {
     if (HI_MPI_VI_EnableDev(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_EnableDev failed");
 
+    bindChannels();
     return Configurator::startImpl();
+}
+
+Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
+    InfoProvider* inf = subsystem()->infoProvider();
+    ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
+
+    if (i == NULL)
+        return NULL;
+
+    return addChannel(i, id);
+}
+
+void Device::bindChannels() {
+    VI_CHN_BIND_ATTR_S attr;
+
+    for (int i = 0 ; i < itemsCount() ; i++) {
+        Channel* ch = static_cast<Channel*>(item(i));
+
+        // HiMPP Media Processing Software Development Reference.pdf
+        // page 109
+
+        attr.ViDev = id();
+        attr.ViWay = getBindWay(i, ch);
+
+        if (HI_MPI_VI_ChnUnBind(ch->id()) != HI_SUCCESS)
+            throw std::runtime_error("HI_MPI_VI_ChnUnBind failed");
+
+        if (HI_MPI_VI_ChnBind(ch->id(), &attr) != HI_SUCCESS)
+            throw std::runtime_error("HI_MPI_VI_ChnBind failed");
+    }
+}
+
+int Device::getBindWay(int i, Channel*) {
+    return i;
 }
 
 void Device::setAttr(VI_DEV_ATTR_S* attr) {

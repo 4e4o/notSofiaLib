@@ -9,6 +9,7 @@ class Subsystem;
 class Device;
 class Channel;
 class InfoProvider;
+class ChannelInfo;
 }
 
 class MPP;
@@ -22,8 +23,8 @@ public:
     virtual VideoBuffer* videoBuffer(MPP*);
     virtual vi::InfoProvider* viInfoProvider() = 0;
     virtual vi::Subsystem* vi(MPP*);
-    virtual vi::Device* viDevice(MPP*, int id);
-    virtual vi::Channel* viChannel(MPP*, vi::Device*, int id);
+    virtual vi::Device* viDevice(vi::Subsystem*, int id);
+    virtual vi::Channel* viChannel(vi::Device*, mpp::vi::ChannelInfo*, int id);
 
 
 };

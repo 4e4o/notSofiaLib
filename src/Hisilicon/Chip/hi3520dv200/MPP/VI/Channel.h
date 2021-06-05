@@ -10,11 +10,10 @@ namespace hi3520dv200 {
 
 class Channel : public mpp::vi::Channel {
 public:
-    Channel(mpp::MPP*, mpp::vi::Device*, int id);
+    Channel(mpp::vi::Device*, ChannelInfo*, int id);
 
 private:
     TSize createDestSize() const;
-    VI_CHN_BIND_ATTR_S* createBindAttrs() const;
 };
 
 }

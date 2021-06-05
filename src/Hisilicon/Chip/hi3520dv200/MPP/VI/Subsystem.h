@@ -13,7 +13,7 @@ public:
     Subsystem(mpp::MPP*);
 
 private:
-    bool configureImpl();
+    void createDevices();
 };
 
 }
