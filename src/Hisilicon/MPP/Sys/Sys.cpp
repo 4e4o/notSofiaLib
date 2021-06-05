@@ -1,6 +1,7 @@
 #include "Sys.h"
 
 #include <stdexcept>
+#include <iostream>
 
 #include <mpi_sys.h>
 
@@ -19,9 +20,10 @@ Sys::Sys(MPP* p)
 
 Sys::~Sys() {
     HI_MPI_SYS_Exit();
+    std::cout << "~Sys " << this << std::endl;
 }
 
-bool Sys::configureImpl() {
+bool Sys::startImpl() {
     MPP_SYS_CONF_S stSysConf{};
     stSysConf.u32AlignWidth = sysWidthAlign();
 
@@ -30,6 +32,8 @@ bool Sys::configureImpl() {
 
     if (HI_MPI_SYS_Init() != HI_SUCCESS)
         throw "HI_MPI_SYS_Init failed";
+
+    return true;
 }
 
 void Sys::setSysWidthAlign(HI_U32 sa) {

@@ -6,9 +6,14 @@
 class Utils {
 public:
     template<class C>
-    static void clearPtrContainer(C& c) {
-        for (auto it = c.begin() ; it != c.end() ; it++)
-            delete (*it);
+    static void clearPtrContainer(C& c, bool fromEnd = false) {
+        if (fromEnd) {
+            for (auto it = c.rbegin() ; it != c.rend() ; it++)
+                delete (*it);
+        } else {
+            for (auto it = c.begin() ; it != c.end() ; it++)
+                delete (*it);
+        }
 
         if (!std::is_const<C>::value) {
             c.clear();

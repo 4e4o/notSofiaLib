@@ -4,6 +4,7 @@
 #include "Hisilicon/MPP/Utils.h"
 
 #include <stdexcept>
+#include <iostream>
 
 #include <hi_comm_vi.h>
 #include <mpi_vi.h>
@@ -33,6 +34,7 @@ Channel::Channel(MPP *p, Device* d, int id)
 
 Channel::~Channel() {
     HI_MPI_VI_DisableChn(id());
+    std::cout << "~Channel " << this << " , " << id() << std::endl;
 }
 
 ChannelInfo* Channel::info() const {
@@ -43,10 +45,10 @@ TSize Channel::createDestSize() const {
     return m_info->imgSize();
 }
 
-VI_CHN_BIND_ATTR_S Channel::createBindAttrs() const {
-    VI_CHN_BIND_ATTR_S attrs;
-    attrs.ViDev = device()->id();
-    attrs.ViWay = id();
+VI_CHN_BIND_ATTR_S* Channel::createBindAttrs() const {
+    VI_CHN_BIND_ATTR_S* attrs = new VI_CHN_BIND_ATTR_S{};
+    attrs->ViDev = device()->id();
+    attrs->ViWay = id();
     return attrs;
 }
 
@@ -57,25 +59,35 @@ bool Channel::configureImpl() {
     if (m_attr.get() == NULL)
         throw std::runtime_error("[vi::Channel] Vi attr is not set");
 
+    // TODO наверно это надо выпилить
+    // девайсы уже созданы и можно биндить к объекту девайса
+    // а объект девайса уже решает какие параметры бинда давать ?
+    m_bindAttr.reset(createBindAttrs());
+
+    if (m_bindAttr == NULL)
+        throw std::runtime_error("[vi::Channel] createBindAttrs is null");
+
+    m_attr->stCapRect = Utils::toMppRect(m_info->capSize());
+    m_attr->stDestSize = Utils::toMppSize(createDestSize());
+    m_attr->enPixFormat = m_info->pixelFormat();
+
+    return true;
+}
+
+bool Channel::startImpl() {
     {
         // TODO
         // HiMPP Media Processing Software Development Reference.pdf
         // page 121
 
-        VI_CHN_BIND_ATTR_S attrs = createBindAttrs();
-
         if (HI_MPI_VI_ChnUnBind(id()) != HI_SUCCESS)
             throw std::runtime_error("HI_MPI_VI_ChnUnBind failed");
 
-        if (HI_MPI_VI_ChnBind(id(), &attrs) != HI_SUCCESS)
+        if (HI_MPI_VI_ChnBind(id(), m_bindAttr.get()) != HI_SUCCESS)
             throw std::runtime_error("HI_MPI_VI_ChnBind failed");
     }
 
     {
-        m_attr->stCapRect = Utils::toMppRect(m_info->capSize());
-        m_attr->stDestSize = Utils::toMppSize(createDestSize());
-        m_attr->enPixFormat = m_info->pixelFormat();
-
         if (HI_MPI_VI_SetChnScanMode(id(), m_info->scanMode()) != HI_SUCCESS)
             throw std::runtime_error("HI_MPI_VI_SetChnScanMode failed");
 

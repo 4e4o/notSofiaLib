@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Hisilicon/MPP/MPPChild.h"
-#include "Utils/Configurable/Configurator.h"
+#include "Utils/Configurator/Configurator.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -15,12 +15,8 @@ class Device;
 class Subsystem : public MPPChild, public Configurator {
 public:
     Subsystem(MPP*);
-    ~Subsystem();
 
     Device* addDevice(int id);
-
-private:
-    typedef std::vector<Device*> TDevices;
 };
 
 }

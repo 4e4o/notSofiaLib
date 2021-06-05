@@ -11,9 +11,6 @@ Subsystem::Subsystem(MPP * p)
     : MPPChild(p) {
 }
 
-Subsystem::~Subsystem() {
-}
-
 Device* Subsystem::addDevice(int id) {
     Device* dev = parent()->factory()->viDevice(parent(), id);
     addItem(dev);

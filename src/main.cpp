@@ -5,6 +5,9 @@
 #include <pthread.h>
 #include <signal.h>
 
+#include <stdexcept>
+#include <iostream>
+
 #include "sample_comm.h"
 
 #include "Boards/7004_lm_v3/Board.h"
@@ -224,7 +227,12 @@ int main() {
     boards::lm7004v3::Board* board;
 
     board = new boards::lm7004v3::Board();
-    board->configure();
+
+    if (!board->configure())
+        throw std::runtime_error("board configure failed");
+
+    if (!board->start())
+        throw std::runtime_error("board start failed");
 
     // это временное явление
     initAdCompatLayer(board);
@@ -237,5 +245,5 @@ int main() {
 
     delete board;
 
-    exit(s32Ret);
+    return 0;
 }

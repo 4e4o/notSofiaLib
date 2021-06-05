@@ -24,6 +24,7 @@ namespace lm7004v3 {
 class Board : public boards::nvp6134::Board {
 public:
     Board();
+    ~Board();
 
     // TODO remove it
     hisilicon::mpp::MPP* mpp() const;

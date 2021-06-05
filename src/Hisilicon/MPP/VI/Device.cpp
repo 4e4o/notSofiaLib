@@ -7,6 +7,7 @@
 #include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
 
 #include <stdexcept>
+#include <iostream>
 
 #include <mpi_vi.h>
 
@@ -23,6 +24,7 @@ Device::~Device() {
     // delete channels first
     Configurator::clear();
     HI_MPI_VI_DisableDev(id());
+    std::cout << "~Device " << this << " , " << id() << std::endl;
 }
 
 Channel* Device::addChannel(int id) {
@@ -47,13 +49,17 @@ bool Device::configureImpl() {
     if (m_attr == NULL)
         throw std::runtime_error("vi::Device attributes not set");
 
+    return Configurator::configureImpl();
+}
+
+bool Device::startImpl() {
     if (HI_MPI_VI_SetDevAttr(id(), m_attr) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetDevAttr failed");
 
     if (HI_MPI_VI_EnableDev(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_EnableDev failed");
 
-    return Configurator::configureImpl();
+    return Configurator::startImpl();
 }
 
 void Device::setAttr(VI_DEV_ATTR_S* attr) {

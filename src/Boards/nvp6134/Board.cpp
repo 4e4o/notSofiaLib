@@ -12,9 +12,6 @@ Board::Board(int chipCount) :
     m_nvpCount(chipCount) {
 }
 
-Board::~Board() {
-}
-
 bool Board::configureImpl() {
     for (int i = 0 ; i < m_nvpCount ; i++)
         addItem(createNvpChip(m_nvpDriver.get(), i));

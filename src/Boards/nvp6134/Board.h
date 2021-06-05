@@ -18,7 +18,6 @@ namespace nvp6134 {
 class Board : public ABoard {
 public:
     Board(int chipCount);
-    ~Board();
 
     // TODO remove it
     ::nvp6134::Chip* nvp(int = 0) const;

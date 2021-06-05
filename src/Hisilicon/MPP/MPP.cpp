@@ -5,13 +5,12 @@
 #include "VideoBuffer.h"
 #include "ElementsFactory.h"
 
-#include <stdexcept>
-
 namespace hisilicon {
 namespace mpp {
 
 MPP::MPP(ElementsFactory* f)
     : m_factory(f) {
+    // Здесь порядок важен
     addItem(m_factory->viInfoProvider());
     addItem(m_factory->videoBuffer(this));
     addItem(new Sys(this));

@@ -20,6 +20,9 @@ Board::Board()
     : boards::nvp6134::Board(NVP_CHIPS_COUNT) {
 }
 
+Board::~Board() {
+}
+
 ::nvp6134::Chip* Board::createNvpChip(::nvp6134::DriverCommunicator* d, int i) {
     return new nvp6134::Chip(d, i);
 }

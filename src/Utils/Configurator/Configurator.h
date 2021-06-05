@@ -13,6 +13,7 @@ public:
 
 protected:
     bool configureImpl();
+    bool startImpl();
 
     void addItem(Configurable*);
     int itemsCount() const;

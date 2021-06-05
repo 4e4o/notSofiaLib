@@ -27,11 +27,14 @@ VideoBuffer::VideoBuffer(MPP* mpp)
     : MPPChild(mpp) {
 }
 
-VideoBuffer::~VideoBuffer() {
+VideoBuffer::~VideoBuffer() {    
     HI_MPI_VB_Exit();
+    std::cout << "~VideoBuffer " << this << std::endl;
 }
 
-bool VideoBuffer::configureImpl() {
+bool VideoBuffer::startImpl() {
+    // на стадии конфигурации нет нужных данных
+    // они есть только на стадии запуска
     const HI_U32 channelCount = parent()->viSourceInfo()->viChannelsCount();
 
     if (channelCount < 1)

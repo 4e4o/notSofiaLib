@@ -7,6 +7,10 @@ Configurable::Configurable()
 Configurable::~Configurable() {
 }
 
+bool Configurable::configureImpl() {
+    return true;
+}
+
 bool Configurable::configure() {
     if (m_configured)
         return true;

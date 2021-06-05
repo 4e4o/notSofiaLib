@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "Utils/Configurable/Configurator.h"
+#include "Utils/Configurator/Configurator.h"
 
 namespace hisilicon {
 namespace mpp {

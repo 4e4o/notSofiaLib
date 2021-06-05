@@ -4,7 +4,7 @@
 #include <hi_type.h>
 
 #include "Hisilicon/MPP/MPPChild.h"
-#include "Utils/Configurable/Configurable.h"
+#include "Utils/Configurator/Configurable.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -18,7 +18,7 @@ public:
     HI_U32 sysWidthAlign() const;
 
 private:
-    bool configureImpl();
+    bool startImpl();
 
     HI_U32 m_sysWidthAlign;
 };

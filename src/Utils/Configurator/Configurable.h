@@ -1,7 +1,9 @@
-#ifndef I_CONFIGURABLE_H
-#define I_CONFIGURABLE_H
+#ifndef CONFIGURABLE_H
+#define CONFIGURABLE_H
 
-class Configurable {
+#include "Startable.h"
+
+class Configurable : public Startable {
 public:
     virtual ~Configurable();
 
@@ -10,7 +12,7 @@ public:
 protected:
     Configurable();
 
-    virtual bool configureImpl() = 0;
+    virtual bool configureImpl();
 
     bool configured() const;
 
@@ -18,4 +20,4 @@ private:
     bool m_configured;
 };
 
-#endif // I_CONFIGURABLE_H
+#endif // CONFIGURABLE_H

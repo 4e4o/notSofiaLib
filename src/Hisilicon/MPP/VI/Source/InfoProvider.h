@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "Utils/Configurable/Configurable.h"
+#include "Utils/Configurator/Configurable.h"
 
 namespace hisilicon {
 namespace mpp {

@@ -14,7 +14,7 @@ public:
 
 private:
     TSize createDestSize() const;
-    VI_CHN_BIND_ATTR_S createBindAttrs() const;
+    VI_CHN_BIND_ATTR_S* createBindAttrs() const;
 };
 
 }

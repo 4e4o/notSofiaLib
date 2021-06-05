@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Utils/Configurable/Configurator.h"
+#include "Utils/Configurator/Configurator.h"
 
 namespace boards {
 

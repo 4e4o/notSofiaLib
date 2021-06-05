@@ -7,7 +7,7 @@
 
 #include "Hisilicon/MPP/MPPChild.h"
 #include "Utils/IdHolder.h"
-#include "Utils/Configurable/Configurator.h"
+#include "Utils/Configurator/Configurator.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -26,6 +26,7 @@ public:
 
 protected:
     bool configureImpl();
+    bool startImpl();
 
 private:
     Channel* addChannel(int id);

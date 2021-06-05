@@ -7,7 +7,7 @@
 #include <nvp6134_ex_170306/video.h>
 
 #include "Utils/IdHolder.h"
-#include "Utils/Configurable/Configurable.h"
+#include "Utils/Configurator/Configurable.h"
 #include "ChipSpecs.h"
 
 namespace nvp6134 {
@@ -44,7 +44,7 @@ protected:
 private:
     bool configureImpl();
 
-    DriverCommunicator *m_driver;
+    DriverCommunicator* m_driver;
     TViChannels m_viChannels;
     TVoChannels m_voChannels;
 };

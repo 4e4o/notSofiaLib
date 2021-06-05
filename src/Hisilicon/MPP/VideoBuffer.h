@@ -4,7 +4,7 @@
 #include <hi_type.h>
 
 #include "MPPChild.h"
-#include "Utils/Configurable/Configurable.h"
+#include "Utils/Configurator/Configurable.h"
 
 namespace hisilicon {
 namespace mpp {
@@ -19,7 +19,7 @@ public:
     ~VideoBuffer();
 
 private:
-    bool configureImpl();
+    bool startImpl();
 
     HI_U32 maxPicVbBlkSize();
     HI_U32 picVbBlkSize(vi::ChannelInfo *ch);
