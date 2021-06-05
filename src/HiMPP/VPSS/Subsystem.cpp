@@ -1,6 +1,6 @@
 #include "Subsystem.h"
-#include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/ElementsFactory.h"
+#include "HiMPP/MPP.h"
+#include "HiMPP/ElementsFactory.h"
 #include "Group.h"
 
 namespace hisilicon {

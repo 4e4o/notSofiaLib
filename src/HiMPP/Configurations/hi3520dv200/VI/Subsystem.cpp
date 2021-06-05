@@ -1,5 +1,5 @@
 #include "Subsystem.h"
-#include "Hisilicon/MPP/VI/Device.h"
+#include "HiMPP/VI/Device.h"
 
 namespace hisilicon {
 namespace mpp {

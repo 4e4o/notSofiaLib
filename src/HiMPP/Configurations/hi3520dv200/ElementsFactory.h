@@ -1,7 +1,7 @@
 #ifndef MPP_HI3520DV200_ELEMENTS_FACTORY_H
 #define MPP_HI3520DV200_ELEMENTS_FACTORY_H
 
-#include "Hisilicon/MPP/ElementsFactory.h"
+#include "HiMPP/ElementsFactory.h"
 
 namespace hisilicon {
 namespace mpp {

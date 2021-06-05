@@ -1,9 +1,9 @@
 #include "Device.h"
 #include "Channel.h"
-#include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/ElementsFactory.h"
-#include "Hisilicon/MPP/VI/Subsystem.h"
-#include "Hisilicon/MPP/VI/Source/InfoProvider.h"
+#include "HiMPP/MPP.h"
+#include "HiMPP/ElementsFactory.h"
+#include "HiMPP/VI/Subsystem.h"
+#include "HiMPP/VI/Source/InfoProvider.h"
 
 #include <stdexcept>
 #include <iostream>

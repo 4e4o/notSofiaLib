@@ -4,15 +4,28 @@
 #include "VideoBuffer.h"
 #include "ElementsFactory.h"
 
+#include <stdexcept>
+
 namespace hisilicon {
 namespace mpp {
 
 MPP::MPP(ElementsFactory* f)
-    : m_factory(f) {
+    : m_factory(f),
+      m_vi(NULL) {
     // Здесь порядок важен
     addItem(m_factory->videoBuffer(this));
     addItem(new Sys(this));
-    addItem(m_factory->vi(this));
+}
+
+vi::Subsystem* MPP::addViSubsystem() {
+    if (m_vi != NULL)
+        throw std::runtime_error("vi subsystem already added");
+
+    if (itemsCount() != 2)
+        throw std::runtime_error("vi subsystem must be added first");
+
+    addItem(m_vi = m_factory->vi(this));
+    return m_vi;
 }
 
 ElementsFactory* MPP::factory() const {
@@ -24,7 +37,7 @@ Sys* MPP::sys() const {
 }
 
 vi::Subsystem* MPP::vi() const {
-    return static_cast<vi::Subsystem*>(item(2));
+    return m_vi;
 }
 
 }

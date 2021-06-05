@@ -26,7 +26,7 @@ bool Configurator::startImpl() {
     return true;
 }
 
-Configurable *Configurator::item(int ind) const {
+Configurable* Configurator::item(int ind) const {
     return m_items[ind];
 }
 

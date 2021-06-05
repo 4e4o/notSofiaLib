@@ -16,11 +16,11 @@ bool Board::configureImpl() {
     for (int i = 0 ; i < m_nvpCount ; i++)
         addItem(createNvpChip(m_nvpDriver.get(), i));
 
-    onChipsCreated();
+    initialize();
     return ABoard::configureImpl();
 }
 
-void Board::onChipsCreated() {
+void Board::initialize() {
 }
 
 int Board::nvpCount() const {

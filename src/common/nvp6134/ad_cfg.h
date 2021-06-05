@@ -30,7 +30,7 @@ class Channel;
 }
 }
 
-void initAdCompatLayer(boards::lm7004v3::Board *);
+void initAdCompatLayer(const boards::lm7004v3::Board*);
 
 struct ChannelInfo {
     //TODO УДАЛИТЬ ЭТО, СДЕЛАТЬ ЧТОБ ЮЗАЮЩИЕ ЭТО ЮЗАЛИ stCapRect/stDestSize/stVencSize

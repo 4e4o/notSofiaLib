@@ -21,11 +21,14 @@ public:
 
     ElementsFactory* factory() const;
 
+    vi::Subsystem* addViSubsystem();
+
     Sys* sys() const;
     vi::Subsystem* vi() const;
 
 private:
     std::unique_ptr<ElementsFactory> m_factory;
+    vi::Subsystem* m_vi;
 };
 
 }

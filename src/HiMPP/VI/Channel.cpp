@@ -1,7 +1,7 @@
 #include "Channel.h"
 #include "Device.h"
-#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
-#include "Hisilicon/MPP/Utils.h"
+#include "HiMPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/Utils.h"
 
 #include <stdexcept>
 #include <iostream>

@@ -3,9 +3,9 @@
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/DriverCommunicator.h"
 #include "nvp6134/Chip.h"
-#include "Hisilicon/MPP/MPP.h"
+#include "HiMPP/MPP.h"
 #include "Boards/nvp6134/MPP/ElementsFactory.h"
-#include "Hisilicon/Chip/hi3520dv200/MPP/ElementsFactory.h"
+#include "HiMPP/Configurations/hi3520dv200/ElementsFactory.h"
 
 #define NVP_CHIPS_COUNT 1
 
@@ -27,8 +27,10 @@ Board::~Board() {
     return new nvp6134::Chip(d, i);
 }
 
-void Board::onChipsCreated() {
-    addItem(new MPP(new TElemFactory(this)));
+void Board::initialize() {
+    MPP* mpp = new MPP(new TElemFactory(this));
+    mpp->addViSubsystem();
+    addItem(mpp);
 }
 
 // TODO remove it

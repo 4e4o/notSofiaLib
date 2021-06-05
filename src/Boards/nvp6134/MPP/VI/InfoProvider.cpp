@@ -1,6 +1,6 @@
 #include "InfoProvider.h"
-#include "Hisilicon/MPP/VI/Source/DeviceInfo.h"
-#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/VI/Source/DeviceInfo.h"
+#include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Boards/nvp6134/Board.h"
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"

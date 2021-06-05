@@ -6,10 +6,10 @@
 #include "Boards/7004_lm_v3/Board.h"
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
-#include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/VI/Subsystem.h"
-#include "Hisilicon/MPP/VI/Device.h"
-#include "Hisilicon/MPP/VI/Channel.h"
+#include "HiMPP/MPP.h"
+#include "HiMPP/VI/Subsystem.h"
+#include "HiMPP/VI/Device.h"
+#include "HiMPP/VI/Channel.h"
 
 using namespace nvp6134;
 
@@ -34,7 +34,7 @@ const ChannelInfo* getChannelInfo(int ch) {
     return &g_channelInfo[ch];
 }
 
-static boards::lm7004v3::Board* bbb;
+static const boards::lm7004v3::Board* bbb;
 
 hisilicon::mpp::vi::Channel* getViChannel(int ch) {
     if ((ch < 0) || (ch > 4))
@@ -47,11 +47,11 @@ hisilicon::mpp::vi::Channel* getViChannel(int ch) {
         ch -= 2;
     }
 
-    hisilicon::mpp::vi::Device* dev = bbb->mpp()->vi()->device(devInd);
+    const hisilicon::mpp::vi::Device* dev = bbb->mpp()->vi()->device(devInd);
     return (hisilicon::mpp::vi::Channel*)dev->item(ch);
 }
 
-void initAdCompatLayer(boards::lm7004v3::Board *board) {
+void initAdCompatLayer(const boards::lm7004v3::Board *board) {
     bbb = board;
     auto& c = board->nvp()->viChannels();
 

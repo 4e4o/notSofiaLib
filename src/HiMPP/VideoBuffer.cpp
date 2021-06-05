@@ -35,9 +35,13 @@ VideoBuffer::~VideoBuffer() {
 bool VideoBuffer::startImpl() {
     // на стадии конфигурации нет нужных данных
     // они есть только на стадии запуска
-    const HI_U32 channelCount = parent()->vi()->channelsCount();
+    HI_U32 channelsCount = 0;
+    const vi::Subsystem* vi = parent()->vi();
 
-    if (channelCount < 1)
+    if (vi != NULL)
+        channelsCount = vi->channelsCount();
+
+    if (channelsCount < 1)
         throw std::runtime_error("No channels to process");
 
     const HI_U32 blockSize = maxPicVbBlkSize();
@@ -57,7 +61,7 @@ bool VideoBuffer::startImpl() {
     // Потом сделал 1 канал на группу, 4 группы, стало работать с channelCount * 3,
     // - с 2 уже не работает, зависимость пока не понятна
 
-    setPool(stVbConf, 0, blockSize, channelCount * 4);
+    setPool(stVbConf, 0, blockSize, channelsCount * 4);
 
     if (HI_MPI_VB_SetConf(&stVbConf) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VB_SetConf failed");
@@ -70,7 +74,12 @@ bool VideoBuffer::startImpl() {
 
 HI_U32 VideoBuffer::maxPicVbBlkSize() {
     HI_U32 result = 0, tmp;
-    auto& devs = parent()->vi()->devices();
+    const vi::Subsystem* vi = parent()->vi();
+
+    if (vi == NULL)
+        return result;
+
+    auto& devs = vi->devices();
 
     for (int i = 0 ; i < (int) devs.size() ; i++) {
         auto& channels = devs[i]->channels();

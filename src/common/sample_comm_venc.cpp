@@ -16,7 +16,7 @@
 #include "sample_comm.h"
 #include "nvp6134/ad_cfg.h"
  
-#include "Hisilicon/MPP/VI/Channel.h"
+#include "HiMPP/VI/Channel.h"
 
 const HI_U8 g_SOI[2] = {0xFF, 0xD8};
 const HI_U8 g_EOI[2] = {0xFF, 0xD9};

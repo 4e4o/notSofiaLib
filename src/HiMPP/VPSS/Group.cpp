@@ -1,7 +1,7 @@
 #include "Group.h"
 #include "Channel.h"
-#include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/ElementsFactory.h"
+#include "HiMPP/MPP.h"
+#include "HiMPP/ElementsFactory.h"
 #include "Subsystem.h"
 
 #include <stdexcept>
@@ -13,13 +13,28 @@ namespace hisilicon {
 namespace mpp {
 namespace vpss {
 
+static VPSS_GRP_ATTR_S* createStandardAttr() {
+    VPSS_GRP_ATTR_S* attr = new VPSS_GRP_ATTR_S{};
+
+    attr->bDrEn = HI_FALSE;
+    attr->bDbEn = HI_FALSE;
+    attr->bIeEn = HI_FALSE;
+    attr->bNrEn = HI_TRUE;
+    attr->bHistEn = HI_FALSE;
+    attr->enDieMode = VPSS_DIE_MODE_AUTO;
+
+    return attr;
+}
+
 Group::Group(Subsystem* p, int id)
-    : Holder<Subsystem*>(p), IdHolder(id) {
+    : Holder<Subsystem*>(p), IdHolder(id),
+      m_attrs(createStandardAttr()) {
 }
 
 Group::~Group() {
     // сначала останавливаем группу
     HI_MPI_VPSS_StopGrp(id());
+
     // потом каналы
     Configurator::clear();
 

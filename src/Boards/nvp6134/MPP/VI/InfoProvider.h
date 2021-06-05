@@ -1,7 +1,7 @@
 #ifndef BOARD_NVP6134_VI_INFO_PROVIDER_H
 #define BOARD_NVP6134_VI_INFO_PROVIDER_H
 
-#include "Hisilicon/MPP/VI/Source/InfoProvider.h"
+#include "HiMPP/VI/Source/InfoProvider.h"
 #include "Utils/Holder.h"
 
 #include <memory>

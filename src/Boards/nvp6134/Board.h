@@ -28,7 +28,7 @@ protected:
     bool configureImpl();
 
 private:
-    virtual void onChipsCreated();
+    virtual void initialize();
 
     std::unique_ptr< ::nvp6134::DriverCommunicator> m_nvpDriver;
     const int m_nvpStartIndex;

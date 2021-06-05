@@ -1,8 +1,8 @@
 #include "Channel.h"
 
-#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
-#include "Hisilicon/MPP/VI/Device.h"
-#include "Hisilicon/MPP/Utils.h"
+#include "HiMPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/VI/Device.h"
+#include "HiMPP/Utils.h"
 
 namespace hisilicon {
 namespace mpp {

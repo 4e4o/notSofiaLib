@@ -30,7 +30,7 @@ public:
     hisilicon::mpp::MPP* mpp() const;
 
 private:
-    void onChipsCreated();
+    void initialize();
     ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i);
 };
 

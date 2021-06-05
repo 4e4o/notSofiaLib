@@ -1,6 +1,6 @@
 #include "Channel.h"
 #include "Group.h"
-#include "Hisilicon/MPP/Utils.h"
+#include "HiMPP/Utils.h"
 
 #include <stdexcept>
 #include <iostream>

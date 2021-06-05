@@ -1,9 +1,9 @@
 #include "Subsystem.h"
-#include "Hisilicon/MPP/MPP.h"
-#include "Hisilicon/MPP/ElementsFactory.h"
-#include "Hisilicon/MPP/VI/Source/InfoProvider.h"
-#include "Hisilicon/MPP/VI/Source/DeviceInfo.h"
-#include "Hisilicon/MPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/MPP.h"
+#include "HiMPP/ElementsFactory.h"
+#include "HiMPP/VI/Source/InfoProvider.h"
+#include "HiMPP/VI/Source/DeviceInfo.h"
+#include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Device.h"
 
 namespace hisilicon {
@@ -53,7 +53,7 @@ const std::vector<Device*>& Subsystem::devices() const {
     return m_devices;
 }
 
-Device* Subsystem::device(int id) {
+const Device* Subsystem::device(int id) {
     return m_devices[id];
 }
 

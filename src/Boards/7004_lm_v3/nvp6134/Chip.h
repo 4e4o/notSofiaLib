@@ -19,7 +19,6 @@ public:
 private:
     NVP6134_VI_MODE getViChannelMode(::nvp6134::ViChannel*);
     NVP6134_OUTMODE_SEL getVoChannelMode(::nvp6134::VoChannel*);
-
 };
 
 }

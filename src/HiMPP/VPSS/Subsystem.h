@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Hisilicon/MPP/MPPChild.h"
+#include "HiMPP/MPPChild.h"
 #include "Utils/Configurator/Configurator.h"
 
 namespace hisilicon {

@@ -16,7 +16,7 @@
 #include "sample_comm.h"
 #include "nvp6134/ad_cfg.h"
 
-#include "Hisilicon/MPP/VI/Channel.h"
+#include "HiMPP/VI/Channel.h"
 
 /*****************************************************************************
 * function : start vpss. VPSS chn with frame
