@@ -1,7 +1,7 @@
 #ifndef BOARD_NVP6134_ELEMENTS_FACTORY_H
 #define BOARD_NVP6134_ELEMENTS_FACTORY_H
 
-#include "VI/InfoProvider.h"
+#include "ViInfoProvider.h"
 
 namespace boards {
 namespace nvp6134 {

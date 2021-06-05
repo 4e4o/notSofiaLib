@@ -1,10 +1,9 @@
 #include "Board.h"
 
-#include "ADC/nvp6134/Chip.h"
-#include "ADC/nvp6134/DriverCommunicator.h"
-#include "nvp6134/Chip.h"
 #include "HiMPP/MPP.h"
-#include "Boards/nvp6134/MPP/ElementsFactory.h"
+#include "ADC/nvp6134/DriverCommunicator.h"
+#include "ADC/nvp6134/Configurations/7004_lm_v3/Chip.h"
+#include "Boards/nvp6134/HiMPP/ElementsFactory.h"
 #include "HiMPP/Configurations/hi3520dv200/ElementsFactory.h"
 
 #define NVP_CHIPS_COUNT 1
@@ -24,7 +23,7 @@ Board::~Board() {
 }
 
 ::nvp6134::Chip* Board::createNvpChip(::nvp6134::DriverCommunicator* d, int i) {
-    return new nvp6134::Chip(d, i);
+    return new ::nvp6134::lm7004v3::Chip(d, i);
 }
 
 void Board::initialize() {

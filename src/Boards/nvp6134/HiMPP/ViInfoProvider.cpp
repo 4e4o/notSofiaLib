@@ -1,4 +1,4 @@
-#include "InfoProvider.h"
+#include "ViInfoProvider.h"
 #include "HiMPP/VI/Source/DeviceInfo.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Boards/nvp6134/Board.h"
