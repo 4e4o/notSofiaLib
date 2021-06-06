@@ -3,8 +3,7 @@
 #include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/DriverCommunicator.h"
 
-namespace boards {
-namespace nvp6134 {
+namespace boards::nvp6134 {
 
 Board::Board(int chipCount) :
     m_nvpDriver(new ::nvp6134::DriverCommunicator(chipCount)),
@@ -31,5 +30,4 @@ int Board::nvpCount() const {
     return static_cast< ::nvp6134::Chip*>(item(m_nvpStartIndex + i));
 }
 
-}
 }

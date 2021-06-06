@@ -10,9 +10,7 @@
 
 #include <mpi_vi.h>
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 Device::Device(Subsystem* p, int id)
     : Holder<Subsystem*>(p), IdHolder(id),
@@ -98,6 +96,4 @@ void Device::setAttr(VI_DEV_ATTR_S* attr) {
     m_attr = attr;
 }
 
-}
-}
 }

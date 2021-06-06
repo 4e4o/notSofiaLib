@@ -6,9 +6,7 @@
 #include "HiMPP/MPPChild.h"
 #include "Utils/Configurator/Configurator.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 class Device;
 class InfoProvider;
@@ -29,15 +27,13 @@ public:
     int channelsCount() const;
 
 protected:
-    bool configureImpl();
+    bool configureImpl() override final;
     virtual void createDevices();
 
 private:
     std::vector<Device*> m_devices;
 };
 
-}
-}
 }
 
 #endif // MPP_VI_SUBSYSTEM_H

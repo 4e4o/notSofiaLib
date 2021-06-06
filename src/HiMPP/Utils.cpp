@@ -1,7 +1,6 @@
 #include "Utils.h"
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 SIZE_S Utils::toMppSize(const TSize &s) {
     SIZE_S r{};
@@ -24,5 +23,4 @@ SIZE_S Utils::rectToSize(const RECT_S&r) {
     return result;
 }
 
-}
 }

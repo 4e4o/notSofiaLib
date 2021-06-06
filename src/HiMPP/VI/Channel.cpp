@@ -9,9 +9,7 @@
 #include <hi_comm_vi.h>
 #include <mpi_vi.h>
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 static VI_CHN_ATTR_S* createStandardAttr() {
     VI_CHN_ATTR_S* attr = new VI_CHN_ATTR_S{};
@@ -104,6 +102,4 @@ const Device* Channel::device() const {
     return Holder<Device*>::value();
 }
 
-}
-}
 }

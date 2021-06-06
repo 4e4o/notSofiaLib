@@ -3,9 +3,7 @@
 
 #include <hi_common.h>
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 class BindSource {
 public:
@@ -33,20 +31,18 @@ protected:
 
 class ViBindSource : public BindSource {
 private:
-    MOD_ID_E sourceBindMode() {
+    MOD_ID_E sourceBindMode() override final {
         return HI_ID_VIU;
     }
 };
 
 class VpssBindReceiver : public BindReceiver {
 private:
-    MOD_ID_E receiverBindMode() {
+    MOD_ID_E receiverBindMode() override final {
         return HI_ID_VPSS;
     }
 };
 
-}
-}
 }
 
 #endif // MPP_VPSS_BIND_ITEM_H

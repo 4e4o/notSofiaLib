@@ -5,9 +5,7 @@
 
 #include "Utils/IdHolder.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 class ChannelInfo;
 
@@ -15,7 +13,7 @@ class DeviceInfo : public IdHolder {
 public:
     typedef std::vector<ChannelInfo*> TViChannelsInfo;
 
-    DeviceInfo(int id);
+    using IdHolder::IdHolder;
     ~DeviceInfo();
 
     void addChannel(ChannelInfo*);
@@ -25,8 +23,6 @@ private:
     TViChannelsInfo m_channels;
 };
 
-}
-}
 }
 
 #endif // MPP_VI_DEVICE_INFO_H

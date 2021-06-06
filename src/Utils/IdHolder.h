@@ -5,7 +5,7 @@
 
 class IdHolder : public Holder<int> {
 public:
-    IdHolder(int id) : Holder<int>(id) { }
+    using Holder<int>::Holder;
 
     int id() const {
         return Holder<int>::value();

@@ -3,24 +3,18 @@
 
 #include "HiMPP/VI/Device.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
-namespace hi3520dv200 {
+namespace hisilicon::mpp::vi::hi3520dv200 {
 
 class Device : public mpp::vi::Device {
 public:
     Device(mpp::vi::Subsystem*, int id);
 
 private:
-    bool configureImpl();
+    bool configureImpl() override final;
 
     VI_DEV_ATTR_S m_attr;
 };
 
-}
-}
-}
 }
 
 #endif // _HI3520DV200

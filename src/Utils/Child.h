@@ -6,7 +6,7 @@
 template<typename Parent>
 class Child : public Holder<Parent*> {
 public:
-    Child(Parent* p) : Holder<Parent*>(p) { }
+    using Holder<Parent*>::Holder;
 
     Parent* parent() const {
         return Holder<Parent*>::value();

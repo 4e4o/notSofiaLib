@@ -9,9 +9,7 @@
 #include "Utils/IdHolder.h"
 #include "Utils/Size.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 class Group;
 
@@ -26,14 +24,12 @@ public:
     const Group* group() const;
 
 private:
-    bool configureImpl();
-    bool startImpl();
+    bool configureImpl() override final;
+    bool startImpl() override final;
 
     std::unique_ptr<VPSS_CHN_ATTR_S> m_attr;
 };
 
-}
-}
 }
 
 #endif // MPP_VPSS_CHANNEL_H

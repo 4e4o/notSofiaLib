@@ -13,18 +13,13 @@
 
 #define DEFAULT_MAX_POOL_COUNT 128
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 static void setPool(VB_CONF_S& conf, int i, HI_U32 blockSize, HI_U32 blkCount) {
     conf.astCommPool[i].u32BlkSize = blockSize;
     conf.astCommPool[i].u32BlkCnt = blkCount;
     memset(conf.astCommPool[i].acMmzName, 0,
            sizeof(conf.astCommPool[i].acMmzName));
-}
-
-VideoBuffer::VideoBuffer(MPP* mpp)
-    : MPPChild(mpp) {
 }
 
 VideoBuffer::~VideoBuffer() {    
@@ -121,5 +116,4 @@ HI_U32 VideoBuffer::picVbBlkSize(vi::Channel *ch) {
     return bufSize;
 }
 
-}
 }

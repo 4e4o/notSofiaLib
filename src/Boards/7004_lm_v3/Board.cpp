@@ -8,8 +8,7 @@
 
 #define NVP_CHIPS_COUNT 1
 
-namespace boards {
-namespace lm7004v3 {
+namespace boards::lm7004v3 {
 
 using hisilicon::mpp::lm7004v3::MPP;
 using boards::nvp6134::mpp::ElementsFactory;
@@ -35,5 +34,4 @@ hisilicon::mpp::MPP* Board::mpp() const {
     return static_cast<hisilicon::mpp::MPP*>(item(1));
 }
 
-}
 }

@@ -7,8 +7,7 @@
 #include "VPSS/Group.h"
 #include "VPSS/Subsystem.h"
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 ElementsFactory::ElementsFactory() {
 }
@@ -44,5 +43,4 @@ vpss::Channel* ElementsFactory::vpssChannel(vpss::Group* g, int id) {
     return new vpss::Channel(g, id);
 }
 
-}
 }

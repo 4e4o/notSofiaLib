@@ -10,14 +10,11 @@ class Chip;
 class DriverCommunicator;
 }
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 class MPP;
 }
-}
 
-namespace boards {
-namespace lm7004v3 {
+namespace boards::lm7004v3 {
 
 // lm7004v3 борда
 
@@ -30,11 +27,10 @@ public:
     hisilicon::mpp::MPP* mpp() const;
 
 private:
-    void initialize();
-    ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i);
+    void initialize() override final;
+    ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) override final;
 };
 
-}
 }
 
 #endif // LM_7003_V3_BOARD_H

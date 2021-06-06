@@ -11,9 +11,7 @@
 #include "Utils/Size.h"
 #include "HiMPP/VPSS/Binder/BindItem.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 class Device;
 class ChannelInfo;
@@ -36,18 +34,16 @@ protected:
     RECT_S capRect() const;
 
 private:
-    bool configureImpl();
-    bool startImpl();
     virtual SIZE_S createDestSize() const;
-    HI_S32 sourceBindDeviceId();
-    HI_S32 sourceBindChannelId();
+    bool configureImpl() override final;
+    bool startImpl() override final;
+    HI_S32 sourceBindDeviceId() override final;
+    HI_S32 sourceBindChannelId() override final;
 
     ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
 };
 
-}
-}
 }
 
 #endif // MPP_VI_CHANNEL_H

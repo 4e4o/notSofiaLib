@@ -10,8 +10,7 @@
 // HiMPP Media Processing Software Development Reference.pdf
 #define DEFAULT_SYS_WIDTH_ALIGN 64
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 Sys::Sys(MPP* p)
     : MPPChild(p),
@@ -53,5 +52,4 @@ HI_U32 Sys::sysWidthAlign() const {
     return m_sysWidthAlign;
 }
 
-}
 }

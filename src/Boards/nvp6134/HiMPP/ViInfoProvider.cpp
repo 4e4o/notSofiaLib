@@ -7,18 +7,11 @@
 
 #include <stdexcept>
 
-namespace boards {
-namespace nvp6134 {
-namespace mpp {
-namespace vi {
+namespace boards::nvp6134::mpp::vi {
 
 using hisilicon::mpp::vi::DeviceInfo;
 using hisilicon::mpp::vi::ChannelInfo;
 using ::nvp6134::ViChannel;
-
-InfoProvider::InfoProvider(Board *b)
-    : Holder<Board*>(b) {
-}
 
 static PIXEL_FORMAT_E toMppPixelFormat(ViChannel* ch) {
     switch(ch->pixelFormat()) {
@@ -84,7 +77,4 @@ bool InfoProvider::configureImpl() {
     return true;
 }
 
-}
-}
-}
 }

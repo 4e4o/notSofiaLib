@@ -1,9 +1,6 @@
 #include "Device.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
-namespace hi3520dv200 {
+namespace hisilicon::mpp::vi::hi3520dv200 {
 
 static VI_DEV_ATTR_S DEV_ATTR_BT656_2MUX = {
     VI_MODE_BT656,
@@ -42,7 +39,4 @@ bool Device::configureImpl() {
     return mpp::vi::Device::configureImpl();
 }
 
-}
-}
-}
 }

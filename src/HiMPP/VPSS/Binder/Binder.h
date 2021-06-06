@@ -7,9 +7,7 @@
 
 #include "Utils/Configurator/Configurable.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 class BindSource;
 class BindReceiver;
@@ -23,18 +21,15 @@ public:
     ~Binder();
 
 private:
-    bool configureImpl();
-    bool startImpl();
+    bool configureImpl() override final;
+    bool startImpl() override final;
 
     BindSource* m_source;
     BindReceiver* m_receiver;
-
     std::unique_ptr<MPP_CHN_S> m_in;
     std::unique_ptr<MPP_CHN_S> m_out;
 };
 
-}
-}
 }
 
 #endif // VPSS_BINDER_H

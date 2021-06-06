@@ -6,25 +6,21 @@
 
 #include <memory>
 
-namespace boards {
-namespace nvp6134 {
+namespace boards::nvp6134 {
 
 class Board;
 
-namespace mpp {
-namespace vi {
+namespace mpp::vi {
 
 class InfoProvider : public Holder<Board*>,
         public hisilicon::mpp::vi::InfoProvider {
 public:
-    InfoProvider(Board*);
+    using Holder<Board*>::Holder;
 
 private:
-    bool configureImpl();
+    bool configureImpl() override final;
 };
 
-}
-}
 }
 }
 

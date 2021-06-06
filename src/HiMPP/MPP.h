@@ -5,8 +5,7 @@
 
 #include "Utils/Configurator/Configurator.h"
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 namespace vi {
 class Subsystem;
@@ -38,7 +37,6 @@ private:
     vpss::Subsystem* m_vpss;
 };
 
-}
 }
 
 #endif // MPP_H

@@ -1,14 +1,7 @@
 #include "Subsystem.h"
 #include "HiMPP/VI/Device.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
-namespace hi3520dv200 {
-
-Subsystem::Subsystem(MPP * p)
-    : mpp::vi::Subsystem(p) {
-}
+namespace hisilicon::mpp::vi::hi3520dv200 {
 
 // id каналов фиксированы и зависят от хики чипа И режима его работы!
 // в нашем случае 4channel 720p режим для hi3520d v200
@@ -36,7 +29,4 @@ void Subsystem::createDevices() {
     dev1->addChannel(6, 0, 3);
 }
 
-}
-}
-}
 }

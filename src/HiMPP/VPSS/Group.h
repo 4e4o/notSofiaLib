@@ -10,9 +10,7 @@
 #include "Utils/Configurator/Configurator.h"
 #include "Binder/BindItem.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 class Channel;
 class Subsystem;
@@ -30,21 +28,19 @@ public:
     const std::vector<Channel*>& channels() const;
 
 protected:
-    bool configureImpl();
-    bool startImpl();
+    bool configureImpl() override final;
+    bool startImpl() override final;
 
 private:
+    HI_S32 receiverBindDeviceId() override final;
+    HI_S32 receiverBindChannelId() override final;
     Subsystem* subsystem() const;
-    HI_S32 receiverBindDeviceId();
-    HI_S32 receiverBindChannelId();
 
     std::vector<Channel*> m_channels;
     std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;
     std::unique_ptr<VPSS_GRP_PARAM_S> m_params;
 };
 
-}
-}
 }
 
 #endif // MPP_VPSS_GROUP_H

@@ -1,8 +1,6 @@
 #include "ChannelInfo.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 ChannelInfo::ChannelInfo(DeviceInfo* d, int id)
     : Holder<DeviceInfo *>(d),
@@ -55,6 +53,4 @@ void ChannelInfo::setPal(bool pal) {
     m_pal = pal;
 }
 
-}
-}
 }

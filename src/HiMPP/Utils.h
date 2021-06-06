@@ -5,8 +5,7 @@
 
 #include "Utils/Size.h"
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 class Utils {
 public:
@@ -15,7 +14,6 @@ public:
     static SIZE_S rectToSize(const RECT_S&r);
 };
 
-}
 }
 
 #endif // MPP_UTILS_H

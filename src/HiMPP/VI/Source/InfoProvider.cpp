@@ -2,9 +2,7 @@
 #include "DeviceInfo.h"
 #include "ChannelInfo.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 InfoProvider::InfoProvider() {
 }
@@ -35,6 +33,4 @@ ChannelInfo* InfoProvider::findChannelInfo(int devId, int chId) {
     return NULL;
 }
 
-}
-}
 }

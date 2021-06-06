@@ -6,9 +6,7 @@
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Device.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 Subsystem::Subsystem(MPP* p)
     : MPPChild(p) {
@@ -57,6 +55,4 @@ const Device* Subsystem::device(int id) {
     return m_devices[id];
 }
 
-}
-}
 }

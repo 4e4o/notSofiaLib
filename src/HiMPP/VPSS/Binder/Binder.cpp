@@ -6,9 +6,7 @@
 #include <stdexcept>
 #include <iostream>
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 static MPP_CHN_S* createBindSource(BindSource *source) {
     MPP_CHN_S* param = new MPP_CHN_S();
@@ -47,6 +45,4 @@ bool Binder::startImpl() {
     return true;
 }
 
-}
-}
 }

@@ -6,9 +6,7 @@
 
 #include "Utils/Configurator/Configurable.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 class DeviceInfo;
 class ChannelInfo;
@@ -35,8 +33,6 @@ private:
     TViDevicesInfo m_devices;
 };
 
-}
-}
 }
 
 #endif // MPP_VI_INFO_PROVIDER_H

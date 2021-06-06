@@ -6,18 +6,15 @@
 #include "HiMPP/MPPChild.h"
 #include "Utils/Configurator/Configurator.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 class Group;
-
 class BindSource;
 class BindReceiver;
 
 class Subsystem : public MPPChild, public Configurator {
 public:
-    Subsystem(MPP*);
+    using MPPChild::MPPChild;
 
     Group* addGroup(int id);
 
@@ -36,8 +33,6 @@ private:
     std::vector<Group*> m_groups;
 };
 
-}
-}
 }
 
 #endif // MPP_VPSS_SUBSYSTEM_H

@@ -15,7 +15,7 @@ public:
                 delete (*it);
         }
 
-        if (!std::is_const<C>::value) {
+        if constexpr (!std::is_const<C>::value) {
             c.clear();
         }
     }

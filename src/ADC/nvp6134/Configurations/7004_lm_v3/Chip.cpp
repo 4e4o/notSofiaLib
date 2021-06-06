@@ -1,15 +1,7 @@
 #include "Chip.h"
 #include "ADC/nvp6134/ViChannel.h"
 
-namespace nvp6134 {
-namespace lm7004v3 {
-
-Chip::Chip(DriverCommunicator *d, int id)
-    : ::nvp6134::Chip(d, id) {
-}
-
-Chip::~Chip() {
-}
+namespace nvp6134::lm7004v3 {
 
 NVP6134_VI_MODE Chip::getViChannelMode(ViChannel* ch) {
     switch(ch->videoFormat()) {
@@ -40,5 +32,4 @@ NVP6134_OUTMODE_SEL Chip::getVoChannelMode(::nvp6134::VoChannel*) {
     // page 121
 }
 
-}
 }

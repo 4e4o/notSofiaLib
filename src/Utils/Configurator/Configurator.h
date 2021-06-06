@@ -12,8 +12,8 @@ public:
     Configurable* item(int = 0) const;
 
 protected:
-    bool configureImpl();
-    bool startImpl();
+    bool configureImpl() override;
+    bool startImpl() override;
 
     void addItem(Configurable*);
     int itemsCount() const;

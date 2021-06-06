@@ -4,14 +4,7 @@
 #include "HiMPP/VI/Device.h"
 #include "HiMPP/Utils.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
-namespace hi3520dv200 {
-
-Channel::Channel(Device *d, ChannelInfo* i, int id)
-    : mpp::vi::Channel(d, i, id) {
-}
+namespace hisilicon::mpp::vi::hi3520dv200 {
 
 SIZE_S Channel::createDestSize() const {
     // HiMPP Media Processing Software Development Reference.pdf
@@ -50,7 +43,4 @@ SIZE_S Channel::createDestSize() const {
     return dest;
 }
 
-}
-}
-}
 }

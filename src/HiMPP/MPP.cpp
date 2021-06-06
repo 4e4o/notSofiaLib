@@ -7,8 +7,7 @@
 
 #include <stdexcept>
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 MPP::MPP(ElementsFactory* f)
     : m_factory(f),
@@ -51,5 +50,4 @@ vi::Subsystem* MPP::vi() const {
     return m_vi;
 }
 
-}
 }

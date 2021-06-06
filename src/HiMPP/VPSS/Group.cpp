@@ -9,9 +9,7 @@
 
 #include <mpi_vpss.h>
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 static VPSS_GRP_ATTR_S* createStandardAttr() {
     VPSS_GRP_ATTR_S* attr = new VPSS_GRP_ATTR_S{};
@@ -104,6 +102,4 @@ void Group::setParameters(VPSS_GRP_PARAM_S* p) {
     m_params.reset(p);
 }
 
-}
-}
 }

@@ -6,8 +6,7 @@
 #include "MPPChild.h"
 #include "Utils/Configurator/Configurable.h"
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 namespace vi {
 class Channel;
@@ -15,17 +14,16 @@ class Channel;
 
 class VideoBuffer : public MPPChild, public Configurable {
 public:
-    VideoBuffer(MPP*);
+    using MPPChild::MPPChild;
     ~VideoBuffer();
 
 private:
-    bool startImpl();
+    bool startImpl() override final;
 
     HI_U32 maxPicVbBlkSize();
     HI_U32 picVbBlkSize(vi::Channel *ch);
 };
 
-}
 }
 
 #endif // MPP_VIDEO_BUFFER_H

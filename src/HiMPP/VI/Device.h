@@ -8,9 +8,7 @@
 #include "Utils/IdHolder.h"
 #include "Utils/Configurator/Configurator.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 class Channel;
 class Subsystem;
@@ -25,8 +23,8 @@ public:
     const std::vector<Channel*>& channels() const;
 
 protected:
-    bool configureImpl();
-    bool startImpl();
+    bool configureImpl() override;
+    bool startImpl() override;
     void setAttr(VI_DEV_ATTR_S* attr);
 
 private:
@@ -39,8 +37,6 @@ private:
     VI_DEV_ATTR_S* m_attr;
 };
 
-}
-}
 }
 
 #endif // MPP_VI_DEVICE_H

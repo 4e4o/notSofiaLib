@@ -10,8 +10,7 @@ class Chip;
 class DriverCommunicator;
 }
 
-namespace boards {
-namespace nvp6134 {
+namespace boards::nvp6134 {
 
 // Борда с nvp чипами
 
@@ -25,7 +24,7 @@ public:
 
 protected:
     virtual ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) = 0;
-    bool configureImpl();
+    bool configureImpl() override;
 
 private:
     virtual void initialize();
@@ -35,7 +34,6 @@ private:
     const int m_nvpCount;
 };
 
-}
 }
 
 #endif // LM_7003_V3_BOARD_H

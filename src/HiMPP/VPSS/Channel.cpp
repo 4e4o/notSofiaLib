@@ -8,9 +8,7 @@
 #include <hi_comm_vpss.h>
 #include <mpi_vpss.h>
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
+namespace hisilicon::mpp::vpss {
 
 static VPSS_CHN_ATTR_S* createStandardAttr() {
     VPSS_CHN_ATTR_S* attr = new VPSS_CHN_ATTR_S{};
@@ -64,6 +62,4 @@ const Group* Channel::group() const {
     return Holder<Group*>::value();
 }
 
-}
-}
 }

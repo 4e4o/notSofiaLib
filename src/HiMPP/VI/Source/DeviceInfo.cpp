@@ -1,13 +1,7 @@
 #include "DeviceInfo.h"
 #include "Utils/Utils.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
-
-DeviceInfo::DeviceInfo(int id)
-    : IdHolder(id) {
-}
+namespace hisilicon::mpp::vi {
 
 DeviceInfo::~DeviceInfo() {
     Utils::clearPtrContainer(m_channels);
@@ -21,6 +15,4 @@ const DeviceInfo::TViChannelsInfo &DeviceInfo::channels() const {
     return m_channels;
 }
 
-}
-}
 }

@@ -4,15 +4,8 @@
 #include "Utils/Child.h"
 #include "MPP.h"
 
-namespace hisilicon {
-namespace mpp {
-
-class MPPChild : public Child<MPP> {
-public:
-    MPPChild(MPP* p) : Child<MPP>(p) { }
-};
-
-}
+namespace hisilicon::mpp {
+using MPPChild = Child<MPP>;
 }
 
 #endif // MPP_CHILD_H

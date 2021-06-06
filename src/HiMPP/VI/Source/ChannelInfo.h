@@ -9,9 +9,7 @@
 #include "Utils/IdHolder.h"
 #include "Utils/Size.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vi {
+namespace hisilicon::mpp::vi {
 
 class DeviceInfo;
 
@@ -43,8 +41,6 @@ private:
     TSize m_capSize;
 };
 
-}
-}
 }
 
 #endif // MPP_VI_CHANNEL_INFO_H

@@ -3,19 +3,15 @@
 
 #include "HiMPP/ElementsFactory.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace hi3520dv200 {
+namespace hisilicon::mpp::hi3520dv200 {
 
 class ElementsFactory : public mpp::ElementsFactory {
 public:
-    mpp::vi::Subsystem* vi(mpp::MPP*);
-    mpp::vi::Device* viDevice(mpp::vi::Subsystem*, int id);
-    mpp::vi::Channel* viChannel(mpp::vi::Device*, mpp::vi::ChannelInfo*, int id);
+    mpp::vi::Subsystem* vi(mpp::MPP*) override;
+    mpp::vi::Device* viDevice(mpp::vi::Subsystem*, int id) override;
+    mpp::vi::Channel* viChannel(mpp::vi::Device*, mpp::vi::ChannelInfo*, int id) override;
 };
 
-}
-}
 }
 
 #endif // MPP_HI3520DV200_ELEMENTS_FACTORY_H

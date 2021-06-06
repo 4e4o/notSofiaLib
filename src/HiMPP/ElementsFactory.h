@@ -1,8 +1,7 @@
 #ifndef MPP_ELEMENTS_FACTORY_H
 #define MPP_ELEMENTS_FACTORY_H
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 namespace vi {
 class Subsystem;
@@ -38,7 +37,6 @@ public:
     virtual vpss::Channel* vpssChannel(vpss::Group*, int id);
 };
 
-}
 }
 
 #endif // MPP_ELEMENTS_FACTORY_H

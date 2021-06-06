@@ -6,8 +6,7 @@
 #include "HiMPP/MPPChild.h"
 #include "Utils/Configurator/Configurable.h"
 
-namespace hisilicon {
-namespace mpp {
+namespace hisilicon::mpp {
 
 class Sys : public MPPChild, public Configurable {
 public:
@@ -18,12 +17,11 @@ public:
     HI_U32 sysWidthAlign() const;
 
 private:
-    bool startImpl();
+    bool startImpl() override final;
 
     HI_U32 m_sysWidthAlign;
 };
 
-}
 }
 
 #endif // MPP_SYS_H

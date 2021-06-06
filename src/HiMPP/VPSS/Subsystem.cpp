@@ -7,13 +7,7 @@
 #include "Binder/Binder.h"
 #include "Group.h"
 
-namespace hisilicon {
-namespace mpp {
-namespace vpss {
-
-Subsystem::Subsystem(MPP* p)
-    : MPPChild(p) {
-}
+namespace hisilicon::mpp::vpss {
 
 // Добавляет vpss группу на каждый канал vi.
 // в каждой группе по одному каналу.
@@ -58,6 +52,4 @@ Group* Subsystem::group(int id) {
     return m_groups[id];
 }
 
-}
-}
 }
