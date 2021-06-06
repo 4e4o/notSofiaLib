@@ -39,8 +39,8 @@ Device* Subsystem::addDevice(int id) {
 int Subsystem::channelsCount() const {
     int count = 0;
 
-    for (int i = 0 ; i < (int) m_devices.size() ; i++)
-        count += m_devices[i]->channels().size();
+    for (auto& device : m_devices)
+        count += device->channels().size();
 
     return count;
 }

@@ -19,16 +19,13 @@ Subsystem::Subsystem(MPP* p)
 // в каждой группе по одному каналу.
 // Должен быть вызван когда девайсы и каналы vi уже добавлены.
 void Subsystem::addSourceFromVi1by1() {
-    auto& devs = parent()->vi()->devices();
     int groupId = 0;
 
-    for (int i = 0 ; i < (int) devs.size() ; i++) {
-        auto& chnls = devs[i]->channels();
-
-        for (int j = 0 ; j < (int) chnls.size() ; j++) {
+    for (auto& device : parent()->vi()->devices()) {
+        for (auto& channel : device->channels()) {
             Group* group = addGroup(groupId++);
             group->addChannel(0);
-            bind(chnls[j], group);
+            bind(channel, group);
         }
     }
 }
@@ -47,8 +44,8 @@ Group* Subsystem::addGroup(int id) {
 int Subsystem::channelsCount() const {
     int count = 0;
 
-    for (int i = 0 ; i < (int) m_groups.size() ; i++)
-        count += m_groups[i]->channels().size();
+    for (auto& group : m_groups)
+        count += group->channels().size();
 
     return count;
 }

@@ -6,8 +6,8 @@ Configurator::~Configurator() {
 }
 
 bool Configurator::configureImpl() {
-    for (int i = 0 ; i < (int) m_items.size() ; i++) {
-        if (!m_items[i]->configure())
+    for (auto& item : m_items) {
+        if (!item->configure())
             return false;
     }
 
@@ -18,8 +18,8 @@ bool Configurator::startImpl() {
     if (!configured())
         return false;
 
-    for (int i = 0 ; i < (int) m_items.size() ; i++) {
-        if (!m_items[i]->start())
+    for (auto& item : m_items) {
+        if (!item->start())
             return false;
     }
 

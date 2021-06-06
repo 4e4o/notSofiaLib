@@ -21,17 +21,9 @@ const InfoProvider::TViDevicesInfo& InfoProvider::devices() const {
 }
 
 ChannelInfo* InfoProvider::findChannelInfo(int devId, int chId) {
-    auto& devs = devices();
-
-    for (int i = 0 ; i < (int)devs.size() ; i++) {
-        auto dev = devs[i];
-
-        if (dev->id() == devId) {
-            auto& channels = dev->channels();
-
-            for (int j = 0 ; j < (int)channels.size() ; j++) {
-                auto channel = channels[j];
-
+    for (auto& device : devices()) {
+        if (device->id() == devId) {
+            for (auto& channel : device->channels()) {
                 if (channel->id() == chId)
                     return channel;
             }

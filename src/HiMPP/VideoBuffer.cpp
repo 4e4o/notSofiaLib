@@ -79,15 +79,11 @@ HI_U32 VideoBuffer::maxPicVbBlkSize() {
     if (vi == NULL)
         return result;
 
-    auto& devs = vi->devices();
+    for (auto& device : vi->devices()) {
+        for (auto& channel : device->channels()) {
+            tmp = picVbBlkSize(channel);
 
-    for (int i = 0 ; i < (int) devs.size() ; i++) {
-        auto& channels = devs[i]->channels();
-
-        for (int j = 0 ; j < (int) channels.size() ; j++) {
-            tmp = picVbBlkSize(channels[j]);
-
-            std::cout << i << ", " << j << " channel video block size = " << tmp << std::endl;
+            std::cout << channel->id() << " channel video block size = " << tmp << std::endl;
 
             if (result < tmp)
                 result = tmp;

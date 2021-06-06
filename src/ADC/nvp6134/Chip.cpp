@@ -51,14 +51,13 @@ bool Chip::configureImpl() {
         m_voChannels[i].reset(new VoChannel(this, i));
 
     // Устанавливаем режим Vi каналов
-    for (int i = 0 ; i < (int) m_viChannels.size() ; i++) {
-        m_viChannels[i]->setMode(getViChannelMode(m_viChannels[i].get()));
-    }
+    for (auto& channel : m_viChannels)
+        channel->setMode(getViChannelMode(channel.get()));
 
     // Устанавливаем режим Vo каналов
-    for (int i = 0 ; i < (int) m_voChannels.size() ; i++) {
+    for (int i = 0 ; i < (int) m_voChannels.size() ; i++)
         m_voChannels[i]->setMode(i, getVoChannelMode(m_voChannels[i].get()));
-    }
+
     // NOTE для NVP6134_OUTMODE_2MUX_MIX режима chid = номеру пары каналов
     // 0 - 0,1
     // !0 - 2,3
