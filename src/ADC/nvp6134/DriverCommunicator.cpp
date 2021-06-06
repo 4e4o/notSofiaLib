@@ -84,8 +84,7 @@ bool DriverCommunicator::setViChannelMode(const ViChannel* ch, bool pal, NVP6134
 }
 
 bool DriverCommunicator::getVideoFmt() {
-    m_inputFormat.reset(new nvp6134_input_videofmt());
-    ::memset(m_inputFormat.get(), 0, sizeof(nvp6134_input_videofmt));
+    m_inputFormat.reset(new nvp6134_input_videofmt{});
 
     if (::ioctl(m_driverFd, IOC_VDEC_GET_INPUT_VIDEO_FMT, m_inputFormat.get()) == -1)
         return false;

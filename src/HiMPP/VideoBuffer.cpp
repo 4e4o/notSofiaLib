@@ -18,8 +18,6 @@ namespace hisilicon::mpp {
 static void setPool(VB_CONF_S& conf, int i, HI_U32 blockSize, HI_U32 blkCount) {
     conf.astCommPool[i].u32BlkSize = blockSize;
     conf.astCommPool[i].u32BlkCnt = blkCount;
-    memset(conf.astCommPool[i].acMmzName, 0,
-           sizeof(conf.astCommPool[i].acMmzName));
 }
 
 VideoBuffer::~VideoBuffer() {    
