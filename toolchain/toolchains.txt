@@ -1,0 +1,53 @@
+сборка тулчейна для hi3520dv200:
+
+Вариант 1: https://crosstool-ng.github.io/
+Вариант 2: https://releases.linaro.org/components/toolchain/binaries/
+Вариант 3: https://toolchains.bootlin.com/
+
+
+
+crosstool-ng way:
+
+sudo dnf groupinstall "Development Tools" "Development Libraries"
+sudo dnf install texinfo help2man libtool
+
+git clone https://github.com/crosstool-ng/crosstool-ng
+cd crosstool-ng
+./bootstrap
+./configure --prefix=/mnt/disk2/workspace/coding/crosstool_ng_installed
+make -j5
+make install
+export PATH="${PATH}:/mnt/disk2/workspace/coding/crosstool_ng_installed/bin/"
+
+
+
+
+
+ct-ng menuconfig:
+
+target arch: arm
+architecture level: armv5te   (тут если опции нету, то надо проверить что tune for cpu или emit assembly for cpu пустые были, иначе этот пункт не показывается, долго мозги ебал на этот счёт)
+floating poing: sofrware (no fpu) - отключаем fpu,иначе получим illegal instruction
+
+target-os: linux
+linux custom:vendor repo
+branch tag checkout: v3.0
+
+c library: uclibc
+C compiler: C++ ВКЛЮЧИТЬ !!!!!! ПО ДЕФОЛТУ ВЫКЛЮЧЕНО (пересобирал бле)
+
+или заюзать конфиг в папке cronsstool-ng в текущей (где этот ридми лежит) - НЕ ПРОТЕСТЕНО
+
+ct-ng build
+
+собирается всё 68 минут на ноут моём [68:18]
+
+
+выхлоп в ~/x-tools/ :
+/home/computer/x-tools/arm-unknown-linux-uclibcgnueabi/bin
+
+берем после сборки копируем либы
+из x-tools/arm-unknown-linux-uclibcgnueabi/arm-unknown-linux-uclibcgnueabi/sysroot/lib/
+в /usr/lib/notSofia на dvr
+
+всё, можно собирать notSofia и запускать

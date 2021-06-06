@@ -7,6 +7,7 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -128,7 +129,7 @@ bool DriverCommunicator::closeDriver() {
     if (m_driverFd < 0)
         return false;
 
-    return ::close(m_driverFd) == 0;
+    return close(m_driverFd) == 0;
 }
 
 }
