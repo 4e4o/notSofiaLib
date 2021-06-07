@@ -2,6 +2,7 @@
 #include "Channel.h"
 #include "HiMPP/MPP.h"
 #include "Subsystem.h"
+#include "HiMPP/VI/Channel.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -63,9 +64,6 @@ bool Group::configureImpl() {
     if (m_attrs.get() == nullptr)
         throw std::runtime_error("vi::Group attributes not set");
 
-    if (m_params.get() == nullptr)
-        throw std::runtime_error("vi::Group parameters not set");
-
     return Configurator::configureImpl();
 }
 
@@ -74,9 +72,11 @@ bool Group::startImpl() {
     if (HI_MPI_VPSS_CreateGrp(id(), m_attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_CreateGrp failed");
 
-    // устанавливаем параметры
-    if (HI_MPI_VPSS_SetGrpParam(id(), m_params.get()) != HI_SUCCESS)
-        throw std::runtime_error("HI_MPI_VPSS_SetGrpParam failed");
+    if (m_params.get() != nullptr) {
+        // устанавливаем параметры
+        if (HI_MPI_VPSS_SetGrpParam(id(), m_params.get()) != HI_SUCCESS)
+            throw std::runtime_error("HI_MPI_VPSS_SetGrpParam failed");
+    }
 
     // стартуем каналы
     if (!Configurator::startImpl())
@@ -95,6 +95,14 @@ const std::vector<Channel*>& Group::channels() const {
 
 void Group::setAttributes(VPSS_GRP_ATTR_S* attr) {
     m_attrs.reset(attr);
+}
+
+void Group::setAttributes(vi::Channel* c) {
+    const SIZE_S size = c->destSize();
+
+    m_attrs->enPixFmt = c->pixelFormat();
+    m_attrs->u32MaxW = size.u32Width;
+    m_attrs->u32MaxH = size.u32Height;
 }
 
 void Group::setParameters(VPSS_GRP_PARAM_S* p) {

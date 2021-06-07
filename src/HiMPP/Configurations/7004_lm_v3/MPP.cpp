@@ -21,7 +21,7 @@ MPP::MPP() {
 
 void MPP::addSubsystems() {
     addViSubsystem();
-//    addVpssSubsystem();
+    addVpssSubsystem();
 }
 
 }

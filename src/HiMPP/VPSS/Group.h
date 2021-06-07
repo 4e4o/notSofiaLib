@@ -10,6 +10,10 @@
 #include "Utils/Configurator/Configurator.h"
 #include "Binder/BindItem.h"
 
+namespace hisilicon::mpp::vi {
+class Channel;
+}
+
 namespace hisilicon::mpp::vpss {
 
 class Channel;
@@ -23,6 +27,9 @@ public:
 
     void setAttributes(VPSS_GRP_ATTR_S*);
     void setParameters(VPSS_GRP_PARAM_S*);
+
+    // установить аттрибуты из vi канала
+    void setAttributes(vi::Channel*);
 
     Channel* addChannel(int id);
     const std::vector<Channel*>& channels() const;

@@ -4,6 +4,7 @@
 #include "ADC/nvp6134/DriverCommunicator.h"
 #include "ADC/nvp6134/Configurations/7004_lm_v3/Chip.h"
 #include "Boards/nvp6134/HiMPP/ViInfoProvider.h"
+#include "HiMPP/VPSS/Subsystem.h"
 
 #define NVP_CHIPS_COUNT 1
 
@@ -23,12 +24,14 @@ Board::~Board() {
 }
 
 void Board::initialize() {
-    using namespace hisilicon::mpp;
-
     MPP* mpp = new MPP();
 
-    mpp->registerType([this]() -> vi::InfoProvider* {
+    mpp->registerType([this]() -> hisilicon::mpp::vi::InfoProvider* {
         return new nvp6134::mpp::vi::InfoProvider(this);
+    });
+
+    mpp->registerType([](hisilicon::mpp::MPP* p) -> hisilicon::mpp::vpss::Subsystem* {
+        return new vpss::Subsystem(p);
     });
 
     addItem(mpp);

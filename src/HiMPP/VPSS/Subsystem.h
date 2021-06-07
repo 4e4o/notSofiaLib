@@ -14,7 +14,7 @@ class BindReceiver;
 
 class Subsystem : public MPPChild, public Configurator {
 public:
-    using MPPChild::MPPChild;
+    Subsystem(MPP*);
 
     Group* addGroup(int id);
 

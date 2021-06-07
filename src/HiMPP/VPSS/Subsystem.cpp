@@ -5,8 +5,19 @@
 #include "HiMPP/VI/Channel.h"
 #include "Binder/Binder.h"
 #include "Group.h"
+#include "Channel.h"
 
 namespace hisilicon::mpp::vpss {
+
+Subsystem::Subsystem(MPP* p)
+    : MPPChild(p) {
+    p->registerType([](Subsystem* p, int id) -> Group* {
+        return new Group(p, id);
+    });
+    p->registerType([](Group* g, int id) -> Channel* {
+        return new Channel(g, id);
+    });
+}
 
 // Добавляет vpss группу на каждый канал vi.
 // в каждой группе по одному каналу.
@@ -17,6 +28,7 @@ void Subsystem::addSourceFromVi1by1() {
     for (auto& device : parent()->vi()->devices()) {
         for (auto& channel : device->channels()) {
             Group* group = addGroup(groupId++);
+            group->setAttributes(channel);
             group->addChannel(0);
             bind(channel, group);
         }
