@@ -157,9 +157,12 @@ static VB_POOL g_VbPool[8] = {0};
 HI_S32 SAMPLE_WISDOM_VENC_Creat_VBPool(VENC_CHN VencChn, SIZE_S stPicSize)
 {
     VB_POOL VbPool;
-    HI_U32 u32BlkSize = (stPicSize.u32Height) * (stPicSize.u32Width) * 2;
-    HI_U32 u32BlkCnt = 2;//8;
     HI_S32 s32Ret = 0;
+    // HiMPP Media Processing Software Development Reference.pdf
+    // page 512
+    HI_U32 u32BlkSize = std::ceil(CEILING_2_POWER(stPicSize.u32Height, 16) *
+            CEILING_2_POWER(stPicSize.u32Width, 16) * 1.5f);
+    HI_U32 u32BlkCnt = 1 + 2 * 1;
 
     /* create a video buffer pool*/
     VbPool = HI_MPI_VB_CreatePool(u32BlkSize, u32BlkCnt, nullptr);
@@ -188,13 +191,13 @@ HI_S32 SAMPLE_WISDOM_VENC_Destory_VBPool(VENC_CHN VencChn)
 {
     HI_S32 s32Ret = 0;
 
-    s32Ret = HI_MPI_VENC_DetachVbPool(VencChn);
+/*    s32Ret = HI_MPI_VENC_DetachVbPool(VencChn);
     if(HI_FAILURE == s32Ret)
     {
         SAMPLE_PRT("[VencChn:%d] Detach vb pool err!\n", VencChn);
         return HI_FAILURE;
     }
-
+*/
     s32Ret = HI_MPI_VB_DestroyPool(g_VbPool[VencChn]);
     if (HI_FAILURE == s32Ret)
     {
@@ -417,6 +420,16 @@ HI_S32 SAMPLE_COMM_VENC_Stop(VENC_GRP VencGrp,VENC_CHN VencChn)
                VencChn, s32Ret);
         return HI_FAILURE;
     }
+
+
+    s32Ret = HI_MPI_VENC_DetachVbPool(VencChn);
+    if(HI_FAILURE == s32Ret)
+    {
+        SAMPLE_PRT("[VencChn:%d] Detach vb pool err!\n", VencChn);
+        return HI_FAILURE;
+    }
+
+
 
     /******************************************
      step 3:  Distroy Venc Channel

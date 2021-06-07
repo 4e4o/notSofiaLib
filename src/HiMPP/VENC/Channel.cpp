@@ -44,6 +44,8 @@ bool Channel::startImpl() {
         throw std::runtime_error("HI_MPI_VENC_CreateChn failed");
 
     // TODO create vb pool
+    // HiMPP Media Processing Software Development Reference.pdf
+    // page 512
 
     if (HI_MPI_VENC_RegisterChn(group()->id(), id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_RegisterChn failed");
