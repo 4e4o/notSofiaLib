@@ -18,8 +18,6 @@
  
 #include "HiMPP/VI/Channel.h"
 
-const HI_U8 g_SOI[2] = {0xFF, 0xD8};
-const HI_U8 g_EOI[2] = {0xFF, 0xD9};
 static pthread_t gs_VencPid;
 static SAMPLE_VENC_GETSTREAM_PARA_S gs_stPara;
 static HI_S32 gs_s32SnapCnt = 0;
