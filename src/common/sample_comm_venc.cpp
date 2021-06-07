@@ -164,7 +164,7 @@ HI_S32 SAMPLE_WISDOM_VENC_Creat_VBPool(VENC_CHN VencChn, SIZE_S stPicSize)
     HI_S32 s32Ret = 0;
 
     /* create a video buffer pool*/
-    VbPool = HI_MPI_VB_CreatePool(u32BlkSize, u32BlkCnt, NULL);
+    VbPool = HI_MPI_VB_CreatePool(u32BlkSize, u32BlkCnt, nullptr);
     if (VB_INVALID_POOLID == VbPool)
     {
         SAMPLE_PRT("[VencChn:%d] create vb err!\n", VencChn);
@@ -484,7 +484,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
     if (s32ChnTotal >= VENC_MAX_CHN_NUM)
     {
         SAMPLE_PRT("input count invaild\n");
-        return NULL;
+        return nullptr;
     }
     for (i = 0; i < s32ChnTotal; i++)
     {
@@ -495,7 +495,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         {
             SAMPLE_PRT("HI_MPI_VENC_GetChnAttr chn[%d] failed with %#x!\n", \
                    VencChn, s32Ret);
-            return NULL;
+            return nullptr;
         }
         enPayLoadType[i] = stVencChnAttr.stVeAttr.enType;
 
@@ -504,7 +504,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         {
             SAMPLE_PRT("SAMPLE_COMM_VENC_GetFilePostfix [%d] failed with %#x!\n", \
                    stVencChnAttr.stVeAttr.enType, s32Ret);
-            return NULL;
+            return nullptr;
         }
         sprintf(aszFileName[i], "stream_chn%d%s", i, szFilePostfix);
         pFile[i] = fopen(aszFileName[i], "wb");
@@ -512,7 +512,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         {
             SAMPLE_PRT("open file[%s] failed!\n", 
                    aszFileName[i]);
-            return NULL;
+            return nullptr;
         }
 
         /* Set Venc Fd. */
@@ -521,7 +521,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         {
             SAMPLE_PRT("HI_MPI_VENC_GetFd failed with %#x!\n", 
                    VencFd[i]);
-            return NULL;
+            return nullptr;
         }
         if (maxfd <= VencFd[i])
         {
@@ -542,7 +542,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
 
         TimeoutVal.tv_sec  = 2;
         TimeoutVal.tv_usec = 0;
-        s32Ret = select(maxfd + 1, &read_fds, NULL, NULL, &TimeoutVal);
+        s32Ret = select(maxfd + 1, &read_fds, nullptr, nullptr, &TimeoutVal);
         if (s32Ret < 0)
         {
             SAMPLE_PRT("select failed!\n");
@@ -574,7 +574,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                      step 2.2 : malloc corresponding number of pack nodes.
                     *******************************************************/
                     stStream.pstPack = (VENC_PACK_S*)malloc(sizeof(VENC_PACK_S) * stStat.u32CurPacks);
-                    if (NULL == stStream.pstPack)
+                    if (nullptr == stStream.pstPack)
                     {
                         SAMPLE_PRT("malloc stream pack failed!\n");
                         break;
@@ -588,7 +588,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                     if (HI_SUCCESS != s32Ret)
                     {
                         free(stStream.pstPack);
-                        stStream.pstPack = NULL;
+                        stStream.pstPack = nullptr;
                         SAMPLE_PRT("HI_MPI_VENC_GetStream failed with %#x!\n", \
                                s32Ret);
                         break;
@@ -601,7 +601,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                     if (HI_SUCCESS != s32Ret)
                     {
                         free(stStream.pstPack);
-                        stStream.pstPack = NULL;
+                        stStream.pstPack = nullptr;
                         SAMPLE_PRT("save stream failed!\n");
                         break;
                     }
@@ -612,14 +612,14 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                     if (HI_SUCCESS != s32Ret)
                     {
                         free(stStream.pstPack);
-                        stStream.pstPack = NULL;
+                        stStream.pstPack = nullptr;
                         break;
                     }
                     /*******************************************************
                      step 2.6 : free pack nodes
                     *******************************************************/
                     free(stStream.pstPack);
-                    stStream.pstPack = NULL;
+                    stStream.pstPack = nullptr;
                 }
             }
         }
@@ -633,7 +633,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         fclose(pFile[i]);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /******************************************************************************

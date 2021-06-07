@@ -1,6 +1,5 @@
 #include "Subsystem.h"
 #include "HiMPP/MPP.h"
-#include "HiMPP/ElementsFactory.h"
 #include "HiMPP/VI/Source/InfoProvider.h"
 #include "HiMPP/VI/Source/DeviceInfo.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
@@ -10,7 +9,7 @@ namespace hisilicon::mpp::vi {
 
 Subsystem::Subsystem(MPP* p)
     : MPPChild(p) {
-    addItem(p->factory()->viInfoProvider());
+    addItem(p->create<InfoProvider>());
 }
 
 bool Subsystem::configureImpl() {
@@ -28,7 +27,7 @@ void Subsystem::createDevices() {
 }
 
 Device* Subsystem::addDevice(int id) {
-    Device* dev = parent()->factory()->viDevice(this, id);
+    Device* dev = parent()->create<Device>(this, id);
     addItem(dev);
     m_devices.push_back(dev);
     return dev;

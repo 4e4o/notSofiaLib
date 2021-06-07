@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Utils/Configurator/Configurator.h"
+#include "Utils/Configurator/ConfigurableFactory.h"
 
 namespace hisilicon::mpp {
 
@@ -16,13 +17,10 @@ class Subsystem;
 }
 
 class Sys;
-class ElementsFactory;
 
-class MPP : public Configurator {
+class MPP : public Configurator, public ConfigurableFactory {
 public:
-    MPP(ElementsFactory*);
-
-    ElementsFactory* factory() const;
+    MPP();
 
     vi::Subsystem* addViSubsystem();
     vpss::Subsystem* addVpssSubsystem();
@@ -32,7 +30,10 @@ public:
     vpss::Subsystem* vpss() const;
 
 private:
-    std::unique_ptr<ElementsFactory> m_factory;
+    bool configureImpl() override final;
+    virtual void addSubsystems();
+    void registerDefaultTypes();
+
     vi::Subsystem* m_vi;
     vpss::Subsystem* m_vpss;
 };

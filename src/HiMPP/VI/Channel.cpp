@@ -48,10 +48,10 @@ HI_S32 Channel::sourceBindChannelId() {
 }
 
 bool Channel::configureImpl() {
-    if (m_info == NULL)
+    if (m_info == nullptr)
         throw std::runtime_error("[vi::Channel] Vi info is not set");
 
-    if (m_attr.get() == NULL)
+    if (m_attr.get() == nullptr)
         throw std::runtime_error("[vi::Channel] Vi attr is not set");
 
     m_attr->enPixFormat = m_info->pixelFormat();

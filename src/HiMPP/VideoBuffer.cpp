@@ -31,7 +31,7 @@ bool VideoBuffer::startImpl() {
     HI_U32 channelsCount = 0;
     const vi::Subsystem* vi = parent()->vi();
 
-    if (vi != NULL)
+    if (vi != nullptr)
         channelsCount = vi->channelsCount();
 
     if (channelsCount < 1)
@@ -69,7 +69,7 @@ HI_U32 VideoBuffer::maxPicVbBlkSize() {
     HI_U32 result = 0, tmp;
     const vi::Subsystem* vi = parent()->vi();
 
-    if (vi == NULL)
+    if (vi == nullptr)
         return result;
 
     for (auto& device : vi->devices()) {

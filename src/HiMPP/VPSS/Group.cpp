@@ -1,7 +1,6 @@
 #include "Group.h"
 #include "Channel.h"
 #include "HiMPP/MPP.h"
-#include "HiMPP/ElementsFactory.h"
 #include "Subsystem.h"
 
 #include <stdexcept>
@@ -54,17 +53,17 @@ HI_S32 Group::receiverBindChannelId() {
 }
 
 Channel* Group::addChannel(int id) {
-    Channel* ch = subsystem()->parent()->factory()->vpssChannel(this, id);
+    Channel* ch = subsystem()->parent()->create<Channel>(this, id);
     addItem(ch);
     m_channels.push_back(ch);
     return ch;
 }
 
 bool Group::configureImpl() {
-    if (m_attrs.get() == NULL)
+    if (m_attrs.get() == nullptr)
         throw std::runtime_error("vi::Group attributes not set");
 
-    if (m_params.get() == NULL)
+    if (m_params.get() == nullptr)
         throw std::runtime_error("vi::Group parameters not set");
 
     return Configurator::configureImpl();

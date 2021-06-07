@@ -22,7 +22,7 @@ ViChannel::ViChannel(Chip* p, int id)
     : ChipChild(p), IdHolder(id),
       m_videoFormat(TVideoFormat::DF_NOT_DETECTED),
       m_mode(NVP6134_VI_BUTT),
-      m_outChannel(NULL) {
+      m_outChannel(nullptr) {
     init();
 }
 
@@ -32,7 +32,7 @@ ViChannel::~ViChannel() {
 void ViChannel::init() {
     DriverCommunicator::ViChannelFormat* fmt = parent()->driver()->getVideoFmt(this);
 
-    if (fmt == NULL)
+    if (fmt == nullptr)
         throw std::runtime_error("Driver does not provide vi format");
 
     // TODO verify that getvideofmt exist in TDetectedFormat
@@ -53,7 +53,7 @@ void ViChannel::setOutChannel(VoChannel* vo) {
 }
 
 TSize ViChannel::captureSize() const {
-    if (m_outChannel == NULL)
+    if (m_outChannel == nullptr)
         throw std::runtime_error("Out channel not set");
 
     TSize s = modeToSize();

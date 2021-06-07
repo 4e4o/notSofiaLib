@@ -1,7 +1,6 @@
 #include "Device.h"
 #include "Channel.h"
 #include "HiMPP/MPP.h"
-#include "HiMPP/ElementsFactory.h"
 #include "HiMPP/VI/Subsystem.h"
 #include "HiMPP/VI/Source/InfoProvider.h"
 
@@ -14,7 +13,7 @@ namespace hisilicon::mpp::vi {
 
 Device::Device(Subsystem* p, int id)
     : Holder<Subsystem*>(p), IdHolder(id),
-      m_attr(NULL) {
+      m_attr(nullptr) {
 }
 
 Device::~Device() {
@@ -29,14 +28,14 @@ Subsystem* Device::subsystem() const {
 }
 
 Channel* Device::addChannel(ChannelInfo* i, int id) {
-    Channel* ch = subsystem()->parent()->factory()->viChannel(this, i, id);
+    Channel* ch = subsystem()->parent()->create<Channel>(this, i, id);
     addItem(ch);
     m_channels.push_back(ch);
     return ch;
 }
 
 bool Device::configureImpl() {
-    if (m_attr == NULL)
+    if (m_attr == nullptr)
         throw std::runtime_error("vi::Device attributes not set");
 
     return Configurator::configureImpl();
@@ -61,8 +60,8 @@ Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
     InfoProvider* inf = subsystem()->infoProvider();
     ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
 
-    if (i == NULL)
-        return NULL;
+    if (i == nullptr)
+        return nullptr;
 
     return addChannel(i, id);
 }

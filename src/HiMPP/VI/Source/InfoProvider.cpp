@@ -26,11 +26,11 @@ ChannelInfo* InfoProvider::findChannelInfo(int devId, int chId) {
                     return channel;
             }
 
-            return NULL;
+            return nullptr;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 }

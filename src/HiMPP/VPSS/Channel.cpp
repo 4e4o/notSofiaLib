@@ -38,7 +38,7 @@ Channel::~Channel() {
 }
 
 bool Channel::configureImpl() {
-    if (m_attr.get() == NULL)
+    if (m_attr.get() == nullptr)
         throw std::runtime_error("[vpps::Channel] attr is not set");
 
     return true;

@@ -1,6 +1,5 @@
 #include "Subsystem.h"
 #include "HiMPP/MPP.h"
-#include "HiMPP/ElementsFactory.h"
 #include "HiMPP/VI/Subsystem.h"
 #include "HiMPP/VI/Device.h"
 #include "HiMPP/VI/Channel.h"
@@ -29,7 +28,7 @@ void Subsystem::bind(vpss::BindSource* s, vpss::BindReceiver* r) {
 }
 
 Group* Subsystem::addGroup(int id) {
-    Group* group = parent()->factory()->vpssGroup(this, id);
+    Group* group = parent()->create<Group>(this, id);
     addItem(group);
     m_groups.push_back(group);
     return group;
