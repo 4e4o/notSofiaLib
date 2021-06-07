@@ -7,7 +7,7 @@ namespace hisilicon::mpp::lm7004v3 {
 
 class MPP : public mpp::MPP {
 public:
-    using mpp::MPP::MPP;
+    MPP();
 
 private:
     void addSubsystems() override final;

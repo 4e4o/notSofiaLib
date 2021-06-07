@@ -3,9 +3,6 @@
 #include "HiMPP/Configurations/7004_lm_v3/MPP.h"
 #include "ADC/nvp6134/DriverCommunicator.h"
 #include "ADC/nvp6134/Configurations/7004_lm_v3/Chip.h"
-#include "HiMPP/Configurations/hi3520dv200/VI/Channel.h"
-#include "HiMPP/Configurations/hi3520dv200/VI/Device.h"
-#include "HiMPP/Configurations/hi3520dv200/VI/Subsystem.h"
 #include "Boards/nvp6134/HiMPP/ViInfoProvider.h"
 
 #define NVP_CHIPS_COUNT 1
@@ -32,18 +29,6 @@ void Board::initialize() {
 
     mpp->registerType([this]() -> vi::InfoProvider* {
         return new nvp6134::mpp::vi::InfoProvider(this);
-    });
-
-    mpp->registerType([](hisilicon::mpp::MPP* p) -> vi::Subsystem* {
-        return new hisilicon::mpp::vi::hi3520dv200::Subsystem(p);
-    });
-
-    mpp->registerType([](vi::Subsystem* s, int id) -> vi::Device* {
-        return new hisilicon::mpp::vi::hi3520dv200::Device(s, id);
-    });
-
-    mpp->registerType([](vi::Device* d, vi::ChannelInfo* i, int id) -> vi::Channel* {
-        return new hisilicon::mpp::vi::hi3520dv200::Channel(d, i, id);
     });
 
     addItem(mpp);
