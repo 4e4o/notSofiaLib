@@ -15,6 +15,7 @@ static VI_DEV_ATTR_S DEV_ATTR_BT656_2MUX = {
     HI_TRUE
 };
 
+// это маска только для hi3520d в нашем режиме
 static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
     switch (ViDev % 2) {
     case 0:
@@ -29,12 +30,10 @@ static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
 Device::Device(mpp::vi::Subsystem* p, int id)
     : mpp::vi::Device(p, id),
       m_attr(DEV_ATTR_BT656_2MUX) {
-    // TODO это маска только для hi3520d в нашем режиме
-    // TODO это конфиг только для lm7004 получается
-    setMask(id, &m_attr);
 }
 
 bool Device::configureImpl() {
+    setMask(id(), &m_attr);
     setAttr(&m_attr);
     return mpp::vi::Device::configureImpl();
 }

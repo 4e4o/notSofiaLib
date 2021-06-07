@@ -9,16 +9,9 @@ namespace hisilicon::mpp::vi::hi3520dv200 {
 // page 616
 
 // TODO ввести режим работы чипа
-// TODO это конфиг только для lm7004 получается
+// это не общий конфиг для hi3520dv200
 
 void Subsystem::createDevices() {
-    // id каналов фиксированы и зависят от хики чипа И режима его работы!
-    // в нашем случае 4channel 720p режим для hi3520d v200
-    // Hi3520D／Hi3515A／Hi3515C H.264 CODEC Processor Data Sheet.pdf
-    // page 616
-
-    // TODO ввести режим работы чипа
-
     Device* dev0 = addDevice(0);
     Device* dev1 = addDevice(1);
 
