@@ -4,16 +4,27 @@
 #include "HiMPP/VI/Source/DeviceInfo.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Device.h"
+#include "Channel.h"
 
 namespace hisilicon::mpp::vi {
 
 Subsystem::Subsystem(MPP* p)
     : MPPChild(p) {
+    registerDefaultTypes();
     addItem(p->create<InfoProvider>());
 }
 
+void Subsystem::registerDefaultTypes() {
+    parent()->registerType([](Subsystem* p, int id) -> Device* {
+        return new Device(p, id);
+    });
+    parent()->registerType([](Device* d, ChannelInfo* i, int id) -> Channel* {
+        return new Channel(d, i, id);
+    });
+}
+
 bool Subsystem::configureImpl() {
-    // если viInfoProvider отконфигурировался
+    // если InfoProvider отконфигурировался
     if (Configurator::configureImpl()) {
         createDevices();
         // конфигурируем девайсы

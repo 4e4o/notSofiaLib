@@ -27,6 +27,7 @@ public:
     void bind(vpss::BindSource*, vpss::BindReceiver*);
 
 protected:
+    void registerDefaultTypes();
     void addSourceFromVi1by1();
 
 private:

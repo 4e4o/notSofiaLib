@@ -27,6 +27,7 @@ public:
     int channelsCount() const;
 
 protected:
+    void registerDefaultTypes();
     bool configureImpl() override final;
     virtual void createDevices();
 

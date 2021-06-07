@@ -11,10 +11,14 @@ namespace hisilicon::mpp::vpss {
 
 Subsystem::Subsystem(MPP* p)
     : MPPChild(p) {
-    p->registerType([](Subsystem* p, int id) -> Group* {
+    registerDefaultTypes();
+}
+
+void Subsystem::registerDefaultTypes() {
+    parent()->registerType([](Subsystem* p, int id) -> Group* {
         return new Group(p, id);
     });
-    p->registerType([](Group* g, int id) -> Channel* {
+    parent()->registerType([](Group* g, int id) -> Channel* {
         return new Channel(g, id);
     });
 }
