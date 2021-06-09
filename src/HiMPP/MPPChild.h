@@ -1,7 +1,7 @@
 #ifndef MPP_CHILD_H
 #define MPP_CHILD_H
 
-#include "Utils/Child.h"
+#include "Misc/Child.h"
 #include "MPP.h"
 
 namespace hisilicon::mpp {

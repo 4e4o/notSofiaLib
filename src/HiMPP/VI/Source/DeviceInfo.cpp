@@ -1,5 +1,5 @@
 #include "DeviceInfo.h"
-#include "Utils/Utils.h"
+#include "Misc/Utils.h"
 
 namespace hisilicon::mpp::vi {
 

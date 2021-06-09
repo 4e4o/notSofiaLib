@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "HiMPP/MPPChild.h"
-#include "Utils/Configurator/Configurator.h"
+#include "Misc/Configurator/Configurator.h"
 
 namespace hisilicon::mpp::vi {
 

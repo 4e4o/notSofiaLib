@@ -3,10 +3,12 @@
 #include "VI/Device.h"
 #include "VI/Subsystem.h"
 
+#define VEDU_COUNT 1
+
 namespace hisilicon::mpp::hi3520dv200 {
 
 MPP::MPP() {
-    setVeduCount(1);
+    setVeduCount(VEDU_COUNT);
 
     registerType([](hisilicon::mpp::MPP* p) -> vi::Subsystem* {
         return new vi::hi3520dv200::Subsystem(p);

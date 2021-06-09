@@ -1,5 +1,5 @@
-#ifndef UTILS_CHILD_H
-#define UTILS_CHILD_H
+#ifndef CHILD_H
+#define CHILD_H
 
 #include "Holder.h"
 
@@ -13,4 +13,4 @@ public:
     }
 };
 
-#endif // UTILS_CHILD_H
+#endif // CHILD_H

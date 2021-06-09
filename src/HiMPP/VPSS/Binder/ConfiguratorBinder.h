@@ -1,7 +1,7 @@
 #ifndef MPP_VPSS_CONFIGURATOR_BINDER_H
 #define MPP_VPSS_CONFIGURATOR_BINDER_H
 
-#include "Utils/Configurator/Configurator.h"
+#include "Misc/Configurator/Configurator.h"
 
 namespace hisilicon::mpp::vpss {
 

@@ -1,7 +1,7 @@
 #ifndef CONFIGURABLE_FACTORY_H
 #define CONFIGURABLE_FACTORY_H
 
-#include "Utils/GenericFactory.h"
+#include "Misc/GenericFactory.h"
 
 class Configurable;
 using ConfigurableFactory = GenericFactory<Configurable>;

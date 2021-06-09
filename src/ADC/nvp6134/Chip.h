@@ -6,8 +6,8 @@
 
 #include <nvp6134_ex_170306/video.h>
 
-#include "Utils/IdHolder.h"
-#include "Utils/Configurator/Configurable.h"
+#include "Misc/IdHolder.h"
+#include "Misc/Configurator/Configurable.h"
 #include "ChipSpecs.h"
 
 namespace nvp6134 {

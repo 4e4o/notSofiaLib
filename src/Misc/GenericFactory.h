@@ -9,8 +9,8 @@
 #include <concepts>
 #include <any>
 
-#include "Utils/ClassName.h"
-#include "Utils/LambdaTraits.h"
+#include "Misc/ClassName.h"
+#include "Misc/LambdaTraits.h"
 
 template<class Base>
 class GenericFactory {

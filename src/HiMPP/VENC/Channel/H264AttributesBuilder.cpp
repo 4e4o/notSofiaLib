@@ -24,6 +24,7 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
     const SIZE_S picSize = source->imgSize();
     const HI_U32 fps = source->pal() ? 25 : 30;
     const float scaleFactor = source->pixelFormat() == PIXEL_FORMAT_YUV_SEMIPLANAR_422 ? 2.0f : 1.5f;
+    const HI_U32 bit_rate = bitrate(picSize, fps, scaleFactor);
 
     result->stVeAttr.enType = PT_H264;
 
@@ -57,7 +58,7 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
         // page 652
         // Average bit rate, in kbit/s
         // Value range: [2, 40960]
-        stH264Cbr.u32BitRate = bitrate(picSize, fps, scaleFactor);
+        stH264Cbr.u32BitRate = bit_rate;
     } else if (m_bitrateType == Channel::BitrateType::FIXQP) {
         VENC_ATTR_H264_FIXQP_S& stH264FixQp = result->stRcAttr.stAttrH264FixQp;
         result->stRcAttr.enRcMode = VENC_RC_MODE_H264FIXQP;
@@ -75,7 +76,7 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
         stH264Vbr.fr32TargetFrmRate = fps;
         stH264Vbr.u32MinQp = 10;
         stH264Vbr.u32MaxQp = 40;
-        stH264Vbr.u32MaxBitRate = 2 * bitrate(picSize, fps, scaleFactor);
+        stH264Vbr.u32MaxBitRate = 2 * bit_rate;
     } else
         throw std::runtime_error("Unknown bitrate type");
 

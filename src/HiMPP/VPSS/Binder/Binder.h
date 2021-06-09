@@ -5,7 +5,7 @@
 
 #include <hi_common.h>
 
-#include "Utils/Configurator/Configurable.h"
+#include "Misc/Configurator/Configurable.h"
 
 namespace hisilicon::mpp::vpss {
 

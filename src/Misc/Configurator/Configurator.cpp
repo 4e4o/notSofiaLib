@@ -1,5 +1,5 @@
 #include "Configurator.h"
-#include "Utils/Utils.h"
+#include "Misc/Utils.h"
 
 Configurator::~Configurator() {
     clear();

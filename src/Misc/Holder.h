@@ -1,5 +1,5 @@
-#ifndef UTILS_HOLDER_H
-#define UTILS_HOLDER_H
+#ifndef HOLDER_H
+#define HOLDER_H
 
 template<typename TValue>
 class Holder {
@@ -15,4 +15,4 @@ private:
     const TValue m_value;
 };
 
-#endif // UTILS_HOLDER_H
+#endif // HOLDER_H

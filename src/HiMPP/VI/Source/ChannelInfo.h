@@ -6,8 +6,8 @@
 #include <hi_comm_video.h>
 #include <hi_comm_vi.h>
 
-#include "Utils/IdHolder.h"
-#include "Utils/Size.h"
+#include "Misc/IdHolder.h"
+#include "Misc/Size.h"
 
 namespace hisilicon::mpp::vi {
 

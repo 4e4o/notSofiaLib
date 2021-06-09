@@ -1,7 +1,7 @@
 #include "ViChannel.h"
 #include "DriverCommunicator.h"
 #include "Chip.h"
-#include "Utils/VideoFormat.h"
+#include "Misc/VideoFormat.h"
 #include "VoChannel.h"
 
 #include <stdexcept>

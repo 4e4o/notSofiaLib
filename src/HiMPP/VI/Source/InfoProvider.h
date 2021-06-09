@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "Utils/Configurator/Configurable.h"
+#include "Misc/Configurator/Configurable.h"
 
 namespace hisilicon::mpp::vi {
 

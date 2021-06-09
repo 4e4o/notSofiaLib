@@ -5,9 +5,9 @@
 
 #include <hi_comm_venc.h>
 
-#include "Utils/Configurator/Configurable.h"
-#include "Utils/IdHolder.h"
-#include "Utils/Size.h"
+#include "Misc/Configurator/Configurable.h"
+#include "Misc/IdHolder.h"
+#include "Misc/Size.h"
 #include "HiMPP/VB/VBufferizable.h"
 
 namespace hisilicon::mpp::venc {

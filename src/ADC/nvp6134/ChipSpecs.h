@@ -1,7 +1,7 @@
 #ifndef CHIP_SPECS_H
 #define CHIP_SPECS_H
 
-#include "Utils/IdHolder.h"
+#include "Misc/IdHolder.h"
 
 namespace nvp6134 {
 

@@ -4,7 +4,7 @@
 #include <hi_type.h>
 
 #include "HiMPP/MPPChild.h"
-#include "Utils/Configurator/Configurable.h"
+#include "Misc/Configurator/Configurable.h"
 
 namespace hisilicon::mpp {
 

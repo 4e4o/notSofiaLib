@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Utils/IdHolder.h"
+#include "Misc/IdHolder.h"
 
 namespace hisilicon::mpp::vi {
 

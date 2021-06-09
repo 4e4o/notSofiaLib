@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "Utils/Configurator/Configurator.h"
-#include "Utils/Configurator/ConfigurableFactory.h"
+#include "Misc/Configurator/Configurator.h"
+#include "Misc/Configurator/ConfigurableFactory.h"
 
 namespace hisilicon::mpp {
 

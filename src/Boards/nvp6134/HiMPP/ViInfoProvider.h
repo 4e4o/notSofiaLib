@@ -2,7 +2,7 @@
 #define BOARD_NVP6134_VI_INFO_PROVIDER_H
 
 #include "HiMPP/VI/Source/InfoProvider.h"
-#include "Utils/Holder.h"
+#include "Misc/Holder.h"
 
 #include <memory>
 

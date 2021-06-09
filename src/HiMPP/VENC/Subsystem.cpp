@@ -99,7 +99,7 @@ void Subsystem::setPoolAllocationMode(PoolAllocationMode m) {
     // режим работы пула
     // если h264e.ko загружен с H264eVBSource == 1
     // то должен быть равен PRIVATE_VB_POOL
-    // если загружен с H264eVBSource == 1 параметром
+    // если загружен с H264eVBSource == 2 параметром
     // то == USER_VB_POOL
     // по дефолту == PRIVATE_VB_POOL
     // HiMPP Media Processing Software Development Reference.pdf

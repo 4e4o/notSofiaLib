@@ -1,5 +1,5 @@
-#ifndef A_CONFIGURATOR_H
-#define A_CONFIGURATOR_H
+#ifndef CONFIGURATOR_H
+#define CONFIGURATOR_H
 
 #include <list>
 
@@ -25,4 +25,4 @@ private:
     std::list<Configurable*> m_items;
 };
 
-#endif // A_CONFIGURATOR_H
+#endif // CONFIGURATOR_H

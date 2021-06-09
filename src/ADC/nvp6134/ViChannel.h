@@ -4,8 +4,8 @@
 #include <nvp6134_ex_170306/video.h>
 
 #include "ChipChild.h"
-#include "Utils/IdHolder.h"
-#include "Utils/Size.h"
+#include "Misc/IdHolder.h"
+#include "Misc/Size.h"
 
 namespace nvp6134 {
 

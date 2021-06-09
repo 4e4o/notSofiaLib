@@ -3,7 +3,7 @@
 
 #include <hi_common.h>
 
-#include "Utils/Size.h"
+#include "Misc/Size.h"
 
 namespace hisilicon::mpp {
 

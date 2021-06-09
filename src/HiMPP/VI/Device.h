@@ -5,8 +5,8 @@
 
 #include <hi_comm_vi.h>
 
-#include "Utils/IdHolder.h"
-#include "Utils/Configurator/Configurator.h"
+#include "Misc/IdHolder.h"
+#include "Misc/Configurator/Configurator.h"
 
 namespace hisilicon::mpp::vi {
 

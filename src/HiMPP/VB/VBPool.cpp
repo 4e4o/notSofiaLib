@@ -3,6 +3,8 @@
 #include "HiMPP/VENC/Group.h"
 #include "HiMPP/VENC/Channel/Channel.h"
 
+#include <iostream>
+
 namespace hisilicon::mpp {
 
 VBPool::VBPool(MPP* p)
@@ -12,8 +14,10 @@ VBPool::VBPool(MPP* p)
 }
 
 VBPool::~VBPool() {
-    if (m_id != VB_INVALID_POOLID)
+    if (m_id != VB_INVALID_POOLID) {
         HI_MPI_VB_DestroyPool(m_id);
+        std::cout << "~VBPool " << this << " " << m_blockSize << " , " << m_blockCount << std::endl;
+    }
 }
 
 void VBPool::initForVenc() {
@@ -74,6 +78,7 @@ bool VBPool::startImpl() {
     if (m_id == VB_INVALID_POOLID)
         throw std::runtime_error("HI_MPI_VB_CreatePool failed");
 
+    std::cout << "VBPool created " << this << " " << m_blockSize << " , " << m_blockCount << std::endl;
     return true;
 }
 
