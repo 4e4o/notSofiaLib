@@ -1,8 +1,9 @@
 #include "MPP.h"
+#include "Sys/Sys.h"
+#include "VB/VideoBuffer.h"
 #include "VI/Subsystem.h"
 #include "VPSS/Subsystem.h"
-#include "Sys/Sys.h"
-#include "VideoBuffer.h"
+#include "VENC/Subsystem.h"
 
 #include <stdexcept>
 
@@ -10,7 +11,9 @@ namespace hisilicon::mpp {
 
 MPP::MPP()
     : m_vi(nullptr),
-      m_vpss(nullptr) {
+      m_vpss(nullptr),
+      m_venc(nullptr),
+      m_veduCount(0) {
     registerDefaultTypes();
 }
 
@@ -23,7 +26,20 @@ void MPP::registerDefaultTypes() {
     });
 }
 
+int MPP::veduCount() const {
+    return m_veduCount;
+}
+
+void MPP::setVeduCount(int veduCount) {
+    m_veduCount = veduCount;
+}
+
 bool MPP::configureImpl() {
+    if (m_veduCount == 0)
+        // HiMPP Media Processing Software Development Reference.pdf
+        // page 512
+        throw std::runtime_error("You must set veduCount for you hi chip");
+
     // Здесь порядок важен
     addItem(create<VideoBuffer>(this));
     addItem(create<Sys>(this));
@@ -35,23 +51,15 @@ void MPP::addSubsystems() {
 }
 
 vi::Subsystem* MPP::addViSubsystem() {
-    if (m_vi != nullptr)
-        throw std::runtime_error("vi subsystem already added");
-
-    addItem(m_vi = create<vi::Subsystem>(this));
-    return m_vi;
+    return addSubsystem<vi::Subsystem>(m_vi);
 }
 
 vpss::Subsystem* MPP::addVpssSubsystem() {
-    if (m_vpss != nullptr)
-        throw std::runtime_error("vpss subsystem already added");
-
-    addItem(m_vpss = create<vpss::Subsystem>(this));
-    return m_vpss;
+    return addSubsystem<vpss::Subsystem>(m_vpss);
 }
 
-vpss::Subsystem* MPP::vpss() const {
-    return m_vpss;
+venc::Subsystem* MPP::addVencSubsystem() {
+    return addSubsystem<venc::Subsystem>(m_venc);
 }
 
 Sys* MPP::sys() const {
@@ -60,6 +68,14 @@ Sys* MPP::sys() const {
 
 vi::Subsystem* MPP::vi() const {
     return m_vi;
+}
+
+vpss::Subsystem* MPP::vpss() const {
+    return m_vpss;
+}
+
+venc::Subsystem* MPP::venc() const {
+    return m_venc;
 }
 
 }

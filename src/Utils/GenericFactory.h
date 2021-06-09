@@ -44,7 +44,6 @@ private:
         typedef std::function<Base*(Args...)> TCreator;
     };
 
-
     template<typename... Ts>
     struct MakeCreator<std::tuple<Ts...>> {
         typedef std::function<Base*(Ts...)> TCreator;

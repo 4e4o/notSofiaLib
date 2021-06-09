@@ -32,15 +32,11 @@ void Subsystem::addSourceFromVi1by1() {
     for (auto& device : parent()->vi()->devices()) {
         for (auto& channel : device->channels()) {
             Group* group = addGroup(groupId++);
-            group->setAttributes(channel);
+            group->setSource(channel);
             group->addChannel(0);
             bind(channel, group);
         }
     }
-}
-
-void Subsystem::bind(vpss::BindSource* s, vpss::BindReceiver* r) {
-    addItem(new vpss::Binder(s, r));
 }
 
 Group* Subsystem::addGroup(int id) {

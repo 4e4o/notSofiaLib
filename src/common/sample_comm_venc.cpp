@@ -14,68 +14,9 @@
 #include <signal.h>
 
 #include "sample_comm.h"
-#include "nvp6134/ad_cfg.h"
- 
-#include "HiMPP/VI/Channel.h"
 
 static pthread_t gs_VencPid;
 static SAMPLE_VENC_GETSTREAM_PARA_S gs_stPara;
-static HI_S32 gs_s32SnapCnt = 0;
-
-
-/******************************************************************************
-* function : venc bind vpss           
-******************************************************************************/
-HI_S32 SAMPLE_COMM_VENC_BindVpss(VENC_GRP GrpChn,VPSS_GRP VpssGrp,VPSS_CHN VpssChn)
-{
-    HI_S32 s32Ret = HI_SUCCESS;
-    MPP_CHN_S stSrcChn;
-    MPP_CHN_S stDestChn;
-
-    stSrcChn.enModId = HI_ID_VPSS;
-    stSrcChn.s32DevId = VpssGrp;
-    stSrcChn.s32ChnId = VpssChn;
-
-    stDestChn.enModId = HI_ID_GROUP;
-    stDestChn.s32DevId = GrpChn;
-    stDestChn.s32ChnId = 0;
-
-    s32Ret = HI_MPI_SYS_Bind(&stSrcChn, &stDestChn);
-    if (s32Ret != HI_SUCCESS)
-    {
-        SAMPLE_PRT("failed with %#x!\n", s32Ret);
-        return HI_FAILURE;
-    }
-
-    return s32Ret;
-}
-
-/******************************************************************************
-* function : venc unbind vpss           
-******************************************************************************/
-HI_S32 SAMPLE_COMM_VENC_UnBindVpss(VENC_GRP GrpChn,VPSS_GRP VpssGrp,VPSS_CHN VpssChn)
-{
-    HI_S32 s32Ret = HI_SUCCESS;
-    MPP_CHN_S stSrcChn;
-    MPP_CHN_S stDestChn;
-
-    stSrcChn.enModId = HI_ID_VPSS;
-    stSrcChn.s32DevId = VpssGrp;
-    stSrcChn.s32ChnId = VpssChn;
-
-    stDestChn.enModId = HI_ID_GROUP;
-    stDestChn.s32DevId = GrpChn;
-    stDestChn.s32ChnId = 0;
-
-    s32Ret = HI_MPI_SYS_UnBind(&stSrcChn, &stDestChn);
-    if (s32Ret != HI_SUCCESS)
-    {
-        SAMPLE_PRT("failed with %#x!\n", s32Ret);
-        return HI_FAILURE;
-    }
-
-    return s32Ret;
-}
 
 /******************************************************************************
 * funciton : get file postfix according palyload_type.
@@ -117,14 +58,14 @@ HI_S32 SAMPLE_COMM_VENC_SaveH264(FILE* fpH264File, VENC_STREAM_S *pstStream)
     for (i = 0; i < pstStream->u32PackCount; i++)
     {
         fwrite(pstStream->pstPack[i].pu8Addr[0],
-               pstStream->pstPack[i].u32Len[0], 1, fpH264File);
+                pstStream->pstPack[i].u32Len[0], 1, fpH264File);
 
         fflush(fpH264File);
 
         if (pstStream->pstPack[i].u32Len[1] > 0)
         {
             fwrite(pstStream->pstPack[i].pu8Addr[1],
-                   pstStream->pstPack[i].u32Len[1], 1, fpH264File);
+                    pstStream->pstPack[i].u32Len[1], 1, fpH264File);
 
             fflush(fpH264File);
         }
@@ -150,318 +91,6 @@ HI_S32 SAMPLE_COMM_VENC_SaveStream(PAYLOAD_TYPE_E enType,FILE *pFd, VENC_STREAM_
         return HI_FAILURE;
     }
     return s32Ret;
-}
-
-static VB_POOL g_VbPool[8] = {0};
-
-HI_S32 SAMPLE_WISDOM_VENC_Creat_VBPool(VENC_CHN VencChn, SIZE_S stPicSize)
-{
-    VB_POOL VbPool;
-    HI_S32 s32Ret = 0;
-    // HiMPP Media Processing Software Development Reference.pdf
-    // page 512
-    HI_U32 u32BlkSize = std::ceil(CEILING_2_POWER(stPicSize.u32Height, 16) *
-            CEILING_2_POWER(stPicSize.u32Width, 16) * 1.5f);
-    HI_U32 u32BlkCnt = 1 + 2 * 1;
-
-    /* create a video buffer pool*/
-    VbPool = HI_MPI_VB_CreatePool(u32BlkSize, u32BlkCnt, nullptr);
-    if (VB_INVALID_POOLID == VbPool)
-    {
-        SAMPLE_PRT("[VencChn:%d] create vb err!\n", VencChn);
-        return HI_FAILURE;
-    }
-
-    s32Ret = HI_MPI_VENC_AttachVbPool(VencChn, VbPool);
-    if(HI_FAILURE == s32Ret)
-    {
-        SAMPLE_PRT("[VencChn:%d] Attach vb pool err!\n", VencChn);
-        return HI_FAILURE;
-    }
-
-    g_VbPool[VencChn] = VbPool;
-
-    SAMPLE_PRT("[VencChn:%d][VbPool:%d] Creat and Attach VBPool OK!\n", VencChn, VbPool);
-
-    return HI_SUCCESS;
-}
-
-
-HI_S32 SAMPLE_WISDOM_VENC_Destory_VBPool(VENC_CHN VencChn)
-{
-    HI_S32 s32Ret = 0;
-
-/*    s32Ret = HI_MPI_VENC_DetachVbPool(VencChn);
-    if(HI_FAILURE == s32Ret)
-    {
-        SAMPLE_PRT("[VencChn:%d] Detach vb pool err!\n", VencChn);
-        return HI_FAILURE;
-    }
-*/
-    s32Ret = HI_MPI_VB_DestroyPool(g_VbPool[VencChn]);
-    if (HI_FAILURE == s32Ret)
-    {
-        SAMPLE_PRT("[g_VbPool(%d):%d] HI_MPI_VB_DestroyPool err!\n", VencChn, g_VbPool[VencChn]);
-        return HI_FAILURE;
-    }
-
-    SAMPLE_PRT("[VencChn:%d][VbPool:%d] Destory VBPool OK!\n", VencChn, g_VbPool[VencChn]);
-
-    return HI_SUCCESS;
-
-}
-
-/******************************************************************************
-* funciton : Start venc stream mode (h264, mjpeg)
-* note      : rate control parameter need adjust, according your case.
-******************************************************************************/
-HI_S32 SAMPLE_COMM_VENC_Start(VPSS_GRP Vpssgrp, VENC_GRP VencGrp, VENC_CHN VencChn, PAYLOAD_TYPE_E enType, SAMPLE_RC_E enRcMode)
-{
-    HI_S32 s32Ret;
-    VENC_CHN_ATTR_S stVencChnAttr;
-    VENC_ATTR_H264_S stH264Attr;
-    VENC_ATTR_H264_CBR_S    stH264Cbr;
-    VENC_ATTR_H264_VBR_S    stH264Vbr;
-    VENC_ATTR_H264_FIXQP_S  stH264FixQp;
-    const struct ChannelInfo* chI = getChannelInfo(Vpssgrp);
-    hisilicon::mpp::vi::Channel* ccc = getViChannel(Vpssgrp);
-    const SIZE_S stPicSize = ccc->imgSize();
-    VIDEO_NORM_E enNorm = ccc->pal() ? VIDEO_ENCODING_MODE_PAL : VIDEO_ENCODING_MODE_NTSC;
-    PIC_SIZE_E enSize = chI->sizeType;
-
-    /******************************************
-     step 1: Greate Venc Group
-    ******************************************/
-    s32Ret = HI_MPI_VENC_CreateGroup(VencGrp);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_CreateGroup[%d] failed with %#x!\n",\
-                 VencGrp, s32Ret);
-        return HI_FAILURE;
-    }
-
-    /******************************************
-     step 2:  Create Venc Channel
-    ******************************************/
-    stVencChnAttr.stVeAttr.enType = enType;
-    switch(enType)
-    {
-        case PT_H264:
-        {
-            stH264Attr.u32MaxPicWidth = stPicSize.u32Width;
-            stH264Attr.u32MaxPicHeight = stPicSize.u32Height;
-            stH264Attr.u32PicWidth = stPicSize.u32Width;/*the picture width*/
-            stH264Attr.u32PicHeight = stPicSize.u32Height;/*the picture height*/
-            stH264Attr.u32BufSize  = stPicSize.u32Width * stPicSize.u32Height * 2;/*stream buffer size*/
-            stH264Attr.u32Profile  = 0;/*0: baseline; 1:MP; 2:HP   ? */
-            stH264Attr.bByFrame = HI_TRUE;/*get stream mode is slice mode or frame mode?*/
-            stH264Attr.bField = HI_FALSE;  /* surpport frame code only for hi3516, bfield = HI_FALSE */
-            stH264Attr.bMainStream = HI_TRUE; /* surpport main stream only for hi3516, bMainStream = HI_TRUE */
-            stH264Attr.u32Priority = 0; /*channels precedence level. invalidate for hi3516*/
-            stH264Attr.bVIField = HI_FALSE;/*the sign of the VI picture is field or frame. Invalidate for hi3516*/
-            memcpy(&stVencChnAttr.stVeAttr.stAttrH264e, &stH264Attr, sizeof(VENC_ATTR_H264_S));
-
-            if(SAMPLE_RC_CBR == enRcMode)
-            {
-                stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
-                stH264Cbr.u32Gop            = (VIDEO_ENCODING_MODE_PAL== enNorm) ? 25 : 30;
-                stH264Cbr.u32StatTime       = 1; /* stream rate statics time(s) */
-                stH264Cbr.u32ViFrmRate      = (VIDEO_ENCODING_MODE_PAL== enNorm) ? 25 : 30;/* input (vi) frame rate */
-                stH264Cbr.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm) ? 25 : 30;/* target frame rate */
-                switch (enSize)
-                {
-                  case PIC_QCIF:
-                	   stH264Cbr.u32BitRate = 256; /* average bit rate */
-                	   break;
-                  case PIC_QVGA:    /* 320 * 240 */
-                  case PIC_CIF:	
-
-                	   stH264Cbr.u32BitRate = 512;
-                       break;
-
-                  case PIC_D1:
-                  case PIC_VGA:	   /* 640 * 480 */
-                	   stH264Cbr.u32BitRate = 1024*2;
-                       break;
-                  case PIC_HD720:   /* 1280 * 720 */
-                	   stH264Cbr.u32BitRate = 1024*3;
-                	   break;
-                  case PIC_HD1080:  /* 1920 * 1080 */
-                  	   stH264Cbr.u32BitRate = 1024*6;
-                	   break;
-                  default :
-                       stH264Cbr.u32BitRate = 1024*4;
-                       break;
-                }
-                
-                stH264Cbr.u32FluctuateLevel = 0; /* average bit rate */
-                memcpy(&stVencChnAttr.stRcAttr.stAttrH264Cbr, &stH264Cbr, sizeof(VENC_ATTR_H264_CBR_S));
-            }
-            else if (SAMPLE_RC_FIXQP == enRcMode) 
-            {
-                stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_H264FIXQP;
-                stH264FixQp.u32Gop = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stH264FixQp.u32ViFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stH264FixQp.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stH264FixQp.u32IQp = 20;
-                stH264FixQp.u32PQp = 23;
-                memcpy(&stVencChnAttr.stRcAttr.stAttrH264FixQp, &stH264FixQp,sizeof(VENC_ATTR_H264_FIXQP_S));
-            }
-            else if (SAMPLE_RC_VBR == enRcMode) 
-            {
-                stVencChnAttr.stRcAttr.enRcMode = VENC_RC_MODE_H264VBR;
-                stH264Vbr.u32Gop = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stH264Vbr.u32StatTime = 1;
-                stH264Vbr.u32ViFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stH264Vbr.fr32TargetFrmRate = (VIDEO_ENCODING_MODE_PAL== enNorm)?25:30;
-                stH264Vbr.u32MinQp = 10;
-                stH264Vbr.u32MaxQp = 40;
-                switch (enSize)
-                {
-                  case PIC_QCIF:
-                	   stH264Vbr.u32MaxBitRate= 256*3; /* average bit rate */
-                	   break;
-                  case PIC_QVGA:    /* 320 * 240 */
-                  case PIC_CIF:
-                	   stH264Vbr.u32MaxBitRate = 512*3;
-                       break;
-                  case PIC_D1:
-                  case PIC_VGA:	   /* 640 * 480 */
-                	   stH264Vbr.u32MaxBitRate = 1024*2;
-                       break;
-                  case PIC_HD720:   /* 1280 * 720 */
-                	   stH264Vbr.u32MaxBitRate = 1024*3;
-                	   break;
-                  case PIC_HD1080:  /* 1920 * 1080 */
-                  	   stH264Vbr.u32MaxBitRate = 1024*6;
-                	   break;
-                  default :
-                       stH264Vbr.u32MaxBitRate = 1024*4*3;
-                       break;
-                }
-                memcpy(&stVencChnAttr.stRcAttr.stAttrH264Vbr, &stH264Vbr, sizeof(VENC_ATTR_H264_VBR_S));
-            }
-            else
-            {
-                return HI_FAILURE;
-            }
-        }
-        break;
-        
-        default:
-            return HI_ERR_VENC_NOT_SUPPORT;
-    }
-
-    s32Ret = HI_MPI_VENC_CreateChn(VencChn, &stVencChnAttr);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_CreateChn [%d] faild with %#x!\n",\
-                VencChn, s32Ret);
-        return s32Ret;
-    }
-
-    s32Ret = SAMPLE_WISDOM_VENC_Creat_VBPool(VencChn, stPicSize);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("SAMPLE_WISDOM_VENC_Creat_VBPool [%d] faild with %#x!\n",\
-                VencChn, s32Ret);
-        return s32Ret;
-    }
-
-    /******************************************
-     step 3:  Regist Venc Channel to VencGrp
-    ******************************************/
-    s32Ret = HI_MPI_VENC_RegisterChn(VencGrp, VencChn);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_RegisterChn faild with %#x!\n", s32Ret);
-        return HI_FAILURE;
-    }
-
-    /******************************************
-     step 4:  Start Recv Venc Pictures
-    ******************************************/
-    s32Ret = HI_MPI_VENC_StartRecvPic(VencChn);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_StartRecvPic faild with%#x!\n", s32Ret);
-        return HI_FAILURE;
-    }
-
-    return HI_SUCCESS;
-
-}
-
-/******************************************************************************
-* funciton : Stop venc ( stream mode -- H264, MJPEG )
-******************************************************************************/
-HI_S32 SAMPLE_COMM_VENC_Stop(VENC_GRP VencGrp,VENC_CHN VencChn)
-{
-    HI_S32 s32Ret;
-
-    /******************************************
-     step 1:  Stop Recv Pictures
-    ******************************************/
-    s32Ret = HI_MPI_VENC_StopRecvPic(VencChn);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_StopRecvPic vechn[%d] failed with %#x!\n",\
-               VencChn, s32Ret);
-        return HI_FAILURE;
-    }
-
-    /******************************************
-     step 2:  UnRegist Venc Channel
-    ******************************************/
-    s32Ret = HI_MPI_VENC_UnRegisterChn(VencChn);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_UnRegisterChn vechn[%d] failed with %#x!\n",\
-               VencChn, s32Ret);
-        return HI_FAILURE;
-    }
-
-
-    s32Ret = HI_MPI_VENC_DetachVbPool(VencChn);
-    if(HI_FAILURE == s32Ret)
-    {
-        SAMPLE_PRT("[VencChn:%d] Detach vb pool err!\n", VencChn);
-        return HI_FAILURE;
-    }
-
-
-
-    /******************************************
-     step 3:  Distroy Venc Channel
-    ******************************************/
-    s32Ret = HI_MPI_VENC_DestroyChn(VencChn);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_DestroyChn vechn[%d] failed with %#x!\n",\
-               VencChn, s32Ret);
-        return HI_FAILURE;
-    }
-
-    s32Ret = SAMPLE_WISDOM_VENC_Destory_VBPool(VencChn);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("SAMPLE_WISDOM_VENC_Destory_VBPool vechn[%d] failed with %#x!\n",\
-               VencChn, s32Ret);
-        return HI_FAILURE;
-    }
-
-    /******************************************
-     step 4:  Distroy Venc Group
-    ******************************************/
-    s32Ret = HI_MPI_VENC_DestroyGroup(VencGrp);
-    if (HI_SUCCESS != s32Ret)
-    {
-        SAMPLE_PRT("HI_MPI_VENC_DestroyGroup group[%d] failed with %#x!\n",\
-               VencGrp, s32Ret);
-        return HI_FAILURE;
-    }
-
-    return HI_SUCCESS;
 }
 
 /******************************************************************************
@@ -505,7 +134,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         if(s32Ret != HI_SUCCESS)
         {
             SAMPLE_PRT("HI_MPI_VENC_GetChnAttr chn[%d] failed with %#x!\n", \
-                   VencChn, s32Ret);
+                       VencChn, s32Ret);
             return nullptr;
         }
         enPayLoadType[i] = stVencChnAttr.stVeAttr.enType;
@@ -514,15 +143,15 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         if(s32Ret != HI_SUCCESS)
         {
             SAMPLE_PRT("SAMPLE_COMM_VENC_GetFilePostfix [%d] failed with %#x!\n", \
-                   stVencChnAttr.stVeAttr.enType, s32Ret);
+                       stVencChnAttr.stVeAttr.enType, s32Ret);
             return nullptr;
         }
         sprintf(aszFileName[i], "stream_chn%d%s", i, szFilePostfix);
         pFile[i] = fopen(aszFileName[i], "wb");
         if (!pFile[i])
         {
-            SAMPLE_PRT("open file[%s] failed!\n", 
-                   aszFileName[i]);
+            SAMPLE_PRT("open file[%s] failed!\n",
+                       aszFileName[i]);
             return nullptr;
         }
 
@@ -530,8 +159,8 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         VencFd[i] = HI_MPI_VENC_GetFd(i);
         if (VencFd[i] < 0)
         {
-            SAMPLE_PRT("HI_MPI_VENC_GetFd failed with %#x!\n", 
-                   VencFd[i]);
+            SAMPLE_PRT("HI_MPI_VENC_GetFd failed with %#x!\n",
+                       VencFd[i]);
             return nullptr;
         }
         if (maxfd <= VencFd[i])
@@ -601,7 +230,7 @@ HI_VOID* SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                         free(stStream.pstPack);
                         stStream.pstPack = nullptr;
                         SAMPLE_PRT("HI_MPI_VENC_GetStream failed with %#x!\n", \
-                               s32Ret);
+                                   s32Ret);
                         break;
                     }
 

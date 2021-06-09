@@ -2,7 +2,7 @@
 #include "Channel.h"
 #include "HiMPP/MPP.h"
 #include "Subsystem.h"
-#include "HiMPP/VI/Channel.h"
+#include "IGroupSource.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -26,7 +26,8 @@ static VPSS_GRP_ATTR_S* createStandardAttr() {
 
 Group::Group(Subsystem* p, int id)
     : Holder<Subsystem*>(p), IdHolder(id),
-      m_attrs(createStandardAttr()) {
+      m_attrs(createStandardAttr()),
+      m_source(nullptr) {
 }
 
 Group::~Group() {
@@ -53,6 +54,14 @@ HI_S32 Group::receiverBindChannelId() {
     return 0;
 }
 
+HI_S32 Group::sourceBindDeviceId() {
+    return id();
+}
+
+HI_S32 Group::sourceBindChannelId() {
+    return 0;
+}
+
 Channel* Group::addChannel(int id) {
     Channel* ch = subsystem()->parent()->create<Channel>(this, id);
     addItem(ch);
@@ -61,6 +70,9 @@ Channel* Group::addChannel(int id) {
 }
 
 bool Group::configureImpl() {
+    if (m_source == nullptr)
+        throw std::runtime_error("vi::Group source is not set");
+
     if (m_attrs.get() == nullptr)
         throw std::runtime_error("vi::Group attributes not set");
 
@@ -97,12 +109,26 @@ void Group::setAttributes(VPSS_GRP_ATTR_S* attr) {
     m_attrs.reset(attr);
 }
 
-void Group::setAttributes(vi::Channel* c) {
-    const SIZE_S size = c->destSize();
+void Group::setSource(IGroupSource* s) {
+    m_source = s;
 
-    m_attrs->enPixFmt = c->pixelFormat();
+    const SIZE_S size = s->destSize();
+    m_attrs->enPixFmt = s->pixelFormat();
     m_attrs->u32MaxW = size.u32Width;
     m_attrs->u32MaxH = size.u32Height;
+}
+
+// venc::IChannelSource
+SIZE_S Group::imgSize() const {
+    return m_source->imgSize();
+}
+
+bool Group::pal() const {
+    return m_source->pal();
+}
+
+PIXEL_FORMAT_E Group::pixelFormat() const {
+    return m_source->pixelFormat();
 }
 
 void Group::setParameters(VPSS_GRP_PARAM_S* p) {

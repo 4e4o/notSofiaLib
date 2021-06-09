@@ -102,4 +102,15 @@ const Device* Channel::device() const {
     return Holder<Device*>::value();
 }
 
+SIZE_S Channel::bufferImageSize() {
+    // FIXME maybe destSize ? or capSize
+//    const SIZE_S imgSize = ch->imgSize();
+
+    return imgSize();
+}
+
+PIXEL_FORMAT_E Channel::bufferPixelFormat() {
+    return pixelFormat();
+}
+
 }

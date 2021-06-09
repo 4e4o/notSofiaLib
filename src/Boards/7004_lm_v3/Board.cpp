@@ -5,6 +5,7 @@
 #include "ADC/nvp6134/Configurations/7004_lm_v3/Chip.h"
 #include "Boards/nvp6134/HiMPP/ViInfoProvider.h"
 #include "HiMPP/VPSS/Subsystem.h"
+#include "HiMPP/VENC/Subsystem.h"
 
 #define NVP_CHIPS_COUNT 1
 
@@ -32,6 +33,10 @@ void Board::initialize() {
 
     mpp->registerType([](hisilicon::mpp::MPP* p) -> hisilicon::mpp::vpss::Subsystem* {
         return new vpss::Subsystem(p);
+    });
+
+    mpp->registerType([](hisilicon::mpp::MPP* p) -> hisilicon::mpp::venc::Subsystem* {
+        return new venc::Subsystem(p);
     });
 
     addItem(mpp);

@@ -16,10 +16,12 @@ class Channel;
 class Subsystem;
 
 class Group : public Holder<Subsystem*>, public IdHolder,
-        public Configurator, public vpss::VpssBindReceiver {
+        public Configurator, public vpss::GroupBindReceiver {
 public:
     Group(Subsystem*, int id);
     ~Group();
+
+    Subsystem* subsystem() const;
 
     Channel* addChannel(int id);
     const std::vector<Channel*>& channels() const;
@@ -30,7 +32,6 @@ protected:
 private:
     HI_S32 receiverBindDeviceId() override final;
     HI_S32 receiverBindChannelId() override final;
-    Subsystem* subsystem() const;
 
     std::vector<Channel*> m_channels;
 };

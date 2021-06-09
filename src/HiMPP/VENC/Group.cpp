@@ -1,5 +1,5 @@
 #include "Group.h"
-#include "Channel.h"
+#include "Channel/Channel.h"
 #include "HiMPP/MPP.h"
 #include "Subsystem.h"
 #include "HiMPP/VI/Channel.h"

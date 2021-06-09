@@ -43,6 +43,20 @@ private:
     }
 };
 
+class VpssBindSource : public BindSource {
+private:
+    MOD_ID_E sourceBindMode() override final {
+        return HI_ID_VPSS;
+    }
+};
+
+class GroupBindReceiver : public BindReceiver {
+private:
+    MOD_ID_E receiverBindMode() override final {
+        return HI_ID_GROUP;
+    }
+};
+
 }
 
 #endif // MPP_VPSS_BIND_ITEM_H

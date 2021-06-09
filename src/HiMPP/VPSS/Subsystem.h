@@ -4,15 +4,13 @@
 #include <vector>
 
 #include "HiMPP/MPPChild.h"
-#include "Utils/Configurator/Configurator.h"
+#include "Binder/ConfiguratorBinder.h"
 
 namespace hisilicon::mpp::vpss {
 
 class Group;
-class BindSource;
-class BindReceiver;
 
-class Subsystem : public MPPChild, public Configurator {
+class Subsystem : public MPPChild, public ConfiguratorBinder {
 public:
     Subsystem(MPP*);
 
@@ -23,8 +21,6 @@ public:
 
     const std::vector<Group*>& groups() const;
     int channelsCount() const;
-
-    void bind(vpss::BindSource*, vpss::BindReceiver*);
 
 protected:
     void registerDefaultTypes();
