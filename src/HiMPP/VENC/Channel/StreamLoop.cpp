@@ -60,8 +60,11 @@ void StreamLoop::run() {
         const int result = select(maxFd() + 1, &m_readFds, nullptr, nullptr, &timeout);
 
         if (result < 0) {
-            std::cout << "[StreamLoop] select failed!" << std::endl;
-            m_running.store(false);
+            if (errno != EINTR) {
+                std::cout << "[StreamLoop] select failed!" << std::endl;
+                m_running.store(false);
+            }
+
             continue;
         } else if (result == 0) {
             std::cout << "[StreamLoop] select timeout, no data" << std::endl;
