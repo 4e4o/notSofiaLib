@@ -14,10 +14,8 @@ StreamLoop::StreamLoop() :
 }
 
 StreamLoop::~StreamLoop() {
+    ::close(m_interruptPipe[0]);
     ::close(m_interruptPipe[1]);
-
-    for (int fd : m_fds)
-        ::close(fd);
 }
 
 void StreamLoop::createInterruptPipe() {
