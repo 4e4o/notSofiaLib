@@ -9,6 +9,7 @@
 #include "HiMPP/VB/VBPool.h"
 #include "Channel/StreamLoop.h"
 #include "Channel/StreamFileOut.h"
+#include "Channel/StreamDummyOut.h"
 #include "Misc/Utils.h"
 
 #define DEFAULT_STREAM_LOOPS_COUNT 1
@@ -84,6 +85,7 @@ void Subsystem::addSourceFromVpss1by1() {
         H264AttributesBuilder* ab = new H264AttributesBuilder();
         channel->setAttributesBuilder(ab);
         channel->setStreamOut(new StreamFileOut(channel));
+//        channel->setStreamOut(new StreamDummyOut());
 
         bind(vpss_group, group);
     }
