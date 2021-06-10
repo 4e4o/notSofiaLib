@@ -158,10 +158,6 @@ const std::vector<Group*>& Subsystem::groups() const {
     return m_groups;
 }
 
-Group* Subsystem::group(int id) {
-    return m_groups[id];
-}
-
 void Subsystem::setPoolAllocationMode(PoolAllocationMode m) {
     // режим работы пула
     // если h264e.ko загружен с H264eVBSource == 1

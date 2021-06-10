@@ -24,9 +24,6 @@ public:
 
     Group* addGroup(int id);
 
-    // TODO remove it
-    Group* group(int id);
-
     const std::vector<Group*>& groups() const;
     int channelsCount() const;
 

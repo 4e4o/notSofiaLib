@@ -61,8 +61,4 @@ const std::vector<Device*>& Subsystem::devices() const {
     return m_devices;
 }
 
-const Device* Subsystem::device(int id) {
-    return m_devices[id];
-}
-
 }

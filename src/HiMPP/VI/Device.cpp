@@ -27,7 +27,7 @@ Subsystem* Device::subsystem() const {
     return Holder<Subsystem*>::value();
 }
 
-Channel* Device::addChannel(ChannelInfo* i, int id) {
+Channel* Device::addChannel(const ChannelInfo* i, int id) {
     Channel* ch = subsystem()->parent()->create<Channel>(this, i, id);
     addItem(ch);
     m_channels.push_back(ch);
@@ -58,7 +58,7 @@ const std::vector<Channel*>& Device::channels() const {
 
 Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
     InfoProvider* inf = subsystem()->infoProvider();
-    ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
+    const ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
 
     if (i == nullptr)
         return nullptr;

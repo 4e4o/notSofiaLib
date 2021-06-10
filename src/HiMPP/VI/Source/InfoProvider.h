@@ -22,9 +22,7 @@ public:
     InfoProvider();
     ~InfoProvider();
 
-    const TViDevicesInfo& devices() const;
-
-    ChannelInfo* findChannelInfo(int devId, int chId);
+    const ChannelInfo* findChannelInfo(int devId, int chId) const;
 
 protected:
     void setDeviceInfo(const TViDevicesInfo&);

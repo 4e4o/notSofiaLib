@@ -15,14 +15,9 @@ class Subsystem : public MPPChild, public Configurator {
 public:
     Subsystem(MPP*);
 
-    // TODO remove it
-    vi::InfoProvider* infoProvider() const;
-
     Device* addDevice(int id);
 
-    // TODO remove it
-    const Device* device(int id);
-
+    vi::InfoProvider* infoProvider() const;
     const std::vector<Device*>& devices() const;
     int channelsCount() const;
 

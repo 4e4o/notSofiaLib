@@ -112,11 +112,11 @@ const Group* Channel::group() const {
     return Holder<Group*>::value();
 }
 
-SIZE_S Channel::bufferImageSize() {
+SIZE_S Channel::vbImageSize() {
     return m_source->imgSize();
 }
 
-PIXEL_FORMAT_E Channel::bufferPixelFormat() {
+PIXEL_FORMAT_E Channel::vbPixelFormat() {
     return m_source->pixelFormat();
 }
 

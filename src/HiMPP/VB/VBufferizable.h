@@ -7,13 +7,13 @@ namespace hisilicon::mpp {
 
 // Буфферизируемый объект
 
-class IBufferizable {
+class IVBufferizable {
 public:
-    IBufferizable() { }
-    virtual ~IBufferizable() { }
+    IVBufferizable() { }
+    virtual ~IVBufferizable() { }
 
-    virtual SIZE_S bufferImageSize() = 0;
-    virtual PIXEL_FORMAT_E bufferPixelFormat() = 0;
+    virtual SIZE_S vbImageSize() = 0;
+    virtual PIXEL_FORMAT_E vbPixelFormat() = 0;
 };
 
 }

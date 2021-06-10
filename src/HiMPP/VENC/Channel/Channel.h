@@ -20,7 +20,7 @@ class IStreamOut;
 class StreamLoop;
 
 class Channel : public IdHolder, public Holder<Group*>,
-        public Configurable, public IBufferizable {
+        public Configurable, public IVBufferizable {
 public:
     Channel(Group*, int id);
     ~Channel();
@@ -42,8 +42,8 @@ public:
 private:
     bool configureImpl() override final;
     bool startImpl() override final;
-    SIZE_S bufferImageSize() override final;
-    PIXEL_FORMAT_E bufferPixelFormat() override final;
+    SIZE_S vbImageSize() override final;
+    PIXEL_FORMAT_E vbPixelFormat() override final;
     void setAttributes(VENC_CHN_ATTR_S* attr);
 
     std::unique_ptr<VENC_CHN_ATTR_S> m_attr;

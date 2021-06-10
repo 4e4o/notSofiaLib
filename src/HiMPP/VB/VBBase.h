@@ -8,14 +8,14 @@
 
 namespace hisilicon::mpp {
 
-class IBufferizable;
+class IVBufferizable;
 
 class VBBase : public MPPChild, public Configurable {
 public:
     using MPPChild::MPPChild;
 
 protected:
-    HI_U32 picVbBlkSize(IBufferizable *b);
+    HI_U32 picVbBlkSize(IVBufferizable *b);
 
     // дополнительное кол-во блоков для выделения в пуле
     // помогает найти нестабильные конфиги пула

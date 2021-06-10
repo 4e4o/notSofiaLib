@@ -20,9 +20,9 @@ class ChannelInfo;
 
 class Channel : public IdHolder, public Holder<Device*>,
         public Configurable, public vpss::ViBindSource,
-        public vpss::IGroupSource, public IBufferizable {
+        public vpss::IGroupSource, public IVBufferizable {
 public:
-    Channel(Device*, ChannelInfo*, int id);
+    Channel(Device*, const ChannelInfo*, int id);
     ~Channel();
 
     void setAttributes(VI_CHN_ATTR_S* attr);
@@ -43,10 +43,10 @@ private:
     bool startImpl() override final;
     HI_S32 sourceBindDeviceId() override final;
     HI_S32 sourceBindChannelId() override final;
-    SIZE_S bufferImageSize() override final;
-    PIXEL_FORMAT_E bufferPixelFormat() override final;
+    SIZE_S vbImageSize() override final;
+    PIXEL_FORMAT_E vbPixelFormat() override final;
 
-    ChannelInfo* m_info;
+    const ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
 };
 

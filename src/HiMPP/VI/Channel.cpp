@@ -24,7 +24,7 @@ static VI_CHN_ATTR_S* createStandardAttr() {
     return attr;
 }
 
-Channel::Channel(Device* d, ChannelInfo* info, int id)
+Channel::Channel(Device* d, const ChannelInfo* info, int id)
     : IdHolder(id), Holder<Device*>(d),
       m_info(info),
       m_attr(createStandardAttr()) {
@@ -102,14 +102,14 @@ const Device* Channel::device() const {
     return Holder<Device*>::value();
 }
 
-SIZE_S Channel::bufferImageSize() {
+SIZE_S Channel::vbImageSize() {
     // FIXME maybe destSize ? or capSize
 //    const SIZE_S imgSize = ch->imgSize();
 
     return imgSize();
 }
 
-PIXEL_FORMAT_E Channel::bufferPixelFormat() {
+PIXEL_FORMAT_E Channel::vbPixelFormat() {
     return pixelFormat();
 }
 

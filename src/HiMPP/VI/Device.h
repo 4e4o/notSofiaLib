@@ -29,7 +29,7 @@ protected:
 
 private:
     virtual int getBindWay(int i, Channel*);
-    Channel* addChannel(ChannelInfo*, int id);
+    Channel* addChannel(const ChannelInfo*, int id);
     void bindChannels();
     Subsystem* subsystem() const;
 

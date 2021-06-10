@@ -51,9 +51,4 @@ void Board::stop() {
     m_mpp->stop();
 }
 
-// TODO remove it
-hisilicon::mpp::MPP* Board::mpp() const {
-    return static_cast<hisilicon::mpp::MPP*>(item(1));
-}
-
 }

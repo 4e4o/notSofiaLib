@@ -59,8 +59,4 @@ const std::vector<Group*>& Subsystem::groups() const {
     return m_groups;
 }
 
-Group* Subsystem::group(int id) {
-    return m_groups[id];
-}
-
 }

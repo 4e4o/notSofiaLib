@@ -10,10 +10,10 @@ namespace hisilicon::mpp {
 // HiMPP Media Processing Software Development Reference.pdf
 // page 90
 
-HI_U32 VBBase::picVbBlkSize(IBufferizable *b) {
+HI_U32 VBBase::picVbBlkSize(IVBufferizable *b) {
     const HI_U32 sysAlignWidth = parent()->sys()->sysWidthAlign();
-    const SIZE_S imgSize = b->bufferImageSize();
-    const PIXEL_FORMAT_E pixFmt = b->bufferPixelFormat();
+    const SIZE_S imgSize = b->vbImageSize();
+    const PIXEL_FORMAT_E pixFmt = b->vbPixelFormat();
 
     if ((PIXEL_FORMAT_YUV_SEMIPLANAR_422 != pixFmt) &&
             (PIXEL_FORMAT_YUV_SEMIPLANAR_420 != pixFmt)) {

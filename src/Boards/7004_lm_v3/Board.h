@@ -23,9 +23,6 @@ public:
     Board();
     ~Board();
 
-    // TODO remove it
-    hisilicon::mpp::MPP* mpp() const;
-
     // TODO move it to board with mpp class
     void run();
     void stop();
