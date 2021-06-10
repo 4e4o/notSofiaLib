@@ -24,6 +24,7 @@ static PIXEL_FORMAT_E toMppPixelFormat(ViChannel* ch) {
 }
 
 static VI_SCAN_MODE_E toMppScanMode(ViChannel* ch) {
+    // TODO more formats
     switch(ch->videoFormat()) {
     case ViChannel::DF_1080P_NTSC:
         return VI_SCAN_PROGRESSIVE;
@@ -51,23 +52,8 @@ bool InfoProvider::configureImpl() {
                 info->setPal(channel->pal());
                 info->setScanMode(toMppScanMode(channel.get()));
                 info->setPixelFormat(toMppPixelFormat(channel.get()));
-            } else {
-                // TODO remove it and don't append channel info
-                // фейковый конфиг чтоб пример пока работал
-
-                TSize size;
-                size.width = 704 / 2;
-                size.height = 240;
-
-                info->setCapSize(size);
-                info->setImgSize(size);
-
-                info->setPal(false);
-                info->setScanMode(VI_SCAN_PROGRESSIVE);
-                info->setPixelFormat(PIXEL_FORMAT_YUV_SEMIPLANAR_422);
+                dev->addChannel(info);
             }
-
-            dev->addChannel(info);
         }
 
         result.push_back(dev);

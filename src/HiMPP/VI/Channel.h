@@ -46,7 +46,6 @@ private:
     SIZE_S bufferImageSize() override final;
     PIXEL_FORMAT_E bufferPixelFormat() override final;
 
-
     ChannelInfo* m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
 };
