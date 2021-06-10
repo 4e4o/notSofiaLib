@@ -6,6 +6,9 @@
 #include "H264AttributesBuilder.h"
 #include "IChannelSource.h"
 #include "HiMPP/VB/VBPool.h"
+#include "StreamLoop.h"
+#include "IStreamOut.h"
+#include "StreamReader.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -16,7 +19,7 @@
 namespace hisilicon::mpp::venc {
 Channel::Channel(Group* g, int id)
     : IdHolder(id), Holder<Group*>(g),
-      m_source(nullptr)  {
+      m_source(nullptr) {
 }
 
 Channel::~Channel() {
@@ -29,6 +32,15 @@ Channel::~Channel() {
     HI_MPI_VENC_DestroyChn(id());
 
     std::cout << "~venc::Channel " << this << " , " << id() << std::endl;
+}
+
+void Channel::setStreamOut(IStreamOut* out) {
+    m_streamReader.reset(new StreamReader(this));
+    m_streamOut.reset(out);
+
+    m_streamReader->setEvent([out](const HI_U8* data, const HI_U32& size) {
+        out->write(data, size);
+    });
 }
 
 void Channel::setSource(IChannelSource* source) {
@@ -53,7 +65,10 @@ bool Channel::needUserPool() const {
 
 bool Channel::configureImpl() {
     if (m_source == nullptr)
-        throw std::runtime_error("Source is not set");
+        throw std::runtime_error("m_source is not set");
+
+    if (m_streamReader.get() == nullptr)
+        throw std::runtime_error("m_streamReader is not set");
 
     if (m_attrBuilder.get() == nullptr)
         throw std::runtime_error("[venc::Channel] m_attrBuilder is not set");
@@ -82,6 +97,9 @@ bool Channel::startImpl() {
 
     if (HI_MPI_VENC_StartRecvPic(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_StartRecvPic failed");
+
+    StreamLoop* sl = group()->subsystem()->getLoopForChannel();
+    m_streamReader->attach(sl);
 
     return true;
 }

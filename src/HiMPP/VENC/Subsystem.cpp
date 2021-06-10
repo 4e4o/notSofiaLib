@@ -7,14 +7,28 @@
 #include "HiMPP/VPSS/Group.h"
 #include "HiMPP/VPSS/Channel.h"
 #include "HiMPP/VB/VBPool.h"
+#include "Channel/StreamLoop.h"
+#include "Channel/StreamFileOut.h"
+#include "Misc/Utils.h"
+
+#define DEFAULT_STREAM_LOOPS_COUNT 1
 
 namespace hisilicon::mpp::venc {
 
 Subsystem::Subsystem(MPP* p)
     : MPPChild(p),
       m_poolMode(PoolAllocationMode::PRIVATE_VB_POOL),
-      m_pool(nullptr) {
+      m_pool(nullptr),
+      m_streamLoopsCount(DEFAULT_STREAM_LOOPS_COUNT),
+      m_channelLoopIndex(0) {
     registerDefaultTypes();
+}
+
+Subsystem::~Subsystem() {
+    stop();
+    joinStreamThreads();
+    Utils::clearPtrContainer(m_threads);
+    Utils::clearPtrContainer(m_streamLoops);
 }
 
 void Subsystem::registerDefaultTypes() {
@@ -32,6 +46,7 @@ VBPool* Subsystem::pool() const {
 
 bool Subsystem::configureImpl() {
     createUserPool();
+    createStreamLoops();
     return ConfiguratorBinder::configureImpl();
 }
 
@@ -63,12 +78,26 @@ void Subsystem::addSourceFromVpss1by1() {
 
     for (auto& vpss_group : parent()->vpss()->groups()) {
         Group* group = addGroup(id);
+
         Channel* channel = group->addChannel(id++);
         channel->setSource(vpss_group);
         H264AttributesBuilder* ab = new H264AttributesBuilder();
         channel->setAttributesBuilder(ab);
+        channel->setStreamOut(new StreamFileOut(channel));
+
         bind(vpss_group, group);
     }
+}
+
+// Назначает лупы каналам по порядку
+StreamLoop* Subsystem::getLoopForChannel() {
+    if(m_streamLoops.empty())
+        throw std::runtime_error("No stream loops");
+
+    if (m_channelLoopIndex >= (int) m_streamLoops.size())
+        m_channelLoopIndex = 0;
+
+    return m_streamLoops[m_channelLoopIndex++];
 }
 
 Group* Subsystem::addGroup(int id) {
@@ -85,6 +114,42 @@ int Subsystem::channelsCount() const {
         count += group->channels().size();
 
     return count;
+}
+
+void Subsystem::createStreamLoops() {
+    for (int i = 0 ; i < m_streamLoopsCount ; i++)
+        m_streamLoops.push_back(new StreamLoop());
+}
+
+void Subsystem::stop() {
+    for (int i = 0 ; i < (int) m_streamLoops.size() ; i++)
+        m_streamLoops[i]->stop();
+}
+
+void Subsystem::run() {
+    if (m_streamLoops.empty())
+        throw std::runtime_error("No stream loops to run");
+
+    // создаём потоки для лупов > 0
+    for (int i = 1 ; i < (int) m_streamLoops.size() ; i++) {
+        m_threads.push_back(new std::thread([this, i] () {
+            m_streamLoops[i]->run();
+        }));
+    }
+
+    // первый луп будет в текущем потоке бегать
+    m_streamLoops[0]->run();
+
+    joinStreamThreads();
+}
+
+void Subsystem::joinStreamThreads() {
+    for (int i = 0 ; i < (int) m_threads.size() ; i++)
+        m_threads[i]->join();
+}
+
+void Subsystem::setStreamLoopsCount(int streamLoopsCount) {
+    m_streamLoopsCount = streamLoopsCount;
 }
 
 const std::vector<Group*>& Subsystem::groups() const {

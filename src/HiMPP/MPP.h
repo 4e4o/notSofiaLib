@@ -38,6 +38,9 @@ public:
     int veduCount() const;
     void setVeduCount(int veduCount);
 
+    void run();
+    void stop();
+
 private:
     bool configureImpl() override final;
     virtual void addSubsystems();

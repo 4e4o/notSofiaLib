@@ -17,7 +17,6 @@ H264AttributesBuilder::H264AttributesBuilder() :
 }
 
 VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
-
     std::unique_ptr<VENC_CHN_ATTR_S> result(new VENC_CHN_ATTR_S());
     VENC_ATTR_H264_S& stH264Attr = result->stVeAttr.stAttrH264e;
 

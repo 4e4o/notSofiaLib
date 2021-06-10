@@ -38,13 +38,27 @@ bool MPP::configureImpl() {
     if (m_veduCount == 0)
         // HiMPP Media Processing Software Development Reference.pdf
         // page 512
-        throw std::runtime_error("You must set veduCount for you hi chip");
+        throw std::runtime_error("You must set veduCount for your hi chip");
 
     // Здесь порядок важен
     addItem(create<VideoBuffer>(this));
     addItem(create<Sys>(this));
     addSubsystems();
     return Configurator::configureImpl();
+}
+
+void MPP::run() {
+    if (m_venc == nullptr)
+        return;
+
+    m_venc->run();
+}
+
+void MPP::stop() {
+    if (m_venc == nullptr)
+        return;
+
+    m_venc->stop();
 }
 
 void MPP::addSubsystems() {

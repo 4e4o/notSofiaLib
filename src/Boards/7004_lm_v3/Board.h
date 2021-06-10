@@ -26,9 +26,15 @@ public:
     // TODO remove it
     hisilicon::mpp::MPP* mpp() const;
 
+    // TODO move it to board with mpp class
+    void run();
+    void stop();
+
 private:
     void initialize() override final;
     ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) override final;
+
+    hisilicon::mpp::MPP *m_mpp;
 };
 
 }

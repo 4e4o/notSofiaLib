@@ -15,16 +15,15 @@ namespace hisilicon::mpp::venc {
 class Group;
 class IAttributesBuilder;
 class IChannelSource;
+class StreamReader;
+class IStreamOut;
+class StreamLoop;
 
 class Channel : public IdHolder, public Holder<Group*>,
         public Configurable, public IBufferizable {
 public:
     Channel(Group*, int id);
     ~Channel();
-
-    enum class Codec {
-        H264
-    };
 
     enum class BitrateType {
         CBR,
@@ -34,21 +33,23 @@ public:
 
     void setAttributesBuilder(IAttributesBuilder*);
     void setSource(IChannelSource* source);
+    void setStreamOut(IStreamOut*);
 
     const Group* group() const;
-
     bool needUserPool() const;
+    bool h264Mode() const;
 
 private:
     bool configureImpl() override final;
     bool startImpl() override final;
     SIZE_S bufferImageSize() override final;
     PIXEL_FORMAT_E bufferPixelFormat() override final;
-    bool h264Mode() const;
     void setAttributes(VENC_CHN_ATTR_S* attr);
 
     std::unique_ptr<VENC_CHN_ATTR_S> m_attr;
     std::unique_ptr<IAttributesBuilder> m_attrBuilder;
+    std::unique_ptr<StreamReader> m_streamReader;
+    std::unique_ptr<IStreamOut> m_streamOut;
     IChannelSource* m_source;
 };
 
