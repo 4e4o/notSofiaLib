@@ -22,8 +22,6 @@ class Subsystem : public MPPChild, public Configurator {
 
   protected:
     void registerDefaultTypes();
-    bool configureImpl() override final;
-    virtual void createDevices();
 
   private:
     std::vector<Device *> m_devices;

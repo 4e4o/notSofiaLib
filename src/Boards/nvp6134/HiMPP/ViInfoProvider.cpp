@@ -33,7 +33,12 @@ static VI_SCAN_MODE_E toMppScanMode(ViChannel *ch) {
     }
 }
 
-bool InfoProvider::configureImpl() {
+InfoProvider::InfoProvider(Board *b)
+    : Holder<Board *>(b) {
+    initInfo();
+}
+
+void InfoProvider::initInfo() {
     hisilicon::mpp::vi::InfoProvider::TViDevicesInfo result;
     auto &nvp = value()->nvp();
 
@@ -59,7 +64,6 @@ bool InfoProvider::configureImpl() {
     }
 
     setDeviceInfo(result);
-    return true;
 }
 
 }

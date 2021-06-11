@@ -25,20 +25,6 @@ void Subsystem::registerDefaultTypes() {
     }, false);
 }
 
-bool Subsystem::configureImpl() {
-    // если InfoProvider отконфигурировался
-    if (Configurator::configureImpl()) {
-        createDevices();
-        // конфигурируем девайсы
-        return Configurator::configureImpl();
-    }
-
-    return false;
-}
-
-void Subsystem::createDevices() {
-}
-
 Device *Subsystem::addDevice(int id) {
     Device *dev = parent()->create<Device>(this, id);
     addItemBack(dev);

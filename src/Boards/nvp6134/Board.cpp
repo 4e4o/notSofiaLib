@@ -18,6 +18,12 @@ bool Board::configureImpl() {
     for (auto &chip : m_nvpChipsets)
         addItemBack(chip);
 
+    // сразу конфигурируем чипы
+    // чтобы mpp далее уже создавать с данными от
+    // этих чипов
+    for (auto &chip : m_nvpChipsets)
+        chip->configure();
+
     return ABoard::configureImpl();
 }
 

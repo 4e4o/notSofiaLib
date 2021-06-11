@@ -9,8 +9,8 @@ class Subsystem : public mpp::vi::Subsystem {
   public:
     using mpp::vi::Subsystem::Subsystem;
 
-  private:
-    void createDevices() override;
+  protected:
+    bool configureImpl() override;
 };
 
 }

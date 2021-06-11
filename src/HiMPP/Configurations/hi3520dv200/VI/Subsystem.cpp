@@ -11,7 +11,7 @@ namespace hisilicon::mpp::vi::hi3520dv200 {
 // TODO ввести режим работы чипа
 // это не общий конфиг для hi3520dv200
 
-void Subsystem::createDevices() {
+bool Subsystem::configureImpl() {
     Device *dev0 = addDevice(0);
     Device *dev1 = addDevice(1);
 
@@ -20,6 +20,8 @@ void Subsystem::createDevices() {
 
     dev1->addChannel(4, 0, 2);
     dev1->addChannel(6, 0, 3);
+
+    return mpp::vi::Subsystem::configureImpl();
 }
 
 }
