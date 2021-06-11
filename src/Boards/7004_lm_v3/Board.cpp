@@ -14,43 +14,33 @@ namespace boards::lm7004v3 {
 using hisilicon::mpp::lm7004v3::MPP;
 
 Board::Board()
-    : boards::nvp6134::Board(NVP_CHIPS_COUNT),
-      m_mpp(nullptr) {
+    : boards::nvp6134::Board(NVP_CHIPS_COUNT) {
     registerType([](::nvp6134::DriverCommunicator * d, int id) -> ::nvp6134::Chip* {
         return new ::nvp6134::lm7004v3::Chip(d, id);
+    });
+
+    registerType([this]() -> ::hisilicon::mpp::MPP* {
+        MPP *mpp = new MPP();
+
+        mpp->registerType([this]() -> hisilicon::mpp::vi::InfoProvider* {
+            return new nvp6134::mpp::vi::InfoProvider(this);
+        });
+
+        mpp->registerType([](hisilicon::mpp::MPP * p) ->
+        hisilicon::mpp::vpss::Subsystem* {
+            return new vpss::Subsystem(p);
+        });
+
+        mpp->registerType([](hisilicon::mpp::MPP * p) ->
+        hisilicon::mpp::venc::Subsystem* {
+            return new venc::Subsystem(p);
+        });
+
+        return mpp;
     });
 }
 
 Board::~Board() {
-}
-
-bool Board::configureImpl() {
-    m_mpp = new MPP();
-
-    m_mpp->registerType([this]() -> hisilicon::mpp::vi::InfoProvider* {
-        return new nvp6134::mpp::vi::InfoProvider(this);
-    });
-
-    m_mpp->registerType([](hisilicon::mpp::MPP * p) ->
-    hisilicon::mpp::vpss::Subsystem* {
-        return new vpss::Subsystem(p);
-    });
-
-    m_mpp->registerType([](hisilicon::mpp::MPP * p) ->
-    hisilicon::mpp::venc::Subsystem* {
-        return new venc::Subsystem(p);
-    });
-
-    addItemBack(m_mpp);
-    return boards::nvp6134::Board::configureImpl();
-}
-
-void Board::run() {
-    m_mpp->run();
-}
-
-void Board::stop() {
-    m_mpp->stop();
 }
 
 }

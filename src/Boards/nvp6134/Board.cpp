@@ -15,10 +15,8 @@ Board::Board(int chipCount) :
 bool Board::configureImpl() {
     createChipsets();
 
-    // добавляем с конца в начало
-    // потому что чипы должны первыми конфигурироваться
-    for (auto it = m_nvpChipsets.rbegin() ; it != m_nvpChipsets.rend() ; it++)
-        addItemFront(*it);
+    for (auto &chip : m_nvpChipsets)
+        addItemFront(chip);
 
     return ABoard::configureImpl();
 }
