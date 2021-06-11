@@ -5,10 +5,9 @@
 
 #include <mpi_sys.h>
 
-// TODO recommended value is 16
-// page 90 of
 // HiMPP Media Processing Software Development Reference.pdf
-#define DEFAULT_SYS_WIDTH_ALIGN 64
+// page 90
+#define DEFAULT_SYS_WIDTH_ALIGN 16
 
 namespace hisilicon::mpp {
 
