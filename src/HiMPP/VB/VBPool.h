@@ -8,8 +8,8 @@
 namespace hisilicon::mpp {
 
 class VBPool : public VBBase {
-public:
-    VBPool(MPP*);
+  public:
+    VBPool(MPP *);
 
     ~VBPool();
 
@@ -21,10 +21,10 @@ public:
 
     VB_POOL id() const;
 
-private:
+  private:
     bool configureImpl() override final;
     bool startImpl() override final;
-    HI_U32 maxVencBlkSize(int&);
+    HI_U32 maxVencBlkSize(int &);
 
     HI_U32 m_blockSize;
     HI_U32 m_blockCount;

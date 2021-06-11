@@ -22,7 +22,7 @@ void StreamLoop::createInterruptPipe() {
     if (::pipe(m_interruptPipe) != 0)
         throw std::runtime_error("Create pipe failed");
 
-    addFd(m_interruptPipe[0], [] (StreamBuffer*) {});
+    addFd(m_interruptPipe[0], [] (StreamBuffer *) {});
 }
 
 int StreamLoop::maxFd() const {

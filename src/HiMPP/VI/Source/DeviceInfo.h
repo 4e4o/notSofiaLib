@@ -10,16 +10,16 @@ namespace hisilicon::mpp::vi {
 class ChannelInfo;
 
 class DeviceInfo : public IdHolder {
-public:
-    typedef std::vector<ChannelInfo*> TViChannelsInfo;
+  public:
+    typedef std::vector<ChannelInfo *> TViChannelsInfo;
 
     using IdHolder::IdHolder;
     ~DeviceInfo();
 
-    void addChannel(ChannelInfo*);
-    const TViChannelsInfo& channels() const;
+    void addChannel(ChannelInfo *);
+    const TViChannelsInfo &channels() const;
 
-private:
+  private:
     TViChannelsInfo m_channels;
 };
 

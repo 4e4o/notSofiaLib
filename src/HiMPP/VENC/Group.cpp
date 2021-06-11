@@ -11,7 +11,7 @@
 
 namespace hisilicon::mpp::venc {
 
-Group::Group(Subsystem* p, int id)
+Group::Group(Subsystem *p, int id)
     : Holder<Subsystem*>(p), IdHolder(id) {
 }
 
@@ -24,8 +24,8 @@ Group::~Group() {
     std::cout << "~venc::Group " << this << " , " << id() << std::endl;
 }
 
-Subsystem* Group::subsystem() const {
-    return Holder<Subsystem*>::value();
+Subsystem *Group::subsystem() const {
+    return Holder<Subsystem *>::value();
 }
 
 HI_S32 Group::receiverBindDeviceId() {
@@ -36,8 +36,8 @@ HI_S32 Group::receiverBindChannelId() {
     return 0;
 }
 
-Channel* Group::addChannel(int id) {
-    Channel* ch = subsystem()->parent()->create<Channel>(this, id);
+Channel *Group::addChannel(int id) {
+    Channel *ch = subsystem()->parent()->create<Channel>(this, id);
     addItemBack(ch);
     m_channels.push_back(ch);
     return ch;
@@ -52,7 +52,7 @@ bool Group::startImpl() {
     return Configurator::startImpl();
 }
 
-const std::vector<Channel*>& Group::channels() const {
+const std::vector<Channel *> &Group::channels() const {
     return m_channels;
 }
 

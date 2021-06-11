@@ -8,16 +8,16 @@
 
 namespace hisilicon::mpp::vpss {
 
-static MPP_CHN_S* createBindSource(BindSource *source) {
-    MPP_CHN_S* param = new MPP_CHN_S();
+static MPP_CHN_S *createBindSource(BindSource *source) {
+    MPP_CHN_S *param = new MPP_CHN_S();
     param->enModId = source->sourceBindMode();
     param->s32DevId = source->sourceBindDeviceId();
     param->s32ChnId = source->sourceBindChannelId();
     return param;
 }
 
-static MPP_CHN_S* createBindReceiver(BindReceiver *source) {
-    MPP_CHN_S* param = new MPP_CHN_S();
+static MPP_CHN_S *createBindReceiver(BindReceiver *source) {
+    MPP_CHN_S *param = new MPP_CHN_S();
     param->enModId = source->receiverBindMode();
     param->s32DevId = source->receiverBindDeviceId();
     param->s32ChnId = source->receiverBindChannelId();

@@ -13,7 +13,7 @@ class ViChannel;
 class VoChannel;
 
 class DriverCommunicator {
-public:
+  public:
     struct ViChannelFormat {
         unsigned int inputvideofmt;
         unsigned int getvideofmt;
@@ -24,11 +24,12 @@ public:
     DriverCommunicator(int chipCount);
     ~DriverCommunicator();
 
-    ViChannelFormat* getVideoFmt(const ViChannel*);
-    bool setViChannelMode(const ViChannel*, bool pal, NVP6134_VI_MODE chmode);
-    bool setVoChannelMode(const VoChannel*, unsigned char chid, NVP6134_OUTMODE_SEL mode);
+    ViChannelFormat *getVideoFmt(const ViChannel *);
+    bool setViChannelMode(const ViChannel *, bool pal, NVP6134_VI_MODE chmode);
+    bool setVoChannelMode(const VoChannel *, unsigned char chid,
+                          NVP6134_OUTMODE_SEL mode);
 
-private:
+  private:
     bool getVideoFmt();
     void detectVideoFmt();
     bool openDriver();

@@ -9,14 +9,14 @@
 namespace hisilicon::mpp {
 
 class Sys : public MPPChild, public Configurable {
-public:
-    Sys(MPP*);
+  public:
+    Sys(MPP *);
     ~Sys();
 
     void setSysWidthAlign(HI_U32);
     HI_U32 sysWidthAlign() const;
 
-private:
+  private:
     bool startImpl() override final;
 
     HI_U32 m_sysWidthAlign;

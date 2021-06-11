@@ -14,12 +14,12 @@ InfoProvider::InfoProvider() {
 InfoProvider::~InfoProvider() {
 }
 
-void InfoProvider::setDeviceInfo(const TViDevicesInfo& d) {
+void InfoProvider::setDeviceInfo(const TViDevicesInfo &d) {
     m_devices = d;
 }
 
-static ChannelInfo* fakeInfo(DeviceInfo* dev, int chId) {
-    ChannelInfo* info = new ChannelInfo(dev, chId);
+static ChannelInfo *fakeInfo(DeviceInfo *dev, int chId) {
+    ChannelInfo *info = new ChannelInfo(dev, chId);
     TSize size{.width = 352, .height = 240};
 
     info->setCapSize(size);
@@ -33,10 +33,10 @@ static ChannelInfo* fakeInfo(DeviceInfo* dev, int chId) {
     return info;
 }
 
-const ChannelInfo* InfoProvider::findChannelInfo(int devId, int chId) const {
-    for (auto& device : m_devices) {
+const ChannelInfo *InfoProvider::findChannelInfo(int devId, int chId) const {
+    for (auto &device : m_devices) {
         if (device->id() == devId) {
-            for (auto& channel : device->channels()) {
+            for (auto &channel : device->channels()) {
                 if (channel->id() == chId)
                     return channel;
             }

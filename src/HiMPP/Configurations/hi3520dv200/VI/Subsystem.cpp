@@ -12,8 +12,8 @@ namespace hisilicon::mpp::vi::hi3520dv200 {
 // это не общий конфиг для hi3520dv200
 
 void Subsystem::createDevices() {
-    Device* dev0 = addDevice(0);
-    Device* dev1 = addDevice(1);
+    Device *dev0 = addDevice(0);
+    Device *dev1 = addDevice(1);
 
     dev0->addChannel(0, 0, 0);
     dev0->addChannel(2, 0, 1);

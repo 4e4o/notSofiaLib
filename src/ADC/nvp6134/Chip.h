@@ -23,26 +23,28 @@ class DriverCommunicator;
 // single nvp6134 chip
 
 class Chip : public IdHolder, public Configurable {
-public:
-    typedef std::array<std::unique_ptr<ViChannel>, ChipSpecs::CS_VI_CHANNELS_COUNT> TViChannels;
-    typedef std::array<std::unique_ptr<VoChannel>, ChipSpecs::CS_VO_CHANNELS_COUNT> TVoChannels;
+  public:
+    typedef std::array<std::unique_ptr<ViChannel>, ChipSpecs::CS_VI_CHANNELS_COUNT>
+    TViChannels;
+    typedef std::array<std::unique_ptr<VoChannel>, ChipSpecs::CS_VO_CHANNELS_COUNT>
+    TVoChannels;
 
     // id - device index from nvp driver [0, 3]
-    Chip(DriverCommunicator*, int id);
+    Chip(DriverCommunicator *, int id);
     ~Chip();
 
-    DriverCommunicator* driver() const;
+    DriverCommunicator *driver() const;
 
-    TViChannels& viChannels();
-    TVoChannels& voChannels();
+    TViChannels &viChannels();
+    TVoChannels &voChannels();
 
-    virtual NVP6134_VI_MODE getViChannelMode(ViChannel*);
-    virtual NVP6134_OUTMODE_SEL getVoChannelMode(VoChannel*);
+    virtual NVP6134_VI_MODE getViChannelMode(ViChannel *);
+    virtual NVP6134_OUTMODE_SEL getVoChannelMode(VoChannel *);
 
-private:
+  private:
     bool configureImpl() override final;
 
-    DriverCommunicator* m_driver;
+    DriverCommunicator *m_driver;
     TViChannels m_viChannels;
     TVoChannels m_voChannels;
 };

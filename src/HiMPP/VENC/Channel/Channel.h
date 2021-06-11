@@ -19,10 +19,10 @@ class StreamReader;
 class IStreamOut;
 class StreamLoop;
 
-class Channel : public IdHolder, public Holder<Group*>,
-        public Configurable, public IVBufferizable {
-public:
-    Channel(Group*, int id);
+class Channel : public IdHolder, public Holder<Group *>,
+    public Configurable, public IVBufferizable {
+  public:
+    Channel(Group *, int id);
     ~Channel();
 
     enum class BitrateType {
@@ -31,26 +31,26 @@ public:
         FIXQP
     };
 
-    void setAttributesBuilder(IAttributesBuilder*);
-    void setSource(IChannelSource* source);
-    void setStreamOut(IStreamOut*);
+    void setAttributesBuilder(IAttributesBuilder *);
+    void setSource(IChannelSource *source);
+    void setStreamOut(IStreamOut *);
 
-    const Group* group() const;
+    const Group *group() const;
     bool needUserPool() const;
     bool h264Mode() const;
 
-private:
+  private:
     bool configureImpl() override final;
     bool startImpl() override final;
     SIZE_S vbImageSize() override final;
     PIXEL_FORMAT_E vbPixelFormat() override final;
-    void setAttributes(VENC_CHN_ATTR_S* attr);
+    void setAttributes(VENC_CHN_ATTR_S *attr);
 
     std::unique_ptr<VENC_CHN_ATTR_S> m_attr;
     std::unique_ptr<IAttributesBuilder> m_attrBuilder;
     std::unique_ptr<StreamReader> m_streamReader;
     std::unique_ptr<IStreamOut> m_streamOut;
-    IChannelSource* m_source;
+    IChannelSource *m_source;
 };
 
 }

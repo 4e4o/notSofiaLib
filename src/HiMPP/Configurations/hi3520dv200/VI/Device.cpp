@@ -27,7 +27,7 @@ static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
     }
 }
 
-Device::Device(mpp::vi::Subsystem* p, int id)
+Device::Device(mpp::vi::Subsystem *p, int id)
     : mpp::vi::Device(p, id),
       m_attr(DEV_ATTR_BT656_2MUX) {
 }

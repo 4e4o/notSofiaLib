@@ -11,14 +11,14 @@ namespace hisilicon::mpp::venc {
 class StreamBuffer;
 
 class StreamLoop {
-public:
-    typedef std::function<void(StreamBuffer*)> Event;
+  public:
+    typedef std::function<void(StreamBuffer *)> Event;
 
     StreamLoop();
     ~StreamLoop();
 
     template<class Callable>
-    void addFd(int fd, Callable&& c) {
+    void addFd(int fd, Callable &&c) {
         if (m_running.load())
             throw std::runtime_error("You must add fds before calling run");
 
@@ -32,7 +32,7 @@ public:
 
     void stop();
 
-private:
+  private:
     int maxFd() const;
     void createInterruptPipe();
 

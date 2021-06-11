@@ -15,17 +15,17 @@ namespace boards::nvp6134 {
 // Плата с nvp чипами
 
 class Board : public ABoard {
-public:
-    typedef std::vector<::nvp6134::Chip*> TNvpChipsets;
+  public:
+    typedef std::vector<::nvp6134::Chip *> TNvpChipsets;
 
     Board(int chipCount);
 
-    const TNvpChipsets& nvp() const;
+    const TNvpChipsets &nvp() const;
 
-protected:
+  protected:
     bool configureImpl() override;
 
-private:
+  private:
     void createChipsets();
 
     int m_chipCount;

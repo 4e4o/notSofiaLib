@@ -14,13 +14,13 @@ StreamReader::StreamReader(Channel *c)
 StreamReader::~StreamReader() {
 }
 
-void StreamReader::attach(StreamLoop* loop) {
+void StreamReader::attach(StreamLoop *loop) {
     const HI_S32 fd = HI_MPI_VENC_GetFd(m_channel->id());
 
     if (fd < 0)
         throw std::runtime_error("HI_MPI_VENC_GetFd failed");
 
-    loop->addFd(fd, [this] (StreamBuffer *buffer) {
+    loop->addFd(fd, [this] (StreamBuffer * buffer) {
         read(buffer);
     });
 }

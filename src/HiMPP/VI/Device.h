@@ -14,27 +14,28 @@ class Channel;
 class Subsystem;
 class ChannelInfo;
 
-class Device : public Holder<Subsystem*>, public IdHolder, public Configurator {
-public:
-    Device(Subsystem*, int id);
+class Device : public Holder<Subsystem *>, public IdHolder,
+    public Configurator {
+  public:
+    Device(Subsystem *, int id);
     ~Device();
 
-    Channel* addChannel(int id, int infoDevId, int infoChId);
-    const std::vector<Channel*>& channels() const;
+    Channel *addChannel(int id, int infoDevId, int infoChId);
+    const std::vector<Channel *> &channels() const;
 
-protected:
+  protected:
     bool configureImpl() override;
     bool startImpl() override;
-    void setAttr(VI_DEV_ATTR_S* attr);
+    void setAttr(VI_DEV_ATTR_S *attr);
 
-private:
-    virtual int getBindWay(int i, Channel*);
-    Channel* addChannel(const ChannelInfo*, int id);
+  private:
+    virtual int getBindWay(int i, Channel *);
+    Channel *addChannel(const ChannelInfo *, int id);
     void bindChannels();
-    Subsystem* subsystem() const;
+    Subsystem *subsystem() const;
 
-    std::vector<Channel*> m_channels;
-    VI_DEV_ATTR_S* m_attr;
+    std::vector<Channel *> m_channels;
+    VI_DEV_ATTR_S *m_attr;
 };
 
 }

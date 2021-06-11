@@ -52,6 +52,6 @@ target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
     ${NVP6134_PATH}
     )
 
-file(GLOB_RECURSE PRJ_SRCS src/*.c src/*.cpp src/*.h src/*.hpp)
+file(GLOB_RECURSE PRJ_SRCS src/*.c src/*.cpp src/*.h src/*.hpp notSofia.astylerc)
 target_sources(${PROJECT_NAME} PRIVATE ${PRJ_SRCS})
 target_link_libraries(${PROJECT_NAME} ${LINK_LIBS})

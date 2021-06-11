@@ -9,8 +9,8 @@
 namespace nvp6134 {
 
 class VoChannel : public ChipChild, public IdHolder {
-public:
-    VoChannel(Chip*, int id);
+  public:
+    VoChannel(Chip *, int id);
     ~VoChannel();
 
     bool is1MuxMode() const;
@@ -20,7 +20,7 @@ public:
 
     bool setMode(unsigned char chid, NVP6134_OUTMODE_SEL mode);
 
-private:
+  private:
     NVP6134_OUTMODE_SEL m_mode;
 };
 

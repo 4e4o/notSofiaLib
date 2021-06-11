@@ -12,21 +12,21 @@ class Device;
 class InfoProvider;
 
 class Subsystem : public MPPChild, public Configurator {
-public:
-    Subsystem(MPP*);
+  public:
+    Subsystem(MPP *);
 
-    Device* addDevice(int id);
+    Device *addDevice(int id);
 
-    vi::InfoProvider* infoProvider() const;
-    const std::vector<Device*>& devices() const;
+    vi::InfoProvider *infoProvider() const;
+    const std::vector<Device *> &devices() const;
 
-protected:
+  protected:
     void registerDefaultTypes();
     bool configureImpl() override final;
     virtual void createDevices();
 
-private:
-    std::vector<Device*> m_devices;
+  private:
+    std::vector<Device *> m_devices;
     InfoProvider *m_infoProvider;
 };
 

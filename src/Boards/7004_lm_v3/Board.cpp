@@ -16,7 +16,7 @@ using hisilicon::mpp::lm7004v3::MPP;
 Board::Board()
     : boards::nvp6134::Board(NVP_CHIPS_COUNT),
       m_mpp(nullptr) {
-    registerType([](::nvp6134::DriverCommunicator* d, int id) -> ::nvp6134::Chip* {
+    registerType([](::nvp6134::DriverCommunicator * d, int id) -> ::nvp6134::Chip* {
         return new ::nvp6134::lm7004v3::Chip(d, id);
     });
 }
@@ -28,14 +28,16 @@ bool Board::configureImpl() {
     m_mpp = new MPP();
 
     m_mpp->registerType([this]() -> hisilicon::mpp::vi::InfoProvider* {
-                          return new nvp6134::mpp::vi::InfoProvider(this);
-                      });
+        return new nvp6134::mpp::vi::InfoProvider(this);
+    });
 
-    m_mpp->registerType([](hisilicon::mpp::MPP* p) -> hisilicon::mpp::vpss::Subsystem* {
+    m_mpp->registerType([](hisilicon::mpp::MPP * p) ->
+    hisilicon::mpp::vpss::Subsystem* {
         return new vpss::Subsystem(p);
     });
 
-    m_mpp->registerType([](hisilicon::mpp::MPP* p) -> hisilicon::mpp::venc::Subsystem* {
+    m_mpp->registerType([](hisilicon::mpp::MPP * p) ->
+    hisilicon::mpp::venc::Subsystem* {
         return new venc::Subsystem(p);
     });
 

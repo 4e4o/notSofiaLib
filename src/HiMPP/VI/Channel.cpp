@@ -11,8 +11,8 @@
 
 namespace hisilicon::mpp::vi {
 
-static VI_CHN_ATTR_S* createStandardAttr() {
-    VI_CHN_ATTR_S* attr = new VI_CHN_ATTR_S{};
+static VI_CHN_ATTR_S *createStandardAttr() {
+    VI_CHN_ATTR_S *attr = new VI_CHN_ATTR_S{};
 
     attr->bMirror = HI_FALSE;
     attr->bFlip = HI_FALSE;
@@ -24,7 +24,7 @@ static VI_CHN_ATTR_S* createStandardAttr() {
     return attr;
 }
 
-Channel::Channel(Device* d, const ChannelInfo* info, int id)
+Channel::Channel(Device *d, const ChannelInfo *info, int id)
     : IdHolder(id), Holder<Device*>(d),
       m_info(info),
       m_attr(createStandardAttr()) {
@@ -74,7 +74,7 @@ bool Channel::startImpl() {
     return true;
 }
 
-void Channel::setAttributes(VI_CHN_ATTR_S* attr) {
+void Channel::setAttributes(VI_CHN_ATTR_S *attr) {
     m_attr.reset(attr);
 }
 
@@ -98,13 +98,13 @@ PIXEL_FORMAT_E Channel::pixelFormat() const {
     return m_attr->enPixFormat;
 }
 
-const Device* Channel::device() const {
-    return Holder<Device*>::value();
+const Device *Channel::device() const {
+    return Holder<Device *>::value();
 }
 
 SIZE_S Channel::vbImageSize() {
     // FIXME maybe destSize ? or capSize
-//    const SIZE_S imgSize = ch->imgSize();
+    //    const SIZE_S imgSize = ch->imgSize();
 
     return imgSize();
 }

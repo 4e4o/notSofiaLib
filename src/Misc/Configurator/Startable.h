@@ -2,19 +2,19 @@
 #define STARTABLE_H
 
 class Startable {
-public:
+  public:
     virtual ~Startable();
 
     bool start();
 
-protected:
+  protected:
     Startable();
 
     virtual bool startImpl();
 
     bool started() const;
 
-private:
+  private:
     bool m_started;
 };
 

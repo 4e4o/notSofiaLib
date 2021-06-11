@@ -10,7 +10,7 @@
 
 template <typename T>
 struct LambdaTraits
-        : public LambdaTraits<decltype(&T::operator())> { };
+: public LambdaTraits<decltype(&T::operator())> { };
 // For generic types, directly use the result of the signature of its 'operator()'
 
 template <typename ClassType, typename ReturnType, typename... Args>

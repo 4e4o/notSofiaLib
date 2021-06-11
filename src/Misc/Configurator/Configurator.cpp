@@ -6,7 +6,7 @@ Configurator::~Configurator() {
 }
 
 bool Configurator::configureImpl() {
-    for (auto& item : m_items) {
+    for (auto &item : m_items) {
         if (!item->configure())
             return false;
     }
@@ -18,7 +18,7 @@ bool Configurator::startImpl() {
     if (!configured())
         return false;
 
-    for (auto& item : m_items) {
+    for (auto &item : m_items) {
         if (!item->start())
             return false;
     }
@@ -30,7 +30,7 @@ void Configurator::addItemBack(Configurable *it) {
     m_items.push_back(it);
 }
 
-void Configurator::addItemFront(Configurable* it) {
+void Configurator::addItemFront(Configurable *it) {
     m_items.push_front(it);
 }
 

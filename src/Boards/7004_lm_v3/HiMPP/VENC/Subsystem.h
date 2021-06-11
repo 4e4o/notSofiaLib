@@ -6,10 +6,10 @@
 namespace boards::lm7004v3::venc {
 
 class Subsystem : public hisilicon::mpp::venc::Subsystem {
-public:
+  public:
     using hisilicon::mpp::venc::Subsystem::Subsystem;
 
-private:
+  private:
     bool configureImpl() override final;
 };
 

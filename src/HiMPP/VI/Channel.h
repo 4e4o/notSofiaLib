@@ -18,26 +18,26 @@ namespace hisilicon::mpp::vi {
 class Device;
 class ChannelInfo;
 
-class Channel : public IdHolder, public Holder<Device*>,
-        public Configurable, public vpss::ViBindSource,
-        public vpss::IGroupSource, public IVBufferizable {
-public:
-    Channel(Device*, const ChannelInfo*, int id);
+class Channel : public IdHolder, public Holder<Device *>,
+    public Configurable, public vpss::ViBindSource,
+    public vpss::IGroupSource, public IVBufferizable {
+  public:
+    Channel(Device *, const ChannelInfo *, int id);
     ~Channel();
 
-    void setAttributes(VI_CHN_ATTR_S* attr);
+    void setAttributes(VI_CHN_ATTR_S *attr);
 
-    const Device* device() const;
+    const Device *device() const;
 
     SIZE_S destSize() const override final;
     SIZE_S imgSize() const override final;
     bool pal() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
-protected:
+  protected:
     RECT_S capRect() const;
 
-private:
+  private:
     virtual SIZE_S createDestSize() const;
     bool configureImpl() override final;
     bool startImpl() override final;
@@ -46,7 +46,7 @@ private:
     SIZE_S vbImageSize() override final;
     PIXEL_FORMAT_E vbPixelFormat() override final;
 
-    const ChannelInfo* m_info;
+    const ChannelInfo *m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
 };
 

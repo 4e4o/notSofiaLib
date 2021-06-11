@@ -8,11 +8,11 @@ namespace hisilicon::mpp::venc {
 class IChannelSource;
 
 class IAttributesBuilder {
-public:
+  public:
     IAttributesBuilder() { }
     virtual ~IAttributesBuilder() { }
 
-    virtual VENC_CHN_ATTR_S* build(IChannelSource*) = 0;
+    virtual VENC_CHN_ATTR_S *build(IChannelSource *) = 0;
 };
 
 }

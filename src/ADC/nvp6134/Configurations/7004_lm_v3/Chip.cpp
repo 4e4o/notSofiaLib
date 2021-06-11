@@ -3,15 +3,15 @@
 
 namespace nvp6134::lm7004v3 {
 
-NVP6134_VI_MODE Chip::getViChannelMode(ViChannel* ch) {
-    switch(ch->videoFormat()) {
+NVP6134_VI_MODE Chip::getViChannelMode(ViChannel *ch) {
+    switch (ch->videoFormat()) {
     case ViChannel::DF_CVBS_NTSC:
     case ViChannel::DF_CVBS_PAL:
         return NVP6134_VI_1440H; // этот формат юзаем мы, самый меньший который работал
-        //      return NVP6134_VI_1920H; // этот формат юзает София, почему? Непонятно.
-        //      return NVP6134_VI_1280H; // этот формат работает, но гличи на изображении не юзабельные
-        //      return NVP6134_VI_960H; // этот не пашет
-        //      return NVP6134_VI_720H; // этот не пашет, я бы по логике выбрал бы этот
+    //      return NVP6134_VI_1920H; // этот формат юзает София, почему? Непонятно.
+    //      return NVP6134_VI_1280H; // этот формат работает, но гличи на изображении не юзабельные
+    //      return NVP6134_VI_960H; // этот не пашет
+    //      return NVP6134_VI_720H; // этот не пашет, я бы по логике выбрал бы этот
     case ViChannel::DF_1080P_NTSC:
         return NVP6134_VI_1080P_2530;
     default:
@@ -19,7 +19,7 @@ NVP6134_VI_MODE Chip::getViChannelMode(ViChannel* ch) {
     }
 }
 
-NVP6134_OUTMODE_SEL Chip::getVoChannelMode(::nvp6134::VoChannel*) {
+NVP6134_OUTMODE_SEL Chip::getVoChannelMode(::nvp6134::VoChannel *) {
     // Может быть такая логика это частный случай моего сетапа, хз...
     return NVP6134_OUTMODE_2MUX_MIX;
 

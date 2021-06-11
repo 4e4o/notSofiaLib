@@ -8,14 +8,14 @@ namespace hisilicon::mpp {
 class IVBufferizable;
 
 class VideoBuffer : public VBBase {
-public:
+  public:
     using VBBase::VBBase;
     ~VideoBuffer();
 
-private:
+  private:
     bool startImpl() override final;
 
-    HI_U32 maxViBlkSize(HI_U32& channelsCount);
+    HI_U32 maxViBlkSize(HI_U32 &channelsCount);
 };
 
 }

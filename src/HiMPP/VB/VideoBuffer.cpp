@@ -13,12 +13,12 @@
 
 namespace hisilicon::mpp {
 
-static void addPool(VB_CONF_S& conf, int i, HI_U32 blockSize, HI_U32 blkCount) {
+static void addPool(VB_CONF_S &conf, int i, HI_U32 blockSize, HI_U32 blkCount) {
     conf.astCommPool[i].u32BlkSize = blockSize;
     conf.astCommPool[i].u32BlkCnt = blkCount;
 }
 
-VideoBuffer::~VideoBuffer() {    
+VideoBuffer::~VideoBuffer() {
     HI_MPI_VB_Exit();
     std::cout << "~VideoBuffer " << this << std::endl;
 }
@@ -70,7 +70,8 @@ bool VideoBuffer::startImpl() {
     // HiMPP Media Processing Software Development Reference.pdf
 
     // основной пул для vi, vpss и других сервисов у которых нет апи приатачивания к пулу
-    addPool(stVbConf, MAIN_POOL_INDEX, blockSize, channelsCount * 4 + 1 + EXTRA_BLOCKS_COUNT);
+    addPool(stVbConf, MAIN_POOL_INDEX, blockSize,
+            channelsCount * 4 + 1 + EXTRA_BLOCKS_COUNT);
 
     if (HI_MPI_VB_SetConf(&stVbConf) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VB_SetConf failed");
@@ -81,17 +82,17 @@ bool VideoBuffer::startImpl() {
     return true;
 }
 
-HI_U32 VideoBuffer::maxViBlkSize(HI_U32& channelsCount) {
+HI_U32 VideoBuffer::maxViBlkSize(HI_U32 &channelsCount) {
     channelsCount = 0;
-    const vi::Subsystem* vi = parent()->vi();
+    const vi::Subsystem *vi = parent()->vi();
 
     if (vi == nullptr)
         return 0;
 
     HI_U32 max = 0, tmp = 0;
 
-    for (auto& device : vi->devices()) {
-        for (auto& channel : device->channels()) {
+    for (auto &device : vi->devices()) {
+        for (auto &channel : device->channels()) {
             channelsCount++;
             tmp = picVbBlkSize(channel);
 

@@ -8,7 +8,8 @@ namespace hisilicon::mpp::venc {
 #define BPP 0.12f
 
 // https://www.sri.com/wp-content/uploads/pdf/3_07_h264_format_bitrate_quality_tradeoff_study.pdf
-static constexpr HI_U32 bitrate(const SIZE_S& size, const HI_U32& fps, float scaleFactor) {
+static constexpr HI_U32 bitrate(const SIZE_S &size, const HI_U32 &fps,
+                                float scaleFactor) {
     return (BPP * size.u32Width * size.u32Height * scaleFactor * fps) / 1000;
 }
 
@@ -16,13 +17,14 @@ H264AttributesBuilder::H264AttributesBuilder() :
     m_bitrateType(Channel::BitrateType::VBR) {
 }
 
-VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
+VENC_CHN_ATTR_S *H264AttributesBuilder::build(IChannelSource *source) {
     std::unique_ptr<VENC_CHN_ATTR_S> result(new VENC_CHN_ATTR_S());
-    VENC_ATTR_H264_S& stH264Attr = result->stVeAttr.stAttrH264e;
+    VENC_ATTR_H264_S &stH264Attr = result->stVeAttr.stAttrH264e;
 
     const SIZE_S picSize = source->imgSize();
     const HI_U32 fps = source->pal() ? 25 : 30;
-    const float scaleFactor = source->pixelFormat() == PIXEL_FORMAT_YUV_SEMIPLANAR_422 ? 2.0f : 1.5f;
+    const float scaleFactor = source->pixelFormat() ==
+                              PIXEL_FORMAT_YUV_SEMIPLANAR_422 ? 2.0f : 1.5f;
     const HI_U32 bit_rate = bitrate(picSize, fps, scaleFactor);
 
     result->stVeAttr.enType = PT_H264;
@@ -39,13 +41,16 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
 
     stH264Attr.u32Profile = 0; /*0: baseline; 1:MP; 2:HP   ? */
     stH264Attr.bByFrame = HI_TRUE; /*get stream mode is slice mode or frame mode?*/
-    stH264Attr.bField = HI_FALSE; /* surpport frame code only for hi3516, bfield = HI_FALSE */
-    stH264Attr.bMainStream = HI_TRUE; /* surpport main stream only for hi3516, bMainStream = HI_TRUE */
+    stH264Attr.bField =
+        HI_FALSE; /* surpport frame code only for hi3516, bfield = HI_FALSE */
+    stH264Attr.bMainStream =
+        HI_TRUE; /* surpport main stream only for hi3516, bMainStream = HI_TRUE */
     stH264Attr.u32Priority = 0; /*channels precedence level. invalidate for hi3516*/
-    stH264Attr.bVIField = HI_FALSE; /*the sign of the VI picture is field or frame. Invalidate for hi3516*/
+    stH264Attr.bVIField =
+        HI_FALSE; /*the sign of the VI picture is field or frame. Invalidate for hi3516*/
 
-    if(m_bitrateType == Channel::BitrateType::CBR) {
-        VENC_ATTR_H264_CBR_S& stH264Cbr = result->stRcAttr.stAttrH264Cbr;
+    if (m_bitrateType == Channel::BitrateType::CBR) {
+        VENC_ATTR_H264_CBR_S &stH264Cbr = result->stRcAttr.stAttrH264Cbr;
 
         result->stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
         stH264Cbr.u32Gop = fps;
@@ -59,7 +64,7 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
         // Value range: [2, 40960]
         stH264Cbr.u32BitRate = bit_rate;
     } else if (m_bitrateType == Channel::BitrateType::FIXQP) {
-        VENC_ATTR_H264_FIXQP_S& stH264FixQp = result->stRcAttr.stAttrH264FixQp;
+        VENC_ATTR_H264_FIXQP_S &stH264FixQp = result->stRcAttr.stAttrH264FixQp;
         result->stRcAttr.enRcMode = VENC_RC_MODE_H264FIXQP;
         stH264FixQp.u32Gop = fps;
         stH264FixQp.u32ViFrmRate = fps;
@@ -67,7 +72,7 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
         stH264FixQp.u32IQp = 20;
         stH264FixQp.u32PQp = 23;
     } else if (m_bitrateType == Channel::BitrateType::VBR) {
-        VENC_ATTR_H264_VBR_S& stH264Vbr = result->stRcAttr.stAttrH264Vbr;
+        VENC_ATTR_H264_VBR_S &stH264Vbr = result->stRcAttr.stAttrH264Vbr;
         result->stRcAttr.enRcMode = VENC_RC_MODE_H264VBR;
         stH264Vbr.u32Gop = fps;
         stH264Vbr.u32StatTime = 1;
@@ -82,7 +87,8 @@ VENC_CHN_ATTR_S* H264AttributesBuilder::build(IChannelSource* source) {
     return result.release();
 }
 
-void H264AttributesBuilder::setBitrateType(const Channel::BitrateType &bitrateType) {
+void H264AttributesBuilder::setBitrateType(const Channel::BitrateType
+        &bitrateType) {
     m_bitrateType = bitrateType;
 }
 

@@ -6,52 +6,52 @@
 namespace hisilicon::mpp::vpss {
 
 class BindSource {
-public:
+  public:
     virtual ~BindSource() { }
 
     virtual MOD_ID_E sourceBindMode() = 0;
     virtual HI_S32 sourceBindDeviceId() = 0;
     virtual HI_S32 sourceBindChannelId() = 0;
 
-protected:
+  protected:
     BindSource() { }
 };
 
 class BindReceiver {
-public:
+  public:
     virtual ~BindReceiver() { }
 
     virtual MOD_ID_E receiverBindMode() = 0;
     virtual HI_S32 receiverBindDeviceId() = 0;
     virtual HI_S32 receiverBindChannelId() = 0;
 
-protected:
+  protected:
     BindReceiver() { }
 };
 
 class ViBindSource : public BindSource {
-private:
+  private:
     MOD_ID_E sourceBindMode() override final {
         return HI_ID_VIU;
     }
 };
 
 class VpssBindReceiver : public BindReceiver {
-private:
+  private:
     MOD_ID_E receiverBindMode() override final {
         return HI_ID_VPSS;
     }
 };
 
 class VpssBindSource : public BindSource {
-private:
+  private:
     MOD_ID_E sourceBindMode() override final {
         return HI_ID_VPSS;
     }
 };
 
 class GroupBindReceiver : public BindReceiver {
-private:
+  private:
     MOD_ID_E receiverBindMode() override final {
         return HI_ID_GROUP;
     }

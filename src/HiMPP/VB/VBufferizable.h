@@ -8,7 +8,7 @@ namespace hisilicon::mpp {
 // Буфферизируемый объект
 
 class IVBufferizable {
-public:
+  public:
     IVBufferizable() { }
     virtual ~IVBufferizable() { }
 

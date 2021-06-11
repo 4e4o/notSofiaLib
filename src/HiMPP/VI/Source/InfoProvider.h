@@ -16,18 +16,18 @@ class ChannelInfo;
 // и Vi channels в MPP
 
 class InfoProvider : public Configurable {
-public:
-    typedef std::vector<DeviceInfo*> TViDevicesInfo;
+  public:
+    typedef std::vector<DeviceInfo *> TViDevicesInfo;
 
     InfoProvider();
     ~InfoProvider();
 
-    const ChannelInfo* findChannelInfo(int devId, int chId) const;
+    const ChannelInfo *findChannelInfo(int devId, int chId) const;
 
-protected:
-    void setDeviceInfo(const TViDevicesInfo&);
+  protected:
+    void setDeviceInfo(const TViDevicesInfo &);
 
-private:
+  private:
     TViDevicesInfo m_devices;
 };
 

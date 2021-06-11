@@ -15,25 +15,25 @@ namespace hisilicon::mpp::venc {
 class Channel;
 class Subsystem;
 
-class Group : public Holder<Subsystem*>, public IdHolder,
-        public Configurator, public vpss::GroupBindReceiver {
-public:
-    Group(Subsystem*, int id);
+class Group : public Holder<Subsystem *>, public IdHolder,
+    public Configurator, public vpss::GroupBindReceiver {
+  public:
+    Group(Subsystem *, int id);
     ~Group();
 
-    Subsystem* subsystem() const;
+    Subsystem *subsystem() const;
 
-    Channel* addChannel(int id);
-    const std::vector<Channel*>& channels() const;
+    Channel *addChannel(int id);
+    const std::vector<Channel *> &channels() const;
 
-protected:
+  protected:
     bool startImpl() override final;
 
-private:
+  private:
     HI_S32 receiverBindDeviceId() override final;
     HI_S32 receiverBindChannelId() override final;
 
-    std::vector<Channel*> m_channels;
+    std::vector<Channel *> m_channels;
 };
 
 }

@@ -4,9 +4,9 @@
 #include <type_traits>
 
 class Utils {
-public:
+  public:
     template<class C>
-    static void clearPtrContainer(C& c, bool fromEnd = false) {
+    static void clearPtrContainer(C &c, bool fromEnd = false) {
         if (fromEnd) {
             for (auto it = c.rbegin() ; it != c.rend() ; it++)
                 delete (*it);

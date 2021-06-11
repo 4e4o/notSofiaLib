@@ -11,8 +11,8 @@
 
 namespace hisilicon::mpp::vpss {
 
-static VPSS_GRP_ATTR_S* createStandardAttr() {
-    VPSS_GRP_ATTR_S* attr = new VPSS_GRP_ATTR_S{};
+static VPSS_GRP_ATTR_S *createStandardAttr() {
+    VPSS_GRP_ATTR_S *attr = new VPSS_GRP_ATTR_S{};
 
     attr->bDrEn = HI_FALSE;
     attr->bDbEn = HI_FALSE;
@@ -24,7 +24,7 @@ static VPSS_GRP_ATTR_S* createStandardAttr() {
     return attr;
 }
 
-Group::Group(Subsystem* p, int id)
+Group::Group(Subsystem *p, int id)
     : Holder<Subsystem*>(p), IdHolder(id),
       m_attrs(createStandardAttr()),
       m_source(nullptr) {
@@ -42,8 +42,8 @@ Group::~Group() {
     std::cout << "~vpss::Group " << this << " , " << id() << std::endl;
 }
 
-Subsystem* Group::subsystem() const {
-    return Holder<Subsystem*>::value();
+Subsystem *Group::subsystem() const {
+    return Holder<Subsystem *>::value();
 }
 
 HI_S32 Group::receiverBindDeviceId() {
@@ -62,8 +62,8 @@ HI_S32 Group::sourceBindChannelId() {
     return 0;
 }
 
-Channel* Group::addChannel(int id) {
-    Channel* ch = subsystem()->parent()->create<Channel>(this, id);
+Channel *Group::addChannel(int id) {
+    Channel *ch = subsystem()->parent()->create<Channel>(this, id);
     addItemBack(ch);
     m_channels.push_back(ch);
     return ch;
@@ -101,15 +101,15 @@ bool Group::startImpl() {
     return true;
 }
 
-const std::vector<Channel*>& Group::channels() const {
+const std::vector<Channel *> &Group::channels() const {
     return m_channels;
 }
 
-void Group::setAttributes(VPSS_GRP_ATTR_S* attr) {
+void Group::setAttributes(VPSS_GRP_ATTR_S *attr) {
     m_attrs.reset(attr);
 }
 
-void Group::setSource(IGroupSource* s) {
+void Group::setSource(IGroupSource *s) {
     m_source = s;
 
     const SIZE_S size = s->destSize();
@@ -131,7 +131,7 @@ PIXEL_FORMAT_E Group::pixelFormat() const {
     return m_source->pixelFormat();
 }
 
-void Group::setParameters(VPSS_GRP_PARAM_S* p) {
+void Group::setParameters(VPSS_GRP_PARAM_S *p) {
     m_params.reset(p);
 }
 

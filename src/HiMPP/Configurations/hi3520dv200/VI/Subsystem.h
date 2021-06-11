@@ -6,10 +6,10 @@
 namespace hisilicon::mpp::vi::hi3520dv200 {
 
 class Subsystem : public mpp::vi::Subsystem {
-public:
+  public:
     using mpp::vi::Subsystem::Subsystem;
 
-private:
+  private:
     void createDevices() override;
 };
 

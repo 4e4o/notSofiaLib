@@ -10,8 +10,8 @@
 
 namespace hisilicon::mpp::vpss {
 
-static VPSS_CHN_ATTR_S* createStandardAttr() {
-    VPSS_CHN_ATTR_S* attr = new VPSS_CHN_ATTR_S{};
+static VPSS_CHN_ATTR_S *createStandardAttr() {
+    VPSS_CHN_ATTR_S *attr = new VPSS_CHN_ATTR_S{};
 
     attr->bSpEn = HI_FALSE;
     attr->bFrameEn = HI_TRUE;
@@ -27,7 +27,7 @@ static VPSS_CHN_ATTR_S* createStandardAttr() {
     return attr;
 }
 
-Channel::Channel(Group* g, int id)
+Channel::Channel(Group *g, int id)
     : IdHolder(id), Holder<Group*>(g),
       m_attr(createStandardAttr()) {
 }
@@ -54,12 +54,12 @@ bool Channel::startImpl() {
     return true;
 }
 
-void Channel::setAttributes(VPSS_CHN_ATTR_S* attr) {
+void Channel::setAttributes(VPSS_CHN_ATTR_S *attr) {
     m_attr.reset(attr);
 }
 
-const Group* Channel::group() const {
-    return Holder<Group*>::value();
+const Group *Channel::group() const {
+    return Holder<Group *>::value();
 }
 
 }

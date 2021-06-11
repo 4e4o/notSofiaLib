@@ -7,7 +7,7 @@
 
 namespace hisilicon::mpp {
 
-VBPool::VBPool(MPP* p)
+VBPool::VBPool(MPP *p)
     : VBBase(p),
       m_blockSize(0), m_blockCount(0),
       m_id(VB_INVALID_POOLID) {
@@ -16,7 +16,8 @@ VBPool::VBPool(MPP* p)
 VBPool::~VBPool() {
     if (m_id != VB_INVALID_POOLID) {
         HI_MPI_VB_DestroyPool(m_id);
-        std::cout << "~VBPool " << this << " " << m_blockSize << " , " << m_blockCount << std::endl;
+        std::cout << "~VBPool " << this << " " << m_blockSize << " , " << m_blockCount
+                  << std::endl;
     }
 }
 
@@ -36,17 +37,17 @@ void VBPool::initForVenc() {
     setBlockCount(channelsCount + 2 * veduCount + EXTRA_BLOCKS_COUNT);
 }
 
-HI_U32 VBPool::maxVencBlkSize(int& channelsCount) {
+HI_U32 VBPool::maxVencBlkSize(int &channelsCount) {
     channelsCount = 0;
-    const venc::Subsystem* venc = parent()->venc();
+    const venc::Subsystem *venc = parent()->venc();
 
     if (venc == nullptr)
         return 0;
 
     HI_U32 max = 0, tmp = 0;
 
-    for (auto& group : venc->groups()) {
-        for (auto& channel : group->channels()) {
+    for (auto &group : venc->groups()) {
+        for (auto &channel : group->channels()) {
             if (!channel->needUserPool())
                 continue;
 
@@ -78,7 +79,8 @@ bool VBPool::startImpl() {
     if (m_id == VB_INVALID_POOLID)
         throw std::runtime_error("HI_MPI_VB_CreatePool failed");
 
-    std::cout << "VBPool created " << this << " " << m_blockSize << " , " << m_blockCount << std::endl;
+    std::cout << "VBPool created " << this << " " << m_blockSize << " , " <<
+              m_blockCount << std::endl;
     return true;
 }
 

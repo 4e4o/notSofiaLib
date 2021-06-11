@@ -4,7 +4,7 @@
 #include "Holder.h"
 
 class IdHolder : public Holder<int> {
-public:
+  public:
     using Holder<int>::Holder;
 
     int id() const {

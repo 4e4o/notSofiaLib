@@ -16,16 +16,16 @@ class BindReceiver;
 // page 42
 
 class Binder : public Configurable {
-public:
-    Binder(BindSource*, BindReceiver*);
+  public:
+    Binder(BindSource *, BindReceiver *);
     ~Binder();
 
-private:
+  private:
     bool configureImpl() override final;
     bool startImpl() override final;
 
-    BindSource* m_source;
-    BindReceiver* m_receiver;
+    BindSource *m_source;
+    BindReceiver *m_receiver;
     std::unique_ptr<MPP_CHN_S> m_in;
     std::unique_ptr<MPP_CHN_S> m_out;
 };

@@ -7,8 +7,8 @@ template <size_t N>
 struct static_string {
     constexpr static_string()  = default;
 
-    constexpr static_string(const char* begin, const char* end) {
-        char* out = data;
+    constexpr static_string(const char *begin, const char *end) {
+        char *out = data;
         while (begin != end)
             *out++ = *begin++;
     }
@@ -17,11 +17,11 @@ struct static_string {
         return N;
     }
 
-    constexpr const char* c_str() const {
+    constexpr const char *c_str() const {
         return data;
     }
 
-private:
+  private:
     char data[N + 1] = {};
 };
 
@@ -35,31 +35,34 @@ struct array_size<const T (&)[N]> {
 
 template <typename T>
 constexpr auto getTypeNameData() {
-    const auto & str = __PRETTY_FUNCTION__;
+    const auto &str = __PRETTY_FUNCTION__;
     constexpr auto prettyStringSize = array_size<decltype(str)>::value;
 #ifdef __clang__
-    constexpr auto startPosOffset = __builtin_strlen("auto getTypeNameData() [T = ");
+    constexpr auto startPosOffset =
+        __builtin_strlen("auto getTypeNameData() [T = ");
 #else
-    constexpr auto startPosOffset = __builtin_strlen("constexpr auto getTypeNameData() [with T = ");
+    constexpr auto startPosOffset =
+        __builtin_strlen("constexpr auto getTypeNameData() [with T = ");
 #endif
     constexpr auto endPosOffset = __builtin_strlen("] ");
 
-    constexpr auto typeStringSize = prettyStringSize - startPosOffset - endPosOffset;
+    constexpr auto typeStringSize = prettyStringSize - startPosOffset -
+                                    endPosOffset;
 
-    return static_string<typeStringSize>{&str[startPosOffset], &str[prettyStringSize - endPosOffset]};
+    return static_string<typeStringSize> {&str[startPosOffset], &str[prettyStringSize - endPosOffset]};
 }
 
 template <typename T>
 constexpr auto typeNameStorage = getTypeNameData<T>();
 
 template <typename T>
-constexpr const char* getFullTypeName() {
+constexpr const char *getFullTypeName() {
     return typeNameStorage<T>.c_str();
 }
 
 template <typename T>
-constexpr const char* getUnqualifiedTypeName() {
-    const char* str = getFullTypeName<T>();
+constexpr const char *getUnqualifiedTypeName() {
+    const char *str = getFullTypeName<T>();
     while (*str != '\0')
         str++;
     while (*str != ':')

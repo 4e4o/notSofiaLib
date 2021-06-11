@@ -7,15 +7,15 @@
 namespace hisilicon::mpp::venc {
 
 class H264AttributesBuilder : public IAttributesBuilder {
-public:
+  public:
     H264AttributesBuilder();
     ~H264AttributesBuilder();
 
-    VENC_CHN_ATTR_S* build(IChannelSource*) override final;
+    VENC_CHN_ATTR_S *build(IChannelSource *) override final;
 
     void setBitrateType(const Channel::BitrateType &bitrateType);
 
-private:
+  private:
     Channel::BitrateType m_bitrateType;
 };
 

@@ -13,17 +13,17 @@ namespace hisilicon::mpp::vpss {
 
 class Group;
 
-class Channel : public IdHolder, public Holder<Group*>,
-        public Configurable {
-public:
-    Channel(Group*, int id);
+class Channel : public IdHolder, public Holder<Group *>,
+    public Configurable {
+  public:
+    Channel(Group *, int id);
     ~Channel();
 
-    void setAttributes(VPSS_CHN_ATTR_S* attr);
+    void setAttributes(VPSS_CHN_ATTR_S *attr);
 
-    const Group* group() const;
+    const Group *group() const;
 
-private:
+  private:
     bool configureImpl() override final;
     bool startImpl() override final;
 

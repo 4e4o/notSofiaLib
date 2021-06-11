@@ -4,12 +4,12 @@
 #include "Holder.h"
 
 template<typename Parent>
-class Child : public Holder<Parent*> {
-public:
-    using Holder<Parent*>::Holder;
+class Child : public Holder<Parent *> {
+  public:
+    using Holder<Parent *>::Holder;
 
-    Parent* parent() const {
-        return Holder<Parent*>::value();
+    Parent *parent() const {
+        return Holder<Parent *>::value();
     }
 };
 

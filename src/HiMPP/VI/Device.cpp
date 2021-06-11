@@ -11,7 +11,7 @@
 
 namespace hisilicon::mpp::vi {
 
-Device::Device(Subsystem* p, int id)
+Device::Device(Subsystem *p, int id)
     : Holder<Subsystem*>(p), IdHolder(id),
       m_attr(nullptr) {
 }
@@ -23,12 +23,12 @@ Device::~Device() {
     std::cout << "~vi::Device " << this << " , " << id() << std::endl;
 }
 
-Subsystem* Device::subsystem() const {
-    return Holder<Subsystem*>::value();
+Subsystem *Device::subsystem() const {
+    return Holder<Subsystem *>::value();
 }
 
-Channel* Device::addChannel(const ChannelInfo* i, int id) {
-    Channel* ch = subsystem()->parent()->create<Channel>(this, i, id);
+Channel *Device::addChannel(const ChannelInfo *i, int id) {
+    Channel *ch = subsystem()->parent()->create<Channel>(this, i, id);
     addItemBack(ch);
     m_channels.push_back(ch);
     return ch;
@@ -52,13 +52,13 @@ bool Device::startImpl() {
     return Configurator::startImpl();
 }
 
-const std::vector<Channel*>& Device::channels() const {
+const std::vector<Channel *> &Device::channels() const {
     return m_channels;
 }
 
-Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
-    InfoProvider* inf = subsystem()->infoProvider();
-    const ChannelInfo* i = inf->findChannelInfo(infoDevId, infoChId);
+Channel *Device::addChannel(int id, int infoDevId, int infoChId) {
+    InfoProvider *inf = subsystem()->infoProvider();
+    const ChannelInfo *i = inf->findChannelInfo(infoDevId, infoChId);
 
     if (i == nullptr)
         return nullptr;
@@ -68,10 +68,10 @@ Channel* Device::addChannel(int id, int infoDevId, int infoChId) {
 
 void Device::bindChannels() {
     VI_CHN_BIND_ATTR_S attr;
-    auto& chnls = channels();
+    auto &chnls = channels();
 
     for (int i = 0 ; i < (int) chnls.size() ; i++) {
-        Channel* ch = chnls[i];
+        Channel *ch = chnls[i];
 
         // HiMPP Media Processing Software Development Reference.pdf
         // page 109
@@ -87,11 +87,11 @@ void Device::bindChannels() {
     }
 }
 
-int Device::getBindWay(int i, Channel*) {
+int Device::getBindWay(int i, Channel *) {
     return i;
 }
 
-void Device::setAttr(VI_DEV_ATTR_S* attr) {
+void Device::setAttr(VI_DEV_ATTR_S *attr) {
     m_attr = attr;
 }
 

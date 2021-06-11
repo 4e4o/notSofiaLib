@@ -6,10 +6,10 @@
 namespace hisilicon::mpp::vi::hi3520dv200 {
 
 class Channel : public mpp::vi::Channel {
-public:
+  public:
     using mpp::vi::Channel::Channel;
 
-private:
+  private:
     SIZE_S createDestSize() const override final;
 };
 

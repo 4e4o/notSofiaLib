@@ -7,7 +7,7 @@
 
 namespace nvp6134 {
 
-Chip::Chip(DriverCommunicator* d, int id)
+Chip::Chip(DriverCommunicator *d, int id)
     : IdHolder(id),
       m_driver(d) {
 }
@@ -15,15 +15,15 @@ Chip::Chip(DriverCommunicator* d, int id)
 Chip::~Chip() {
 }
 
-DriverCommunicator* Chip::driver() const {
+DriverCommunicator *Chip::driver() const {
     return m_driver;
 }
 
-Chip::TViChannels& Chip::viChannels() {
+Chip::TViChannels &Chip::viChannels() {
     return m_viChannels;
 }
 
-Chip::TVoChannels& Chip::voChannels() {
+Chip::TVoChannels &Chip::voChannels() {
     return m_voChannels;
 }
 
@@ -34,11 +34,11 @@ Chip::TVoChannels& Chip::voChannels() {
 // от платы, от конфига железа.
 // Класс конкретной конфигурации должен определять эту логику
 
-NVP6134_VI_MODE Chip::getViChannelMode(ViChannel*) {
+NVP6134_VI_MODE Chip::getViChannelMode(ViChannel *) {
     throw std::runtime_error("Unimplemented getViChannelMode");
 }
 
-NVP6134_OUTMODE_SEL Chip::getVoChannelMode(VoChannel*) {
+NVP6134_OUTMODE_SEL Chip::getVoChannelMode(VoChannel *) {
     throw std::runtime_error("Unimplemented getVoChannelMode");
 }
 
@@ -51,7 +51,7 @@ bool Chip::configureImpl() {
         m_voChannels[i].reset(new VoChannel(this, i));
 
     // Устанавливаем режим Vi каналов
-    for (auto& channel : m_viChannels)
+    for (auto &channel : m_viChannels)
         channel->setMode(getViChannelMode(channel.get()));
 
     // Устанавливаем режим Vo каналов

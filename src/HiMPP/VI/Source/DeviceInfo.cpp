@@ -7,7 +7,7 @@ DeviceInfo::~DeviceInfo() {
     Utils::clearPtrContainer(m_channels);
 }
 
-void DeviceInfo::addChannel(ChannelInfo* c) {
+void DeviceInfo::addChannel(ChannelInfo *c) {
     m_channels.push_back(c);
 }
 

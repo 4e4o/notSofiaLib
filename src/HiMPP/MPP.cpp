@@ -20,10 +20,10 @@ MPP::MPP()
 }
 
 void MPP::registerDefaultTypes() {
-    registerType([] (MPP *p) -> VideoBuffer* {
+    registerType([] (MPP * p) -> VideoBuffer* {
         return new VideoBuffer(p);
     }, false);
-    registerType([] (MPP *p) -> Sys* {
+    registerType([] (MPP * p) -> Sys* {
         return new Sys(p);
     }, false);
 }
@@ -49,31 +49,31 @@ void MPP::stop() {
     m_venc->stop();
 }
 
-vi::Subsystem* MPP::addViSubsystem() {
+vi::Subsystem *MPP::addViSubsystem() {
     return addSubsystem<vi::Subsystem>(m_vi);
 }
 
-vpss::Subsystem* MPP::addVpssSubsystem() {
+vpss::Subsystem *MPP::addVpssSubsystem() {
     return addSubsystem<vpss::Subsystem>(m_vpss);
 }
 
-venc::Subsystem* MPP::addVencSubsystem() {
+venc::Subsystem *MPP::addVencSubsystem() {
     return addSubsystem<venc::Subsystem>(m_venc);
 }
 
-Sys* MPP::sys() const {
+Sys *MPP::sys() const {
     return m_sys;
 }
 
-vi::Subsystem* MPP::vi() const {
+vi::Subsystem *MPP::vi() const {
     return m_vi;
 }
 
-vpss::Subsystem* MPP::vpss() const {
+vpss::Subsystem *MPP::vpss() const {
     return m_vpss;
 }
 
-venc::Subsystem* MPP::venc() const {
+venc::Subsystem *MPP::venc() const {
     return m_venc;
 }
 

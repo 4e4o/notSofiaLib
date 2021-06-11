@@ -6,10 +6,10 @@
 namespace hisilicon::mpp::lm7004v3 {
 
 class MPP : public mpp::hi3520dv200::MPP {
-public:
+  public:
     using mpp::hi3520dv200::MPP::MPP;
 
-private:
+  private:
     bool configureImpl() override final;
 };
 

@@ -27,7 +27,7 @@ SIZE_S Channel::createDestSize() const {
 
         In interlaced capture mode, s32Y and
         u32Height must be 4-pixel aligned.
-   */
+    */
 
     // тут смотрим на формат результирующего изображения
     // если width влазеет в cap::width / 2 то юзаем cap::width / 2

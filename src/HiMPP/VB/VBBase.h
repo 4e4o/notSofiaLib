@@ -11,10 +11,10 @@ namespace hisilicon::mpp {
 class IVBufferizable;
 
 class VBBase : public MPPChild, public Configurable {
-public:
+  public:
     using MPPChild::MPPChild;
 
-protected:
+  protected:
     HI_U32 picVbBlkSize(IVBufferizable *b);
 
     // дополнительное кол-во блоков для выделения в пуле

@@ -12,12 +12,12 @@ class Board;
 
 namespace mpp::vi {
 
-class InfoProvider : public Holder<Board*>,
-        public hisilicon::mpp::vi::InfoProvider {
-public:
-    using Holder<Board*>::Holder;
+class InfoProvider : public Holder<Board *>,
+    public hisilicon::mpp::vi::InfoProvider {
+  public:
+    using Holder<Board *>::Holder;
 
-private:
+  private:
     bool configureImpl() override final;
 };
 

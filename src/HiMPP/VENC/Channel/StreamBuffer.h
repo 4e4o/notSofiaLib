@@ -6,17 +6,17 @@
 namespace hisilicon::mpp::venc {
 
 class StreamBuffer {
-public:
+  public:
     StreamBuffer();
     ~StreamBuffer();
 
-    VENC_PACK_S* get(HI_U32 packsCount);
+    VENC_PACK_S *get(HI_U32 packsCount);
     HI_U32 size() const;
 
-private:
+  private:
     void freeBuffer();
 
-    VENC_PACK_S* m_buffer;
+    VENC_PACK_S *m_buffer;
     HI_U32 m_currentPacks;
 };
 

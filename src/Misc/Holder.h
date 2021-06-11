@@ -3,15 +3,15 @@
 
 template<typename TValue>
 class Holder {
-public:
-    Holder(const TValue& v) :
+  public:
+    Holder(const TValue &v) :
         m_value(v) { }
 
     TValue value() const {
         return m_value;
     }
 
-private:
+  private:
     const TValue m_value;
 };
 

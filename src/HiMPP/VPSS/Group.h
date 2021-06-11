@@ -17,28 +17,28 @@ class Channel;
 class Subsystem;
 class IGroupSource;
 
-class Group : public Holder<Subsystem*>, public IdHolder,
-        public Configurator, public VpssBindReceiver,
-        public vpss::VpssBindSource, public venc::IChannelSource  {
-public:
-    Group(Subsystem*, int id);
+class Group : public Holder<Subsystem *>, public IdHolder,
+    public Configurator, public VpssBindReceiver,
+    public vpss::VpssBindSource, public venc::IChannelSource  {
+  public:
+    Group(Subsystem *, int id);
     ~Group();
 
-    void setAttributes(VPSS_GRP_ATTR_S*);
-    void setParameters(VPSS_GRP_PARAM_S*);
+    void setAttributes(VPSS_GRP_ATTR_S *);
+    void setParameters(VPSS_GRP_PARAM_S *);
 
-    void setSource(IGroupSource*);
+    void setSource(IGroupSource *);
 
-    Channel* addChannel(int id);
-    const std::vector<Channel*>& channels() const;
+    Channel *addChannel(int id);
+    const std::vector<Channel *> &channels() const;
 
-    Subsystem* subsystem() const;
+    Subsystem *subsystem() const;
 
-protected:
+  protected:
     bool configureImpl() override final;
     bool startImpl() override final;
 
-private:
+  private:
     HI_S32 receiverBindDeviceId() override final;
     HI_S32 receiverBindChannelId() override final;
     HI_S32 sourceBindDeviceId() override final;
@@ -49,10 +49,10 @@ private:
     bool pal() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
-    std::vector<Channel*> m_channels;
+    std::vector<Channel *> m_channels;
     std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;
     std::unique_ptr<VPSS_GRP_PARAM_S> m_params;
-    IGroupSource* m_source;
+    IGroupSource *m_source;
 };
 
 }

@@ -6,12 +6,12 @@
 namespace hisilicon::mpp::venc {
 
 class StreamDummyOut : public IStreamOut {
-public:
+  public:
     StreamDummyOut() { }
     ~StreamDummyOut() { }
 
-private:
-    void write(const HI_U8*, const HI_U32&) override final { }
+  private:
+    void write(const HI_U8 *, const HI_U32 &) override final { }
 };
 
 }

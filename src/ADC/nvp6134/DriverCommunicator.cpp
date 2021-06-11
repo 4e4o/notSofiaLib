@@ -20,7 +20,7 @@
 #define CHANNEL_INDEX(IND, CHIP, CHANNEL) \
     int IND = CHANNEL_LINEAR_INDEX(CHIP, CHANNEL); \
     if ((IND < 0) || (IND >= (CHANNEL_LINEAR_INDEX(m_chipCount, ChipSpecs::CS_VI_CHANNELS_COUNT)))) \
-    throw std::runtime_error("Incorrect channel index");
+        throw std::runtime_error("Incorrect channel index");
 
 namespace nvp6134 {
 
@@ -45,7 +45,8 @@ DriverCommunicator::~DriverCommunicator() {
     closeDriver();
 }
 
-DriverCommunicator::ViChannelFormat* DriverCommunicator::getVideoFmt(const ViChannel* ch) {
+DriverCommunicator::ViChannelFormat *DriverCommunicator::getVideoFmt(
+    const ViChannel *ch) {
     CHANNEL_INDEX(ind, ch->parent()->id(), ch->id());
     return m_channelInputFormats[ind].get();
 }
@@ -68,7 +69,8 @@ void DriverCommunicator::detectVideoFmt() {
     }
 }
 
-bool DriverCommunicator::setViChannelMode(const ViChannel* ch, bool pal, NVP6134_VI_MODE chmode) {
+bool DriverCommunicator::setViChannelMode(const ViChannel *ch, bool pal,
+        NVP6134_VI_MODE chmode) {
     CHANNEL_INDEX(ind, ch->parent()->id(), ch->id());
 
     nvp6134_chn_mode mode;
@@ -86,12 +88,13 @@ bool DriverCommunicator::setViChannelMode(const ViChannel* ch, bool pal, NVP6134
 bool DriverCommunicator::getVideoFmt() {
     m_inputFormat.reset(new nvp6134_input_videofmt{});
 
-    if (::ioctl(m_driverFd, IOC_VDEC_GET_INPUT_VIDEO_FMT, m_inputFormat.get()) == -1)
+    if (::ioctl(m_driverFd, IOC_VDEC_GET_INPUT_VIDEO_FMT,
+                m_inputFormat.get()) == -1)
         return false;
 
-    for(int i = 0; i < m_chipCount * ChipSpecs::CS_VI_CHANNELS_COUNT; i++) {
+    for (int i = 0; i < m_chipCount * ChipSpecs::CS_VI_CHANNELS_COUNT; i++) {
         cout << "[DriverCommunicator::getVideoFmt] " << i << " fmt = " <<
-                m_inputFormat->getvideofmt[i] << endl;\
+             m_inputFormat->getvideofmt[i] << endl; \
     }
 
     return true;
@@ -111,7 +114,8 @@ bool DriverCommunicator::openDriver() {
     return true;
 }
 
-bool DriverCommunicator::setVoChannelMode(const VoChannel* vo, unsigned char chid, NVP6134_OUTMODE_SEL mode) {
+bool DriverCommunicator::setVoChannelMode(const VoChannel *vo,
+        unsigned char chid, NVP6134_OUTMODE_SEL mode) {
     nvp6134_opt_mode optmode;
 
     optmode.chipsel = vo->parent()->id();

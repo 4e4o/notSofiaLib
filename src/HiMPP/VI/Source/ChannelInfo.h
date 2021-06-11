@@ -13,9 +13,9 @@ namespace hisilicon::mpp::vi {
 
 class DeviceInfo;
 
-class ChannelInfo : public Holder<DeviceInfo*>, public IdHolder {
-public:
-    ChannelInfo(DeviceInfo*, int id);
+class ChannelInfo : public Holder<DeviceInfo *>, public IdHolder {
+  public:
+    ChannelInfo(DeviceInfo *, int id);
     ~ChannelInfo();
 
     void setPixelFormat(PIXEL_FORMAT_E);
@@ -33,7 +33,7 @@ public:
     bool pal() const;
     void setPal(bool pal);
 
-private:
+  private:
     bool m_pal;
     VI_SCAN_MODE_E m_scanMode;
     PIXEL_FORMAT_E m_pixelFormat;

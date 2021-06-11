@@ -12,7 +12,7 @@
 
 namespace hisilicon::mpp {
 
-Sys::Sys(MPP* p)
+Sys::Sys(MPP *p)
     : MPPChild(p),
       m_sysWidthAlign(DEFAULT_SYS_WIDTH_ALIGN) {
 }

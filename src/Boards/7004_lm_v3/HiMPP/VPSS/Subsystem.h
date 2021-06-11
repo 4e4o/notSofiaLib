@@ -6,10 +6,10 @@
 namespace boards::lm7004v3::vpss {
 
 class Subsystem : public hisilicon::mpp::vpss::Subsystem {
-public:
+  public:
     using hisilicon::mpp::vpss::Subsystem::Subsystem;
 
-private:
+  private:
     bool configureImpl() override final;
 };
 

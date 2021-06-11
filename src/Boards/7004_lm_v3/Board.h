@@ -19,7 +19,7 @@ namespace boards::lm7004v3 {
 // lm7004v3 борда
 
 class Board : public boards::nvp6134::Board {
-public:
+  public:
     Board();
     ~Board();
 
@@ -27,7 +27,7 @@ public:
     void run();
     void stop();
 
-private:
+  private:
     bool configureImpl() override final;
 
     hisilicon::mpp::MPP *m_mpp;

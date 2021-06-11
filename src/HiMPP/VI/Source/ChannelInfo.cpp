@@ -2,7 +2,7 @@
 
 namespace hisilicon::mpp::vi {
 
-ChannelInfo::ChannelInfo(DeviceInfo* d, int id)
+ChannelInfo::ChannelInfo(DeviceInfo *d, int id)
     : Holder<DeviceInfo *>(d),
       IdHolder(id),
       m_pal(false),
@@ -29,7 +29,7 @@ void ChannelInfo::setImgSize(const TSize &imgSize) {
     m_imgSize = imgSize;
 }
 
-TSize ChannelInfo::capSize() const{
+TSize ChannelInfo::capSize() const {
     return m_capSize;
 }
 

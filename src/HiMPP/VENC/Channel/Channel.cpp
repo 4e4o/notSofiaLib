@@ -18,7 +18,7 @@
 
 namespace hisilicon::mpp::venc {
 
-Channel::Channel(Group* g, int id)
+Channel::Channel(Group *g, int id)
     : IdHolder(id), Holder<Group*>(g),
       m_source(nullptr) {
 }
@@ -35,16 +35,16 @@ Channel::~Channel() {
     std::cout << "~venc::Channel " << this << " , " << id() << std::endl;
 }
 
-void Channel::setStreamOut(IStreamOut* out) {
+void Channel::setStreamOut(IStreamOut *out) {
     m_streamReader.reset(new StreamReader(this));
     m_streamOut.reset(out);
 
-    m_streamReader->setEvent([out](const HI_U8* data, const HI_U32& size) {
+    m_streamReader->setEvent([out](const HI_U8 * data, const HI_U32 & size) {
         out->write(data, size);
     });
 }
 
-void Channel::setSource(IChannelSource* source) {
+void Channel::setSource(IChannelSource *source) {
     m_source = source;
 }
 
@@ -56,12 +56,13 @@ bool Channel::h264Mode() const {
     if (m_attrBuilder.get() == nullptr)
         throw std::runtime_error("[venc::Channel] m_attrBuilder is not set");
 
-    return dynamic_cast<H264AttributesBuilder*>(m_attrBuilder.get()) != nullptr;
+    return dynamic_cast<H264AttributesBuilder *>(m_attrBuilder.get()) != nullptr;
 }
 
 bool Channel::needUserPool() const {
-    return (group()->subsystem()->poolAllocationMode() == Subsystem::PoolAllocationMode::USER_VB_POOL)
-            && h264Mode();
+    return (group()->subsystem()->poolAllocationMode() ==
+            Subsystem::PoolAllocationMode::USER_VB_POOL)
+           && h264Mode();
 }
 
 bool Channel::configureImpl() {
@@ -89,7 +90,8 @@ bool Channel::startImpl() {
     if (needUserPool()) {
         // HiMPP Media Processing Software Development Reference.pdf
         // page 512
-        if(HI_MPI_VENC_AttachVbPool(id(), group()->subsystem()->pool()->id()) != HI_SUCCESS)
+        if (HI_MPI_VENC_AttachVbPool(id(),
+                                     group()->subsystem()->pool()->id()) != HI_SUCCESS)
             throw std::runtime_error("HI_MPI_VENC_AttachVbPool failed");
     }
 
@@ -99,18 +101,18 @@ bool Channel::startImpl() {
     if (HI_MPI_VENC_StartRecvPic(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_StartRecvPic failed");
 
-    StreamLoop* sl = group()->subsystem()->getLoopForChannel();
+    StreamLoop *sl = group()->subsystem()->getLoopForChannel();
     m_streamReader->attach(sl);
 
     return true;
 }
 
-void Channel::setAttributes(VENC_CHN_ATTR_S* attr) {
+void Channel::setAttributes(VENC_CHN_ATTR_S *attr) {
     m_attr.reset(attr);
 }
 
-const Group* Channel::group() const {
-    return Holder<Group*>::value();
+const Group *Channel::group() const {
+    return Holder<Group *>::value();
 }
 
 SIZE_S Channel::vbImageSize() {

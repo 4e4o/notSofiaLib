@@ -4,19 +4,19 @@
 #include "Startable.h"
 
 class Configurable : public Startable {
-public:
+  public:
     virtual ~Configurable();
 
     bool configure();
 
-protected:
+  protected:
     Configurable();
 
     virtual bool configureImpl();
 
     bool configured() const;
 
-private:
+  private:
     bool m_configured;
 };
 

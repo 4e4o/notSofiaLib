@@ -6,7 +6,7 @@
 namespace hisilicon::mpp::hi3520dv200 {
 
 class MPP : public mpp::MPP {
-public:
+  public:
     MPP();
 };
 

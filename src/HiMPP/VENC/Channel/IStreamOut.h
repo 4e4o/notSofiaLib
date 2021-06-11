@@ -6,11 +6,11 @@
 namespace hisilicon::mpp::venc {
 
 class IStreamOut {
-public:
+  public:
     IStreamOut() { }
     virtual ~IStreamOut() { }
 
-    virtual void write(const HI_U8*, const HI_U32&) = 0;
+    virtual void write(const HI_U8 *, const HI_U32 &) = 0;
 };
 
 }

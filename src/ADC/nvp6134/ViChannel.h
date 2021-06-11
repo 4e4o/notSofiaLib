@@ -12,7 +12,7 @@ namespace nvp6134 {
 class VoChannel;
 
 class ViChannel : public ChipChild, public IdHolder {
-public:
+  public:
     // значения взяты из nvp6134_ex_170306/video.c, см. тело функции nvp6134_vfmt_convert
     // https://github.com/4e4o/nvp6134_ex_170306/blob/master/video.c#L332
     enum TVideoFormat {
@@ -64,7 +64,7 @@ public:
         YUV_422
     };
 
-    ViChannel(Chip*, int id);
+    ViChannel(Chip *, int id);
     ~ViChannel();
 
     bool formatDetected() const;
@@ -75,9 +75,9 @@ public:
     TSize imageSize() const;
 
     void setMode(NVP6134_VI_MODE m);
-    void setOutChannel(VoChannel*);
+    void setOutChannel(VoChannel *);
 
-private:
+  private:
     void init();
     TSize modeToSize() const;
     TSize videoFormatSize() const;
@@ -85,7 +85,7 @@ private:
 
     TVideoFormat m_videoFormat;
     NVP6134_VI_MODE m_mode;
-    VoChannel* m_outChannel;
+    VoChannel *m_outChannel;
 };
 
 }

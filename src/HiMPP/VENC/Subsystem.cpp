@@ -16,7 +16,7 @@
 
 namespace hisilicon::mpp::venc {
 
-Subsystem::Subsystem(MPP* p)
+Subsystem::Subsystem(MPP *p)
     : MPPChild(p),
       m_poolMode(PoolAllocationMode::PRIVATE_VB_POOL),
       m_pool(nullptr),
@@ -33,15 +33,15 @@ Subsystem::~Subsystem() {
 }
 
 void Subsystem::registerDefaultTypes() {
-    parent()->registerType([](Subsystem* p, int id) -> Group* {
+    parent()->registerType([](Subsystem * p, int id) -> Group* {
         return new Group(p, id);
     }, false);
-    parent()->registerType([](Group* g, int id) -> Channel* {
+    parent()->registerType([](Group * g, int id) -> Channel* {
         return new Channel(g, id);
     }, false);
 }
 
-VBPool* Subsystem::pool() const {
+VBPool *Subsystem::pool() const {
     return m_pool;
 }
 
@@ -61,8 +61,8 @@ void Subsystem::createUserPool() {
 }
 
 bool Subsystem::needUserPool() {
-    for (auto& group : m_groups) {
-        for (auto& channel : group->channels()) {
+    for (auto &group : m_groups) {
+        for (auto &channel : group->channels()) {
             if (channel->needUserPool())
                 return true;
         }
@@ -77,23 +77,23 @@ bool Subsystem::needUserPool() {
 void Subsystem::addSourceFromVpss1by1() {
     int id = 0;
 
-    for (auto& vpss_group : parent()->vpss()->groups()) {
-        Group* group = addGroup(id);
+    for (auto &vpss_group : parent()->vpss()->groups()) {
+        Group *group = addGroup(id);
 
-        Channel* channel = group->addChannel(id++);
+        Channel *channel = group->addChannel(id++);
         channel->setSource(vpss_group);
-        H264AttributesBuilder* ab = new H264AttributesBuilder();
+        H264AttributesBuilder *ab = new H264AttributesBuilder();
         channel->setAttributesBuilder(ab);
         channel->setStreamOut(new StreamFileOut(channel));
-//        channel->setStreamOut(new StreamDummyOut());
+        //        channel->setStreamOut(new StreamDummyOut());
 
         bind(vpss_group, group);
     }
 }
 
 // Назначает лупы каналам по порядку
-StreamLoop* Subsystem::getLoopForChannel() {
-    if(m_streamLoops.empty())
+StreamLoop *Subsystem::getLoopForChannel() {
+    if (m_streamLoops.empty())
         throw std::runtime_error("No stream loops");
 
     if (m_channelLoopIndex >= (int) m_streamLoops.size())
@@ -102,8 +102,8 @@ StreamLoop* Subsystem::getLoopForChannel() {
     return m_streamLoops[m_channelLoopIndex++];
 }
 
-Group* Subsystem::addGroup(int id) {
-    Group* group = parent()->create<Group>(this, id);
+Group *Subsystem::addGroup(int id) {
+    Group *group = parent()->create<Group>(this, id);
     addItemBack(group);
     m_groups.push_back(group);
     return group;
@@ -145,7 +145,7 @@ void Subsystem::setStreamLoopsCount(int streamLoopsCount) {
     m_streamLoopsCount = streamLoopsCount;
 }
 
-const std::vector<Group*>& Subsystem::groups() const {
+const std::vector<Group *> &Subsystem::groups() const {
     return m_groups;
 }
 

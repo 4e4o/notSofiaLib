@@ -11,7 +11,7 @@ namespace boards {
 // Абстрактная борда
 
 class ABoard : public Configurator, public ConfigurableFactory {
-public:
+  public:
     ~ABoard() {}
 };
 

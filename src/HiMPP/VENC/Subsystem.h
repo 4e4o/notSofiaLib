@@ -18,13 +18,13 @@ class Group;
 class StreamLoop;
 
 class Subsystem : public MPPChild, public vpss::ConfiguratorBinder {
-public:
-    Subsystem(MPP*);
+  public:
+    Subsystem(MPP *);
     ~Subsystem();
 
-    Group* addGroup(int id);
+    Group *addGroup(int id);
 
-    const std::vector<Group*>& groups() const;
+    const std::vector<Group *> &groups() const;
 
     enum class PoolAllocationMode {
         PRIVATE_VB_POOL,
@@ -34,31 +34,31 @@ public:
     void setPoolAllocationMode(PoolAllocationMode m);
     PoolAllocationMode poolAllocationMode() const;
 
-    VBPool* pool() const;
+    VBPool *pool() const;
 
     void setStreamLoopsCount(int streamLoopsCount);
-    StreamLoop* getLoopForChannel();
+    StreamLoop *getLoopForChannel();
 
     void run();
     void stop();
 
-protected:
+  protected:
     bool configureImpl() override;
     void registerDefaultTypes();
     void addSourceFromVpss1by1();
 
-private:
+  private:
     void createUserPool();
     bool needUserPool();
     void createStreamLoops();
     void joinStreamThreads();
 
-    std::vector<Group*> m_groups;
+    std::vector<Group *> m_groups;
     PoolAllocationMode m_poolMode;
     VBPool *m_pool;
-    std::vector<StreamLoop*> m_streamLoops;
+    std::vector<StreamLoop *> m_streamLoops;
     int m_streamLoopsCount;
-    std::vector<std::thread*> m_threads;
+    std::vector<std::thread *> m_threads;
     int m_channelLoopIndex;
 };
 

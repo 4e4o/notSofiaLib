@@ -9,12 +9,12 @@ namespace nvp6134::lm7004v3 {
 // содержит конфигурацию чипа на плате.
 
 class Chip : public ::nvp6134::Chip {
-public:
+  public:
     using ::nvp6134::Chip::Chip;
 
-private:
-    NVP6134_VI_MODE getViChannelMode(::nvp6134::ViChannel*) override final;
-    NVP6134_OUTMODE_SEL getVoChannelMode(::nvp6134::VoChannel*) override final;
+  private:
+    NVP6134_VI_MODE getViChannelMode(::nvp6134::ViChannel *) override final;
+    NVP6134_OUTMODE_SEL getVoChannelMode(::nvp6134::VoChannel *) override final;
 };
 
 }

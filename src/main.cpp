@@ -5,7 +5,7 @@
 
 #include "Boards/7004_lm_v3/Board.h"
 
-static boards::lm7004v3::Board* board;
+static boards::lm7004v3::Board *board;
 
 int main() {
 

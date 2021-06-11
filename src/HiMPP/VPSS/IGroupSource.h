@@ -6,7 +6,7 @@
 namespace hisilicon::mpp::vpss {
 
 class IGroupSource {
-public:
+  public:
     IGroupSource() { }
     virtual ~IGroupSource() { }
 

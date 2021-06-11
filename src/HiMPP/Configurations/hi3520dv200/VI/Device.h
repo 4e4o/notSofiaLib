@@ -6,10 +6,10 @@
 namespace hisilicon::mpp::vi::hi3520dv200 {
 
 class Device : public mpp::vi::Device {
-public:
-    Device(mpp::vi::Subsystem*, int id);
+  public:
+    Device(mpp::vi::Subsystem *, int id);
 
-private:
+  private:
     bool configureImpl() override final;
 
     VI_DEV_ATTR_S m_attr;

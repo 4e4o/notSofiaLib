@@ -19,8 +19,8 @@ StreamFileOut::StreamFileOut(Channel *c) :
 StreamFileOut::~StreamFileOut() {
 }
 
-void StreamFileOut::write(const HI_U8* data, const HI_U32& size) {
-    m_file.write(reinterpret_cast<const char*>(data), size);
+void StreamFileOut::write(const HI_U8 *data, const HI_U32 &size) {
+    m_file.write(reinterpret_cast<const char *>(data), size);
 }
 
 }

@@ -24,17 +24,17 @@ class Sys;
 class VideoBuffer;
 
 class MPP : public Configurator, public ConfigurableFactory {
-public:
+  public:
     MPP();
 
-    vi::Subsystem* addViSubsystem();
-    vpss::Subsystem* addVpssSubsystem();
-    venc::Subsystem* addVencSubsystem();
+    vi::Subsystem *addViSubsystem();
+    vpss::Subsystem *addVpssSubsystem();
+    venc::Subsystem *addVencSubsystem();
 
-    Sys* sys() const;
-    vi::Subsystem* vi() const;
-    vpss::Subsystem* vpss() const;
-    venc::Subsystem* venc() const;
+    Sys *sys() const;
+    vi::Subsystem *vi() const;
+    vpss::Subsystem *vpss() const;
+    venc::Subsystem *venc() const;
 
     int veduCount() const;
     void setVeduCount(int veduCount);
@@ -42,14 +42,14 @@ public:
     void run();
     void stop();
 
-protected:
+  protected:
     bool configureImpl() override;
 
-private:
+  private:
     void registerDefaultTypes();
 
     template<class T, bool back = true>
-    T* addSubsystem(T*& store) {
+    T * addSubsystem(T *&store) {
         if (store != nullptr)
             throw std::runtime_error("subsystem already added");
 
@@ -64,10 +64,10 @@ private:
     }
 
     Sys *m_sys;
-    VideoBuffer* m_vb;
-    vi::Subsystem* m_vi;
-    vpss::Subsystem* m_vpss;
-    venc::Subsystem* m_venc;
+    VideoBuffer *m_vb;
+    vi::Subsystem *m_vi;
+    vpss::Subsystem *m_vpss;
+    venc::Subsystem *m_venc;
     // VEDU in HiMPP Media Processing Software Development Reference.pdf
     int m_veduCount;
 };

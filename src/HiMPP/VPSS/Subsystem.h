@@ -11,19 +11,19 @@ namespace hisilicon::mpp::vpss {
 class Group;
 
 class Subsystem : public MPPChild, public ConfiguratorBinder {
-public:
-    Subsystem(MPP*);
+  public:
+    Subsystem(MPP *);
 
-    Group* addGroup(int id);
+    Group *addGroup(int id);
 
-    const std::vector<Group*>& groups() const;
+    const std::vector<Group *> &groups() const;
 
-protected:
+  protected:
     void registerDefaultTypes();
     void addSourceFromVi1by1();
 
-private:
-    std::vector<Group*> m_groups;
+  private:
+    std::vector<Group *> m_groups;
 };
 
 }

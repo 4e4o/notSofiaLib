@@ -6,7 +6,7 @@
 namespace hisilicon::mpp::venc {
 
 class IChannelSource {
-public:
+  public:
     IChannelSource() { }
     virtual ~IChannelSource() { }
 
