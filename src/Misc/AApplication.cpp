@@ -1,6 +1,7 @@
 #include "AApplication.h"
 
 #include <signal.h>
+#include <iostream>
 
 AApplication *AApplication::g_app = nullptr;
 
@@ -28,10 +29,17 @@ void AApplication::setExit() {
 int AApplication::run() {
     m_board.reset(create<ABoard>());
 
-    if (!m_board->configure())
-        throw std::runtime_error("board configure failed");
+    try {
+        if (!m_board->configure())
+            throw std::runtime_error("board configure failed");
 
-    m_board->run();
+        m_board->run();
+    } catch (const std::exception &e) {
+        std::cout << "Exception: " << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "Unknown exception: " << std::endl;
+    }
+
     return 0;
 }
 
