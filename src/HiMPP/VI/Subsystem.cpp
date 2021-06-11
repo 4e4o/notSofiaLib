@@ -9,9 +9,10 @@
 namespace hisilicon::mpp::vi {
 
 Subsystem::Subsystem(MPP* p)
-    : MPPChild(p) {
+    : MPPChild(p),
+      m_infoProvider(p->create<InfoProvider>()) {
     registerDefaultTypes();
-    addItemBack(p->create<InfoProvider>());
+    addItemBack(m_infoProvider);
 }
 
 void Subsystem::registerDefaultTypes() {
@@ -44,17 +45,8 @@ Device* Subsystem::addDevice(int id) {
     return dev;
 }
 
-int Subsystem::channelsCount() const {
-    int count = 0;
-
-    for (auto& device : m_devices)
-        count += device->channels().size();
-
-    return count;
-}
-
 vi::InfoProvider* Subsystem::infoProvider() const {
-    return static_cast<vi::InfoProvider*>(item(0));
+    return m_infoProvider;
 }
 
 const std::vector<Device*>& Subsystem::devices() const {

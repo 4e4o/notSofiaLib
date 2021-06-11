@@ -10,7 +10,9 @@
 namespace hisilicon::mpp {
 
 MPP::MPP()
-    : m_vi(nullptr),
+    : m_sys(nullptr),
+      m_vb(nullptr),
+      m_vi(nullptr),
       m_vpss(nullptr),
       m_venc(nullptr),
       m_veduCount(0) {
@@ -26,14 +28,6 @@ void MPP::registerDefaultTypes() {
     }, false);
 }
 
-int MPP::veduCount() const {
-    return m_veduCount;
-}
-
-void MPP::setVeduCount(int veduCount) {
-    m_veduCount = veduCount;
-}
-
 bool MPP::configureImpl() {
     if (m_veduCount == 0)
         // HiMPP Media Processing Software Development Reference.pdf
@@ -41,23 +35,17 @@ bool MPP::configureImpl() {
         throw std::runtime_error("You must set veduCount for your hi chip");
 
     // Здесь порядок важен
-    addItemFront(create<Sys>(this));
-    addItemFront(create<VideoBuffer>(this));
+    addSubsystem<Sys, false>(m_sys);
+    addSubsystem<VideoBuffer, false>(m_vb);
 
     return Configurator::configureImpl();
 }
 
 void MPP::run() {
-    if (m_venc == nullptr)
-        return;
-
     m_venc->run();
 }
 
 void MPP::stop() {
-    if (m_venc == nullptr)
-        return;
-
     m_venc->stop();
 }
 
@@ -74,7 +62,7 @@ venc::Subsystem* MPP::addVencSubsystem() {
 }
 
 Sys* MPP::sys() const {
-    return static_cast<Sys*>(item(1));
+    return m_sys;
 }
 
 vi::Subsystem* MPP::vi() const {
@@ -87,6 +75,14 @@ vpss::Subsystem* MPP::vpss() const {
 
 venc::Subsystem* MPP::venc() const {
     return m_venc;
+}
+
+int MPP::veduCount() const {
+    return m_veduCount;
+}
+
+void MPP::setVeduCount(int veduCount) {
+    m_veduCount = veduCount;
 }
 
 }

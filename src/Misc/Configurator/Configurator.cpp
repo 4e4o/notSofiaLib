@@ -26,21 +26,12 @@ bool Configurator::startImpl() {
     return true;
 }
 
-Configurable* Configurator::item(int ind) const {
-    auto it1 = std::next(m_items.begin(), ind);
-    return *it1;
-}
-
 void Configurator::addItemBack(Configurable *it) {
     m_items.push_back(it);
 }
 
 void Configurator::addItemFront(Configurable* it) {
     m_items.push_front(it);
-}
-
-int Configurator::itemsCount() const {
-    return m_items.size();
 }
 
 void Configurator::clear() {

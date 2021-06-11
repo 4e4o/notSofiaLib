@@ -25,7 +25,6 @@ public:
     Group* addGroup(int id);
 
     const std::vector<Group*>& groups() const;
-    int channelsCount() const;
 
     enum class PoolAllocationMode {
         PRIVATE_VB_POOL,

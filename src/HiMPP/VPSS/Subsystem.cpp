@@ -46,15 +46,6 @@ Group* Subsystem::addGroup(int id) {
     return group;
 }
 
-int Subsystem::channelsCount() const {
-    int count = 0;
-
-    for (auto& group : m_groups)
-        count += group->channels().size();
-
-    return count;
-}
-
 const std::vector<Group*>& Subsystem::groups() const {
     return m_groups;
 }

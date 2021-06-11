@@ -21,6 +21,7 @@ class Subsystem;
 }
 
 class Sys;
+class VideoBuffer;
 
 class MPP : public Configurator, public ConfigurableFactory {
 public:
@@ -47,15 +48,23 @@ protected:
 private:
     void registerDefaultTypes();
 
-    template<class T>
+    template<class T, bool back = true>
     T* addSubsystem(T*& store) {
         if (store != nullptr)
             throw std::runtime_error("subsystem already added");
 
-        addItemBack(store = create<T>(this));
+        store = create<T>(this);
+
+        if constexpr (back)
+            addItemBack(store);
+        else
+            addItemFront(store);
+
         return store;
     }
 
+    Sys *m_sys;
+    VideoBuffer* m_vb;
     vi::Subsystem* m_vi;
     vpss::Subsystem* m_vpss;
     venc::Subsystem* m_venc;

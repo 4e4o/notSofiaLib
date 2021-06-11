@@ -17,7 +17,6 @@ public:
     Group* addGroup(int id);
 
     const std::vector<Group*>& groups() const;
-    int channelsCount() const;
 
 protected:
     void registerDefaultTypes();

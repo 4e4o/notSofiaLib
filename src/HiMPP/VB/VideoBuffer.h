@@ -15,7 +15,7 @@ public:
 private:
     bool startImpl() override final;
 
-    HI_U32 maxViBlkSize();
+    HI_U32 maxViBlkSize(HI_U32& channelsCount);
 };
 
 }

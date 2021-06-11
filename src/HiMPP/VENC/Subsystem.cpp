@@ -109,15 +109,6 @@ Group* Subsystem::addGroup(int id) {
     return group;
 }
 
-int Subsystem::channelsCount() const {
-    int count = 0;
-
-    for (auto& group : m_groups)
-        count += group->channels().size();
-
-    return count;
-}
-
 void Subsystem::createStreamLoops() {
     for (int i = 0 ; i < m_streamLoopsCount ; i++)
         m_streamLoops.push_back(new StreamLoop());

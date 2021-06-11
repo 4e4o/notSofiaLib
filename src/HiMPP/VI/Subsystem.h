@@ -19,7 +19,6 @@ public:
 
     vi::InfoProvider* infoProvider() const;
     const std::vector<Device*>& devices() const;
-    int channelsCount() const;
 
 protected:
     void registerDefaultTypes();
@@ -28,6 +27,7 @@ protected:
 
 private:
     std::vector<Device*> m_devices;
+    InfoProvider *m_infoProvider;
 };
 
 }

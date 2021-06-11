@@ -27,15 +27,10 @@ bool VideoBuffer::startImpl() {
     // на стадии конфигурации нет нужных данных
     // они есть только на стадии запуска
     HI_U32 channelsCount = 0;
-    const vi::Subsystem* vi = parent()->vi();
-
-    if (vi != nullptr)
-        channelsCount = vi->channelsCount();
+    const HI_U32 blockSize = maxViBlkSize(channelsCount);
 
     if (channelsCount < 1)
         throw std::runtime_error("No channels to process");
-
-    const HI_U32 blockSize = maxViBlkSize();
 
     if (blockSize < 1)
         throw std::runtime_error("Invalid block size");
@@ -86,7 +81,8 @@ bool VideoBuffer::startImpl() {
     return true;
 }
 
-HI_U32 VideoBuffer::maxViBlkSize() {
+HI_U32 VideoBuffer::maxViBlkSize(HI_U32& channelsCount) {
+    channelsCount = 0;
     const vi::Subsystem* vi = parent()->vi();
 
     if (vi == nullptr)
@@ -96,6 +92,7 @@ HI_U32 VideoBuffer::maxViBlkSize() {
 
     for (auto& device : vi->devices()) {
         for (auto& channel : device->channels()) {
+            channelsCount++;
             tmp = picVbBlkSize(channel);
 
             if (tmp > max)
