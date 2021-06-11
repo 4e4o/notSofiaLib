@@ -3,7 +3,7 @@
 
 namespace hisilicon::mpp::lm7004v3 {
 
-void MPP::addSubsystems() {
+bool MPP::configureImpl() {
     addViSubsystem();
     addVpssSubsystem();
     addVencSubsystem();
@@ -11,6 +11,7 @@ void MPP::addSubsystems() {
     // это зависит от того с какими параметрами загружен h264e.ko
     // см. комментарии внутри setPoolAllocationMode
     venc()->setPoolAllocationMode(venc::Subsystem::PoolAllocationMode::USER_VB_POOL);
+    return mpp::hi3520dv200::MPP::configureImpl();
 }
 
 }

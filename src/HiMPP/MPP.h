@@ -41,9 +41,10 @@ public:
     void run();
     void stop();
 
+protected:
+    bool configureImpl() override;
+
 private:
-    bool configureImpl() override final;
-    virtual void addSubsystems();
     void registerDefaultTypes();
 
     template<class T>
@@ -51,7 +52,7 @@ private:
         if (store != nullptr)
             throw std::runtime_error("subsystem already added");
 
-        addItem(store = create<T>(this));
+        addItemBack(store = create<T>(this));
         return store;
     }
 

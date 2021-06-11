@@ -16,8 +16,9 @@ protected:
     bool configureImpl() override;
     bool startImpl() override;
 
-    void addItem(Configurable*);
     void addItemFront(Configurable*);
+    void addItemBack(Configurable*);
+
     int itemsCount() const;
     void clear();
 

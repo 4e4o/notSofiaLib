@@ -31,7 +31,7 @@ Configurable* Configurator::item(int ind) const {
     return *it1;
 }
 
-void Configurator::addItem(Configurable *it) {
+void Configurator::addItemBack(Configurable *it) {
     m_items.push_back(it);
 }
 

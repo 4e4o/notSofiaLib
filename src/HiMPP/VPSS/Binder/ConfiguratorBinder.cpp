@@ -4,7 +4,7 @@
 namespace hisilicon::mpp::vpss {
 
 void ConfiguratorBinder::bind(vpss::BindSource* s, vpss::BindReceiver* r) {
-    addItem(new vpss::Binder(s, r));
+    addItemBack(new vpss::Binder(s, r));
 }
 
 }

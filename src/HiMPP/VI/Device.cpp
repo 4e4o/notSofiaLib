@@ -29,7 +29,7 @@ Subsystem* Device::subsystem() const {
 
 Channel* Device::addChannel(const ChannelInfo* i, int id) {
     Channel* ch = subsystem()->parent()->create<Channel>(this, i, id);
-    addItem(ch);
+    addItemBack(ch);
     m_channels.push_back(ch);
     return ch;
 }

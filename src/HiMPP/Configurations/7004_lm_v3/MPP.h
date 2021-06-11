@@ -10,7 +10,7 @@ public:
     using mpp::hi3520dv200::MPP::MPP;
 
 private:
-    void addSubsystems() override final;
+    bool configureImpl() override final;
 };
 
 }

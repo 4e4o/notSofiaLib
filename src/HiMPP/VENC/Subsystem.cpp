@@ -104,7 +104,7 @@ StreamLoop* Subsystem::getLoopForChannel() {
 
 Group* Subsystem::addGroup(int id) {
     Group* group = parent()->create<Group>(this, id);
-    addItem(group);
+    addItemBack(group);
     m_groups.push_back(group);
     return group;
 }

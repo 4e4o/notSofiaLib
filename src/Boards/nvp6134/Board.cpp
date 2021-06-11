@@ -1,7 +1,6 @@
 #include "Board.h"
-
-#include "ADC/nvp6134/Chip.h"
 #include "ADC/nvp6134/DriverCommunicator.h"
+#include "ADC/nvp6134/Chip.h"
 
 namespace boards::nvp6134 {
 
@@ -13,11 +12,6 @@ Board::Board(int chipCount) :
     }, false);
 }
 
-void Board::createChipsets() {
-    for (int i = 0 ; i < m_chipCount ; i++)
-        m_nvpChipsets.push_back(create<::nvp6134::Chip>(m_nvpDriver.get(), i));
-}
-
 bool Board::configureImpl() {
     createChipsets();
 
@@ -27,6 +21,11 @@ bool Board::configureImpl() {
         addItemFront(*it);
 
     return ABoard::configureImpl();
+}
+
+void Board::createChipsets() {
+    for (int i = 0 ; i < m_chipCount ; i++)
+        m_nvpChipsets.push_back(create<::nvp6134::Chip>(m_nvpDriver.get(), i));
 }
 
 const Board::TNvpChipsets& Board::nvp() const {

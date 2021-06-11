@@ -11,7 +11,7 @@ namespace hisilicon::mpp::vi {
 Subsystem::Subsystem(MPP* p)
     : MPPChild(p) {
     registerDefaultTypes();
-    addItem(p->create<InfoProvider>());
+    addItemBack(p->create<InfoProvider>());
 }
 
 void Subsystem::registerDefaultTypes() {
@@ -39,7 +39,7 @@ void Subsystem::createDevices() {
 
 Device* Subsystem::addDevice(int id) {
     Device* dev = parent()->create<Device>(this, id);
-    addItem(dev);
+    addItemBack(dev);
     m_devices.push_back(dev);
     return dev;
 }

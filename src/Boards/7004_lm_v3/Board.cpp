@@ -39,7 +39,7 @@ bool Board::configureImpl() {
         return new venc::Subsystem(p);
     });
 
-    addItem(m_mpp);
+    addItemBack(m_mpp);
     return boards::nvp6134::Board::configureImpl();
 }
 

@@ -64,7 +64,7 @@ HI_S32 Group::sourceBindChannelId() {
 
 Channel* Group::addChannel(int id) {
     Channel* ch = subsystem()->parent()->create<Channel>(this, id);
-    addItem(ch);
+    addItemBack(ch);
     m_channels.push_back(ch);
     return ch;
 }
