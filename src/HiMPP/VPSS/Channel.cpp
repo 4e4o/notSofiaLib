@@ -14,7 +14,7 @@ static VPSS_CHN_ATTR_S *createStandardAttr() {
     VPSS_CHN_ATTR_S *attr = new VPSS_CHN_ATTR_S{};
 
     attr->bSpEn = HI_FALSE;
-    attr->bFrameEn = HI_TRUE;
+    attr->bFrameEn = HI_FALSE;/*
     attr->stFrame.u32Color[VPSS_FRAME_WORK_LEFT] = 0xff00;
     attr->stFrame.u32Color[VPSS_FRAME_WORK_RIGHT] = 0xff00;
     attr->stFrame.u32Color[VPSS_FRAME_WORK_BOTTOM] = 0xff00;
@@ -23,7 +23,7 @@ static VPSS_CHN_ATTR_S *createStandardAttr() {
     attr->stFrame.u32Width[VPSS_FRAME_WORK_RIGHT] = 2;
     attr->stFrame.u32Width[VPSS_FRAME_WORK_TOP] = 2;
     attr->stFrame.u32Width[VPSS_FRAME_WORK_BOTTOM] = 2;
-
+*/
     return attr;
 }
 
