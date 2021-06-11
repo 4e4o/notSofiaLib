@@ -9,7 +9,7 @@ class BindSource;
 class BindReceiver;
 
 class ConfiguratorBinder : public Configurator {
-  protected:
+  public:
     void bind(vpss::BindSource *, vpss::BindReceiver *);
 };
 
