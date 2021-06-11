@@ -10,7 +10,7 @@ class Channel : public mpp::vi::Channel {
     using mpp::vi::Channel::Channel;
 
   private:
-    SIZE_S createDestSize() const override final;
+    SIZE_S *createDestSize() const override final;
 };
 
 }

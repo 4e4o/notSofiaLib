@@ -25,7 +25,6 @@ class Channel : public IdHolder, public Holder<Group *>,
 
   private:
     bool configureImpl() override final;
-    bool startImpl() override final;
 
     std::unique_ptr<VPSS_CHN_ATTR_S> m_attr;
 };

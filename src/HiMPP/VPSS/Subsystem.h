@@ -18,9 +18,10 @@ class Subsystem : public MPPChild, public ConfiguratorBinder {
 
     const std::vector<Group *> &groups() const;
 
+    void addSourceFromVi1by1();
+
   protected:
     void registerDefaultTypes();
-    void addSourceFromVi1by1();
 
   private:
     std::vector<Group *> m_groups;

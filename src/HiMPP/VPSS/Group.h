@@ -36,7 +36,6 @@ class Group : public Holder<Subsystem *>, public IdHolder,
 
   protected:
     bool configureImpl() override final;
-    bool startImpl() override final;
 
   private:
     HI_S32 receiverBindDeviceId() override final;

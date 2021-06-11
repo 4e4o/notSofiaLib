@@ -1,9 +1,7 @@
 #ifndef CONFIGURABLE_H
 #define CONFIGURABLE_H
 
-#include "Startable.h"
-
-class Configurable : public Startable {
+class Configurable {
   public:
     virtual ~Configurable();
 

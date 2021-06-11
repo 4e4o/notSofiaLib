@@ -17,7 +17,7 @@ class Sys : public MPPChild, public Configurable {
     HI_U32 sysWidthAlign() const;
 
   private:
-    bool startImpl() override final;
+    bool configureImpl() override final;
 
     HI_U32 m_sysWidthAlign;
 };

@@ -25,8 +25,6 @@ class Channel : public IdHolder, public Holder<Device *>,
     Channel(Device *, const ChannelInfo *, int id);
     ~Channel();
 
-    void setAttributes(VI_CHN_ATTR_S *attr);
-
     const Device *device() const;
 
     SIZE_S destSize() const override final;
@@ -38,9 +36,8 @@ class Channel : public IdHolder, public Holder<Device *>,
     RECT_S capRect() const;
 
   private:
-    virtual SIZE_S createDestSize() const;
+    virtual SIZE_S *createDestSize() const;
     bool configureImpl() override final;
-    bool startImpl() override final;
     HI_S32 sourceBindDeviceId() override final;
     HI_S32 sourceBindChannelId() override final;
     SIZE_S vbImageSize() override final;
@@ -48,6 +45,7 @@ class Channel : public IdHolder, public Holder<Device *>,
 
     const ChannelInfo *m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;
+    mutable std::unique_ptr<SIZE_S> m_destSize;
 };
 
 }

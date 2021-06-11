@@ -76,10 +76,6 @@ bool Group::configureImpl() {
     if (m_attrs.get() == nullptr)
         throw std::runtime_error("vi::Group attributes not set");
 
-    return Configurator::configureImpl();
-}
-
-bool Group::startImpl() {
     // создаём группу
     if (HI_MPI_VPSS_CreateGrp(id(), m_attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_CreateGrp failed");
@@ -91,7 +87,7 @@ bool Group::startImpl() {
     }
 
     // стартуем каналы
-    if (!Configurator::startImpl())
+    if (!Configurator::configureImpl())
         return false;
 
     // стартуем группу

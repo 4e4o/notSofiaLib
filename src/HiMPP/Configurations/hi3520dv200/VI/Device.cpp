@@ -1,4 +1,5 @@
 #include "Device.h"
+#include "Subsystem.h"
 
 namespace hisilicon::mpp::vi::hi3520dv200 {
 
@@ -15,8 +16,7 @@ static VI_DEV_ATTR_S DEV_ATTR_BT656_2MUX = {
     HI_TRUE
 };
 
-// это маска только для hi3520d в нашем режиме
-static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
+static void set4ch720pMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
     switch (ViDev % 2) {
     case 0:
         pstDevAttr->au32CompMask[0] = 0xFF000000;
@@ -28,14 +28,24 @@ static void setMask(VI_DEV ViDev, VI_DEV_ATTR_S *pstDevAttr) {
 }
 
 Device::Device(mpp::vi::Subsystem *p, int id)
-    : mpp::vi::Device(p, id),
-      m_attr(DEV_ATTR_BT656_2MUX) {
+    : mpp::vi::Device(p, id) {
+    initMode();
 }
 
-bool Device::configureImpl() {
-    setMask(id(), &m_attr);
-    setAttr(&m_attr);
-    return mpp::vi::Device::configureImpl();
+void Device::initMode() {
+    using vi::hi3520dv200::Subsystem;
+    Subsystem *s = subsystem<Subsystem>();
+
+    switch (s->hiMode()) {
+    case Subsystem::HI3520DV200_MODE::MODE_4CH_72OP: {
+        m_attr = DEV_ATTR_BT656_2MUX;
+        set4ch720pMask(id(), &m_attr);
+        setAttr(&m_attr);
+        break;
+    }
+    default:
+        throw std::runtime_error("[vi::hi3520dv200::Device] Unsupported HI3520DV200_MODE");
+    }
 }
 
 }

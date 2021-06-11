@@ -25,14 +25,17 @@ class Device : public Holder<Subsystem *>, public IdHolder,
 
   protected:
     bool configureImpl() override;
-    bool startImpl() override;
     void setAttr(VI_DEV_ATTR_S *attr);
+
+    template<class T = Subsystem>
+    T * subsystem() const {
+        return static_cast<T *>(Holder<Subsystem *>::value());
+    }
 
   private:
     virtual int getBindWay(int i, Channel *);
     Channel *addChannel(const ChannelInfo *, int id);
     void bindChannels();
-    Subsystem *subsystem() const;
 
     std::vector<Channel *> m_channels;
     VI_DEV_ATTR_S *m_attr;

@@ -41,10 +41,6 @@ bool Channel::configureImpl() {
     if (m_attr.get() == nullptr)
         throw std::runtime_error("[vpps::Channel] attr is not set");
 
-    return true;
-}
-
-bool Channel::startImpl() {
     if (HI_MPI_VPSS_SetChnAttr(group()->id(), id(), m_attr.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_SetChnAttr failed");
 

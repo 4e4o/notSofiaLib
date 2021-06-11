@@ -22,7 +22,7 @@ Sys::~Sys() {
     std::cout << "~Sys " << this << std::endl;
 }
 
-bool Sys::startImpl() {
+bool Sys::configureImpl() {
     MPP_SYS_CONF_S stSysConf{};
     stSysConf.u32AlignWidth = sysWidthAlign();
 

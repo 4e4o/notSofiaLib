@@ -69,10 +69,6 @@ bool VBPool::configureImpl() {
     if (m_blockSize == 0)
         throw std::runtime_error("m_blockSize must be > 0");
 
-    return true;
-}
-
-bool VBPool::startImpl() {
     m_id = HI_MPI_VB_CreatePool(m_blockSize, m_blockCount,
                                 m_name.empty() ? nullptr : m_name.c_str());
 

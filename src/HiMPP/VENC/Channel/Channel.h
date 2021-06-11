@@ -41,7 +41,6 @@ class Channel : public IdHolder, public Holder<Group *>,
 
   private:
     bool configureImpl() override final;
-    bool startImpl() override final;
     SIZE_S vbImageSize() override final;
     PIXEL_FORMAT_E vbPixelFormat() override final;
     void setAttributes(VENC_CHN_ATTR_S *attr);

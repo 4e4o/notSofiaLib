@@ -35,10 +35,7 @@ Binder::~Binder() {
 bool Binder::configureImpl() {
     m_in.reset(createBindSource(m_source));
     m_out.reset(createBindReceiver(m_receiver));
-    return true;
-}
 
-bool Binder::startImpl() {
     if (HI_MPI_SYS_Bind(m_in.get(), m_out.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_SYS_Bind failed");
 

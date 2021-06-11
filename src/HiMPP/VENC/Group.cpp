@@ -43,13 +43,13 @@ Channel *Group::addChannel(int id) {
     return ch;
 }
 
-bool Group::startImpl() {
+bool Group::configureImpl() {
     // создаём группу
     if (HI_MPI_VENC_CreateGroup(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_CreateGroup failed");
 
     // стартуем каналы
-    return Configurator::startImpl();
+    return Configurator::configureImpl();
 }
 
 const std::vector<Channel *> &Group::channels() const {

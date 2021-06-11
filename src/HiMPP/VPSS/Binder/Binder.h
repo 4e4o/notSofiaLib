@@ -22,7 +22,6 @@ class Binder : public Configurable {
 
   private:
     bool configureImpl() override final;
-    bool startImpl() override final;
 
     BindSource *m_source;
     BindReceiver *m_receiver;

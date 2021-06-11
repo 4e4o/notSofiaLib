@@ -31,9 +31,6 @@ int AApplication::run() {
     if (!m_board->configure())
         throw std::runtime_error("board configure failed");
 
-    if (!m_board->start())
-        throw std::runtime_error("board start failed");
-
     m_board->run();
     return 0;
 }

@@ -27,7 +27,7 @@ class Group : public Holder<Subsystem *>, public IdHolder,
     const std::vector<Channel *> &channels() const;
 
   protected:
-    bool startImpl() override final;
+    bool configureImpl() override final;
 
   private:
     HI_S32 receiverBindDeviceId() override final;

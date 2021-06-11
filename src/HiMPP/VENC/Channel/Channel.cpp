@@ -80,10 +80,6 @@ bool Channel::configureImpl() {
     if (m_attr.get() == nullptr)
         throw std::runtime_error("[venc::Channel] attr is not set");
 
-    return true;
-}
-
-bool Channel::startImpl() {
     if (HI_MPI_VENC_CreateChn(id(), m_attr.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_CreateChn failed");
 

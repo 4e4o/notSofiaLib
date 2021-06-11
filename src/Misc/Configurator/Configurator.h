@@ -11,7 +11,6 @@ class Configurator : public Configurable {
 
   protected:
     bool configureImpl() override;
-    bool startImpl() override;
 
     void addItemFront(Configurable *);
     void addItemBack(Configurable *);

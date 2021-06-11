@@ -23,10 +23,6 @@ Device::~Device() {
     std::cout << "~vi::Device " << this << " , " << id() << std::endl;
 }
 
-Subsystem *Device::subsystem() const {
-    return Holder<Subsystem *>::value();
-}
-
 Channel *Device::addChannel(const ChannelInfo *i, int id) {
     Channel *ch = subsystem()->parent()->create<Channel>(this, i, id);
     addItemBack(ch);
@@ -38,10 +34,6 @@ bool Device::configureImpl() {
     if (m_attr == nullptr)
         throw std::runtime_error("vi::Device attributes not set");
 
-    return Configurator::configureImpl();
-}
-
-bool Device::startImpl() {
     if (HI_MPI_VI_SetDevAttr(id(), m_attr) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetDevAttr failed");
 
@@ -49,7 +41,7 @@ bool Device::startImpl() {
         throw std::runtime_error("HI_MPI_VI_EnableDev failed");
 
     bindChannels();
-    return Configurator::startImpl();
+    return Configurator::configureImpl();
 }
 
 const std::vector<Channel *> &Device::channels() const {

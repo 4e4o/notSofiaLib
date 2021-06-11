@@ -35,18 +35,6 @@ Channel::~Channel() {
     std::cout << "~vi::Channel " << this << " , " << id() << std::endl;
 }
 
-SIZE_S Channel::createDestSize() const {
-    return Utils::toMppSize(m_info->imgSize());
-}
-
-HI_S32 Channel::sourceBindDeviceId() {
-    return device()->id();
-}
-
-HI_S32 Channel::sourceBindChannelId() {
-    return id();
-}
-
 bool Channel::configureImpl() {
     if (m_info == nullptr)
         throw std::runtime_error("[vi::Channel] Vi info is not set");
@@ -54,14 +42,10 @@ bool Channel::configureImpl() {
     if (m_attr.get() == nullptr)
         throw std::runtime_error("[vi::Channel] Vi attr is not set");
 
-    m_attr->enPixFormat = m_info->pixelFormat();
-    m_attr->stCapRect = Utils::toMppRect(m_info->capSize());
-    m_attr->stDestSize = createDestSize();
+    m_attr->enPixFormat = pixelFormat();
+    m_attr->stCapRect = capRect();
+    m_attr->stDestSize = destSize();
 
-    return true;
-}
-
-bool Channel::startImpl() {
     if (HI_MPI_VI_SetChnScanMode(id(), m_info->scanMode()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetChnScanMode failed");
 
@@ -74,16 +58,27 @@ bool Channel::startImpl() {
     return true;
 }
 
-void Channel::setAttributes(VI_CHN_ATTR_S *attr) {
-    m_attr.reset(attr);
+HI_S32 Channel::sourceBindDeviceId() {
+    return device()->id();
+}
+
+HI_S32 Channel::sourceBindChannelId() {
+    return id();
+}
+
+SIZE_S *Channel::createDestSize() const {
+    return new SIZE_S{Utils::toMppSize(m_info->imgSize())};
 }
 
 SIZE_S Channel::destSize() const {
-    return m_attr->stDestSize;
+    if (m_destSize.get() == nullptr)
+        m_destSize.reset(createDestSize());
+
+    return *m_destSize.get();
 }
 
 RECT_S Channel::capRect() const {
-    return m_attr->stCapRect;
+    return Utils::toMppRect(m_info->capSize());
 }
 
 SIZE_S Channel::imgSize() const {
@@ -95,7 +90,7 @@ bool Channel::pal() const {
 }
 
 PIXEL_FORMAT_E Channel::pixelFormat() const {
-    return m_attr->enPixFormat;
+    return m_info->pixelFormat();
 }
 
 const Device *Channel::device() const {

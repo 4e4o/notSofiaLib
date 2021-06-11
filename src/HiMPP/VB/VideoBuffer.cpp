@@ -23,9 +23,7 @@ VideoBuffer::~VideoBuffer() {
     std::cout << "~VideoBuffer " << this << std::endl;
 }
 
-bool VideoBuffer::startImpl() {
-    // на стадии конфигурации нет нужных данных
-    // они есть только на стадии запуска
+bool VideoBuffer::configureImpl() {
     HI_U32 channelsCount = 0;
     const HI_U32 blockSize = maxViBlkSize(channelsCount);
 

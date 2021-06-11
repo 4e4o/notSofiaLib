@@ -14,18 +14,6 @@ bool Configurator::configureImpl() {
     return true;
 }
 
-bool Configurator::startImpl() {
-    if (!configured())
-        return false;
-
-    for (auto &item : m_items) {
-        if (!item->start())
-            return false;
-    }
-
-    return true;
-}
-
 void Configurator::addItemBack(Configurable *it) {
     m_items.push_back(it);
 }

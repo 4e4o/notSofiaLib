@@ -6,7 +6,7 @@
 
 namespace hisilicon::mpp::vi::hi3520dv200 {
 
-SIZE_S Channel::createDestSize() const {
+SIZE_S *Channel::createDestSize() const {
     // HiMPP Media Processing Software Development Reference.pdf
     // page 136/135
     // for hi3520d:
@@ -40,7 +40,7 @@ SIZE_S Channel::createDestSize() const {
     if (imgSize().u32Width <= halfCapWidth)
         dest.u32Width = halfCapWidth;
 
-    return dest;
+    return new SIZE_S{std::move(dest)};
 }
 
 }

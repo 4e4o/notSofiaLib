@@ -13,7 +13,7 @@ class VideoBuffer : public VBBase {
     ~VideoBuffer();
 
   private:
-    bool startImpl() override final;
+    bool configureImpl() override final;
 
     HI_U32 maxViBlkSize(HI_U32 &channelsCount);
 };

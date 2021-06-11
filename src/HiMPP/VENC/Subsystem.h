@@ -39,13 +39,14 @@ class Subsystem : public MPPChild, public vpss::ConfiguratorBinder {
     void setStreamLoopsCount(int streamLoopsCount);
     StreamLoop *getLoopForChannel();
 
+    void addSourceFromVpss1by1();
+
     void run();
     void stop();
 
   protected:
     bool configureImpl() override;
     void registerDefaultTypes();
-    void addSourceFromVpss1by1();
 
   private:
     void createUserPool();

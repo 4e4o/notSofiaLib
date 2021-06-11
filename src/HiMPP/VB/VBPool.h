@@ -23,7 +23,6 @@ class VBPool : public VBBase {
 
   private:
     bool configureImpl() override final;
-    bool startImpl() override final;
     HI_U32 maxVencBlkSize(int &);
 
     HI_U32 m_blockSize;
