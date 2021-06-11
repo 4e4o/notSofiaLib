@@ -37,9 +37,22 @@ bool VideoBuffer::configureImpl() {
 
     stVbConf.u32MaxPoolCnt = DEFAULT_MAX_POOL_COUNT;
 
-    // TODO why * 4 ??
-    // < 3 not works
+    // основной пул для vi, vpss и других сервисов у которых нет апи приатачивания к пулу
+    addPool(stVbConf, MAIN_POOL_INDEX, blockSize,
+            getBlocksCount(channelsCount) + EXTRA_BLOCKS_COUNT);
 
+    if (HI_MPI_VB_SetConf(&stVbConf) != HI_SUCCESS)
+        throw std::runtime_error("HI_MPI_VB_SetConf failed");
+
+    if (HI_MPI_VB_Init() != HI_SUCCESS)
+        throw std::runtime_error("HI_MPI_VB_Init failed");
+
+    return true;
+}
+
+HI_U32 VideoBuffer::getBlocksCount(const HI_U32 &channelsCount) {
+
+    // NOTE
     // Значит тут имеется зависимость от кол-ва каналов на группу в vpps
     // Сначало было 4 канала на группу, 4 группы vpps и работало только с channelCount * 4
     // Потом сделал 1 канал на группу, 4 группы, стало работать с channelCount * 3,
@@ -64,20 +77,14 @@ bool VideoBuffer::configureImpl() {
     // я думал может venc модулю не хватает блоков из своего пула и он берёт их из основного,
     // но нет, добавлял блоки в venc пул и увеличивал их размер - результат тот же
 
-    // TODO page 40
     // HiMPP Media Processing Software Development Reference.pdf
+    // page 40:
+    // "The number of public VB pools and the size and number of
+    // buffers vary according to services."
 
-    // основной пул для vi, vpss и других сервисов у которых нет апи приатачивания к пулу
-    addPool(stVbConf, MAIN_POOL_INDEX, blockSize,
-            channelsCount * 4 + 1 + EXTRA_BLOCKS_COUNT);
+    // Вот нет конкретной формулы для vi и других подсистем в мануале.
 
-    if (HI_MPI_VB_SetConf(&stVbConf) != HI_SUCCESS)
-        throw std::runtime_error("HI_MPI_VB_SetConf failed");
-
-    if (HI_MPI_VB_Init() != HI_SUCCESS)
-        throw std::runtime_error("HI_MPI_VB_Init failed");
-
-    return true;
+    return channelsCount * 4 + 1;
 }
 
 HI_U32 VideoBuffer::maxViBlkSize(HI_U32 &channelsCount) {

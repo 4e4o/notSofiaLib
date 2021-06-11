@@ -12,8 +12,11 @@ class VideoBuffer : public VBBase {
     using VBBase::VBBase;
     ~VideoBuffer();
 
+  protected:
+    bool configureImpl() override;
+
   private:
-    bool configureImpl() override final;
+    virtual HI_U32 getBlocksCount(const HI_U32 &);
 
     HI_U32 maxViBlkSize(HI_U32 &channelsCount);
 };
