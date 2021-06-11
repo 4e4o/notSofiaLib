@@ -16,7 +16,7 @@ bool Board::configureImpl() {
     createChipsets();
 
     for (auto &chip : m_nvpChipsets)
-        addItemFront(chip);
+        addItemBack(chip);
 
     return ABoard::configureImpl();
 }
