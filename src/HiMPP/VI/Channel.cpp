@@ -98,9 +98,10 @@ const Device *Channel::device() const {
 }
 
 SIZE_S Channel::vbImageSize() {
-    // FIXME maybe destSize ? or capSize
-    //    const SIZE_S imgSize = ch->imgSize();
-
+    // Тут нет уверенности что именно imgSize() юзать надо,
+    // проверено destSize, capSize -
+    // так же работает буффер без ошибок
+    // значит будем юзать наименьшее значение
     return imgSize();
 }
 
