@@ -17,6 +17,7 @@
 #include <mpi_venc.h>
 
 namespace hisilicon::mpp::venc {
+
 Channel::Channel(Group* g, int id)
     : IdHolder(id), Holder<Group*>(g),
       m_source(nullptr) {
