@@ -35,11 +35,10 @@ static VI_SCAN_MODE_E toMppScanMode(ViChannel* ch) {
 
 bool InfoProvider::configureImpl() {
     hisilicon::mpp::vi::InfoProvider::TViDevicesInfo result;
-    const int chipsCount = value()->nvpCount();
+    auto& nvp = value()->nvp();
 
-    for (int i = 0 ; i < chipsCount ; i++) {
-        DeviceInfo *dev = new DeviceInfo(i);
-        ::nvp6134::Chip* chip = value()->nvp(i);
+    for (auto& chip : nvp) {
+        DeviceInfo *dev = new DeviceInfo(chip->id());
         auto& ch = chip->viChannels();
 
         for (int j = 0 ; j < (int) ch.size() ; j++) {

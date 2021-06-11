@@ -4,12 +4,13 @@
 #include <vector>
 
 #include "Misc/Configurator/Configurator.h"
+#include "Misc/Configurator/ConfigurableFactory.h"
 
 namespace boards {
 
 // Абстрактная борда
 
-class ABoard : public Configurator {
+class ABoard : public Configurator, public ConfigurableFactory {
 public:
     ~ABoard() {}
 };

@@ -12,26 +12,25 @@ class DriverCommunicator;
 
 namespace boards::nvp6134 {
 
-// Борда с nvp чипами
+// Плата с nvp чипами
 
 class Board : public ABoard {
 public:
+    typedef std::vector<::nvp6134::Chip*> TNvpChipsets;
+
     Board(int chipCount);
 
-    // TODO remove it
-    ::nvp6134::Chip* nvp(int = 0) const;
-    int nvpCount() const;
+    const TNvpChipsets& nvp() const;
 
 protected:
-    virtual ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) = 0;
     bool configureImpl() override;
 
 private:
-    virtual void initialize();
+    void createChipsets();
 
-    std::unique_ptr< ::nvp6134::DriverCommunicator> m_nvpDriver;
-    const int m_nvpStartIndex;
-    const int m_nvpCount;
+    int m_chipCount;
+    std::unique_ptr<::nvp6134::DriverCommunicator> m_nvpDriver;
+    TNvpChipsets m_nvpChipsets;
 };
 
 }

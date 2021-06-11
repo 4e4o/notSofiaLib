@@ -20,10 +20,10 @@ MPP::MPP()
 void MPP::registerDefaultTypes() {
     registerType([] (MPP *p) -> VideoBuffer* {
         return new VideoBuffer(p);
-    });
+    }, false);
     registerType([] (MPP *p) -> Sys* {
         return new Sys(p);
-    });
+    }, false);
 }
 
 int MPP::veduCount() const {

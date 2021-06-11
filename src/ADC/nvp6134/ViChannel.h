@@ -67,17 +67,14 @@ public:
     ViChannel(Chip*, int id);
     ~ViChannel();
 
-    bool pal() const;
-
-    void setMode(NVP6134_VI_MODE m);
-
     bool formatDetected() const;
-
+    bool pal() const;
     OutPixelFormat pixelFormat() const;
     TVideoFormat videoFormat() const;
     TSize captureSize() const;
     TSize imageSize() const;
 
+    void setMode(NVP6134_VI_MODE m);
     void setOutChannel(VoChannel*);
 
 private:

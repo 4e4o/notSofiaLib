@@ -18,7 +18,7 @@ MPP::MPP() {
         return new vi::hi3520dv200::Device(s, id);
     });
 
-    registerType([](vi::Device* d, vi::ChannelInfo* i, int id) -> vi::Channel* {
+    registerType([](vi::Device* d, const vi::ChannelInfo* i, int id) -> vi::Channel* {
         return new vi::hi3520dv200::Channel(d, i, id);
     });
 }

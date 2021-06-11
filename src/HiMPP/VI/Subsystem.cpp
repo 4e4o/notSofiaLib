@@ -17,10 +17,10 @@ Subsystem::Subsystem(MPP* p)
 void Subsystem::registerDefaultTypes() {
     parent()->registerType([](Subsystem* p, int id) -> Device* {
         return new Device(p, id);
-    });
-    parent()->registerType([](Device* d, ChannelInfo* i, int id) -> Channel* {
+    }, false);
+    parent()->registerType([](Device* d, const ChannelInfo* i, int id) -> Channel* {
         return new Channel(d, i, id);
-    });
+    }, false);
 }
 
 bool Subsystem::configureImpl() {

@@ -17,10 +17,10 @@ Subsystem::Subsystem(MPP* p)
 void Subsystem::registerDefaultTypes() {
     parent()->registerType([](Subsystem* p, int id) -> Group* {
         return new Group(p, id);
-    });
+    }, false);
     parent()->registerType([](Group* g, int id) -> Channel* {
         return new Channel(g, id);
-    });
+    }, false);
 }
 
 // Добавляет vpss группу на каждый канал vi.

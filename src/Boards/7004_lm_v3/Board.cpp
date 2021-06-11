@@ -16,16 +16,15 @@ using hisilicon::mpp::lm7004v3::MPP;
 Board::Board()
     : boards::nvp6134::Board(NVP_CHIPS_COUNT),
       m_mpp(nullptr) {
+    registerType([](::nvp6134::DriverCommunicator* d, int id) -> ::nvp6134::Chip* {
+        return new ::nvp6134::lm7004v3::Chip(d, id);
+    });
 }
 
 Board::~Board() {
 }
 
-::nvp6134::Chip* Board::createNvpChip(::nvp6134::DriverCommunicator* d, int i) {
-    return new ::nvp6134::lm7004v3::Chip(d, i);
-}
-
-void Board::initialize() {
+bool Board::configureImpl() {
     m_mpp = new MPP();
 
     m_mpp->registerType([this]() -> hisilicon::mpp::vi::InfoProvider* {
@@ -41,6 +40,7 @@ void Board::initialize() {
     });
 
     addItem(m_mpp);
+    return boards::nvp6134::Board::configureImpl();
 }
 
 void Board::run() {

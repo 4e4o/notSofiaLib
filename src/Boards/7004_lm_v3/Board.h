@@ -28,8 +28,7 @@ public:
     void stop();
 
 private:
-    void initialize() override final;
-    ::nvp6134::Chip* createNvpChip(::nvp6134::DriverCommunicator*, int i) override final;
+    bool configureImpl() override final;
 
     hisilicon::mpp::MPP *m_mpp;
 };

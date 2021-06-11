@@ -6,28 +6,31 @@
 namespace boards::nvp6134 {
 
 Board::Board(int chipCount) :
-    m_nvpDriver(new ::nvp6134::DriverCommunicator(chipCount)),
-    m_nvpStartIndex(itemsCount()),
-    m_nvpCount(chipCount) {
+    m_chipCount(chipCount),
+    m_nvpDriver(new ::nvp6134::DriverCommunicator(chipCount)) {
+    registerType([](::nvp6134::DriverCommunicator* d, int id) -> ::nvp6134::Chip* {
+        return new ::nvp6134::Chip(d, id);
+    }, false);
+}
+
+void Board::createChipsets() {
+    for (int i = 0 ; i < m_chipCount ; i++)
+        m_nvpChipsets.push_back(create<::nvp6134::Chip>(m_nvpDriver.get(), i));
 }
 
 bool Board::configureImpl() {
-    for (int i = 0 ; i < m_nvpCount ; i++)
-        addItem(createNvpChip(m_nvpDriver.get(), i));
+    createChipsets();
 
-    initialize();
+    // добавляем с конца в начало
+    // потому что чипы должны первыми конфигурироваться
+    for(auto it = m_nvpChipsets.rbegin() ; it != m_nvpChipsets.rend() ; it++)
+        addItemFront(*it);
+
     return ABoard::configureImpl();
 }
 
-void Board::initialize() {
-}
-
-int Board::nvpCount() const {
-    return m_nvpCount;
-}
-
-::nvp6134::Chip* Board::nvp(int i) const {
-    return static_cast< ::nvp6134::Chip*>(item(m_nvpStartIndex + i));
+const Board::TNvpChipsets& Board::nvp() const {
+    return m_nvpChipsets;
 }
 
 }
