@@ -8,7 +8,8 @@
 namespace hisilicon::mpp::venc {
 
 StreamReader::StreamReader(Channel *c)
-    : m_channel(c) {
+    : m_channel(c),
+      m_consecutiveMode(false) {
 }
 
 StreamReader::~StreamReader() {
@@ -32,24 +33,44 @@ void StreamReader::read(StreamBuffer *buffer) {
     if (HI_MPI_VENC_Query(m_channel->id(), &stStat) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_Query failed");
 
-    stStream.pstPack = buffer->get(stStat.u32CurPacks);
+    stStream.pstPack = buffer->getPackBuffer(stStat.u32CurPacks);
     stStream.u32PackCount = stStat.u32CurPacks;
 
-    if (nullptr == stStream.pstPack)
+    if (stStream.pstPack == nullptr)
         throw std::runtime_error("StreamReader::read buffer is nullptr");
 
-    if (HI_MPI_VENC_GetStream(m_channel->id(), &stStream, HI_TRUE) != HI_SUCCESS)
+    const HI_S32 streamResult = HI_MPI_VENC_GetStream(m_channel->id(), &stStream,
+                                HI_FALSE);
+
+    if (streamResult == HI_ERR_VENC_BUF_EMPTY)
+        return;
+
+    if (streamResult != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_GetStream failed");
 
     for (HI_U32 i = 0; i < stStream.u32PackCount; i++) {
-        m_event(stStream.pstPack[i].pu8Addr[0], stStream.pstPack[i].u32Len[0]);
+        if (stStream.pstPack[i].u32Len[1] > 0) {
+            HI_U8 *data;
 
-        if (stStream.pstPack[i].u32Len[1] > 0)
-            m_event(stStream.pstPack[i].pu8Addr[1], stStream.pstPack[i].u32Len[1]);
+            if (m_consecutiveMode)
+                data = stStream.pstPack[i].pu8Addr[0];
+            else
+                data = buffer->getConsecutveStreamBuffer(i);
+
+            m_event(data, stStream.pstPack[i].u32Len[0] + stStream.pstPack[i].u32Len[1]);
+        } else {
+            m_event(stStream.pstPack[i].pu8Addr[0], stStream.pstPack[i].u32Len[0]);
+        }
     }
 
     if (HI_MPI_VENC_ReleaseStream(m_channel->id(), &stStream) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_ReleaseStream failed");
+}
+
+void StreamReader::setConsecutiveMode(bool consecutiveMode) {
+    // HiMPP Media Processing Software Development Reference.pdf
+    // page 510
+    m_consecutiveMode = consecutiveMode;
 }
 
 }

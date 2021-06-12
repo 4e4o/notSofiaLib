@@ -25,11 +25,14 @@ class StreamReader {
         m_event = std::move(c);
     }
 
+    void setConsecutiveMode(bool consecutiveMode);
+
   private:
     void read(StreamBuffer *buffer);
 
     Channel *m_channel;
     Event m_event;
+    bool m_consecutiveMode;
 };
 
 }

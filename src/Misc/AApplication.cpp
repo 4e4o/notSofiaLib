@@ -37,6 +37,7 @@ int AApplication::run() {
         if (!m_board->configure())
             throw std::runtime_error("board configure failed");
 
+        beforeBoardRun();
         m_board->run();
     } catch (const std::exception &e) {
         std::cout << "Exception: " << e.what() << std::endl;
@@ -45,6 +46,9 @@ int AApplication::run() {
     }
 
     return 0;
+}
+
+void AApplication::beforeBoardRun() {
 }
 
 void AApplication::stop() {

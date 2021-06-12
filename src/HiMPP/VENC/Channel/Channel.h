@@ -33,22 +33,25 @@ class Channel : public IdHolder, public Holder<Group *>,
 
     void setAttributesBuilder(IAttributesBuilder *);
     void setSource(IChannelSource *source);
-    void setStreamOut(IStreamOut *);
+    void setStreamOut(IStreamOut *, bool getOwnership = true);
 
     const Group *group() const;
     bool needUserPool() const;
     bool h264Mode() const;
+    SIZE_S imgSize() const;
 
   private:
     bool configureImpl() override final;
     SIZE_S vbImageSize() override final;
     PIXEL_FORMAT_E vbPixelFormat() override final;
     void setAttributes(VENC_CHN_ATTR_S *attr);
+    void releaseStreamOut();
 
     std::unique_ptr<VENC_CHN_ATTR_S> m_attr;
     std::unique_ptr<IAttributesBuilder> m_attrBuilder;
     std::unique_ptr<StreamReader> m_streamReader;
     std::unique_ptr<IStreamOut> m_streamOut;
+    bool m_ownsStreamOut;
     IChannelSource *m_source;
 };
 

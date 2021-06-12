@@ -22,6 +22,9 @@ class AApplication : public GenericFactory<boards::ABoard> {
 
     boards::ABoard *board() const;
 
+  protected:
+    virtual void beforeBoardRun();
+
   private:
     void setExit();
 

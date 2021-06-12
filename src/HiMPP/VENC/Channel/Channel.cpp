@@ -20,10 +20,13 @@ namespace hisilicon::mpp::venc {
 
 Channel::Channel(Group *g, int id)
     : IdHolder(id), Holder<Group*>(g),
+      m_ownsStreamOut(true),
       m_source(nullptr) {
 }
 
 Channel::~Channel() {
+    releaseStreamOut();
+
     HI_MPI_VENC_StopRecvPic(id());
     HI_MPI_VENC_UnRegisterChn(id());
 
@@ -35,9 +38,18 @@ Channel::~Channel() {
     std::cout << "~venc::Channel " << this << " , " << id() << std::endl;
 }
 
-void Channel::setStreamOut(IStreamOut *out) {
-    m_streamReader.reset(new StreamReader(this));
+void Channel::releaseStreamOut() {
+    if (!m_ownsStreamOut)
+        m_streamOut.release();
+}
+
+void Channel::setStreamOut(IStreamOut *out, bool getOwnership) {
+    if (m_streamReader.get() == nullptr)
+        m_streamReader.reset(new StreamReader(this));
+
+    releaseStreamOut();
     m_streamOut.reset(out);
+    m_ownsStreamOut = getOwnership;
 
     m_streamReader->setEvent([out](const HI_U8 * data, const HI_U32 & size) {
         out->write(data, size);
@@ -57,6 +69,10 @@ bool Channel::h264Mode() const {
         throw std::runtime_error("[venc::Channel] m_attrBuilder is not set");
 
     return dynamic_cast<H264AttributesBuilder *>(m_attrBuilder.get()) != nullptr;
+}
+
+SIZE_S Channel::imgSize() const {
+    return m_source->imgSize();
 }
 
 bool Channel::needUserPool() const {

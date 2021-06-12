@@ -1,36 +1,61 @@
 #include "StreamBuffer.h"
 
+#include <cstring>
+#include <iostream>
+
 namespace hisilicon::mpp::venc {
 
-StreamBuffer::StreamBuffer()
-    : m_buffer(nullptr),
-      m_currentPacks(0) {
+StreamBuffer::StreamBuffer() {
 }
 
 StreamBuffer::~StreamBuffer() {
-    freeBuffer();
+    freePackBuffer();
+    freeStreamBuffer();
 }
 
-HI_U32 StreamBuffer::size() const {
-    return sizeof(VENC_PACK_S) * m_currentPacks;
-}
-
-VENC_PACK_S *StreamBuffer::get(HI_U32 packsCount) {
-    if (m_currentPacks < packsCount) {
-        freeBuffer();
-        m_buffer = new VENC_PACK_S[packsCount];
-        m_currentPacks = packsCount;
+VENC_PACK_S *StreamBuffer::getPackBuffer(HI_U32 packsCount) {
+    if (m_packBuffer.size() < packsCount) {
+        freePackBuffer();
+        m_packBuffer = std::move(std::span(new VENC_PACK_S[packsCount], packsCount));
+        //    std::cout << "getPackBuffer new " << packsCount << std::endl;
     }
 
-    return m_buffer;
+    return m_packBuffer.data();
 }
 
-void StreamBuffer::freeBuffer() {
-    if (m_buffer == nullptr)
+HI_U8 *StreamBuffer::getConsecutveStreamBuffer(int packIndex) {
+    VENC_PACK_S &pack = m_packBuffer[packIndex];
+    const HI_U32 totalLength = pack.u32Len[0] + pack.u32Len[1];
+
+    if (m_streamBuffer.size() < totalLength) {
+        freeStreamBuffer();
+        m_streamBuffer = std::move(std::span(new HI_U8[totalLength], totalLength));
+        //    std::cout << "getConsecutveStreamBuffer new " << totalLength << std::endl;
+    }
+
+    //    std::cout << "getConsecutveStreamBuffer memcpy " << totalLength << std::endl;
+
+    std::memcpy(m_streamBuffer.data(), pack.pu8Addr[0], pack.u32Len[0]);
+    std::memcpy(m_streamBuffer.data() + pack.u32Len[0], pack.pu8Addr[1],
+                pack.u32Len[1]);
+
+    return m_streamBuffer.data();
+}
+
+void StreamBuffer::freeStreamBuffer() {
+    if (m_streamBuffer.empty())
         return;
 
-    delete[] m_buffer;
-    m_currentPacks = 0;
+    delete[] m_streamBuffer.data();
+    m_streamBuffer = std::move(std::span<HI_U8>());
+}
+
+void StreamBuffer::freePackBuffer() {
+    if (m_packBuffer.empty())
+        return;
+
+    delete[] m_packBuffer.data();
+    m_packBuffer = std::move(std::span<VENC_PACK_S>());
 }
 
 }
