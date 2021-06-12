@@ -15,7 +15,7 @@ class AApplication : public GenericFactory<boards::ABoard> {
     AApplication();
     virtual ~AApplication();
 
-    int run();
+    virtual int run();
     void stop();
 
     static AApplication *app();
