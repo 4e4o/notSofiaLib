@@ -26,6 +26,10 @@ void AApplication::setExit() {
     });
 }
 
+boards::ABoard *AApplication::board() const {
+    return m_board.get();
+}
+
 int AApplication::run() {
     m_board.reset(create<ABoard>());
 

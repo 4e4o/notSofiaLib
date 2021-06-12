@@ -20,6 +20,8 @@ class AApplication : public GenericFactory<boards::ABoard> {
 
     static AApplication *app();
 
+    boards::ABoard *board() const;
+
   private:
     void setExit();
 

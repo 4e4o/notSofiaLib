@@ -20,6 +20,8 @@ class ABoard : public Configurator, public ConfigurableFactory {
     void run();
     void stop();
 
+    hisilicon::mpp::MPP *mpp() const;
+
   protected:
     bool configureImpl() override;
 

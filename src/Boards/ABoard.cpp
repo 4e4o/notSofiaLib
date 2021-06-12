@@ -17,6 +17,10 @@ bool ABoard::configureImpl() {
     return Configurator::configureImpl();
 }
 
+hisilicon::mpp::MPP *ABoard::mpp() const {
+    return m_mpp;
+}
+
 void ABoard::run() {
     m_mpp->run();
 }
