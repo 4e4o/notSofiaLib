@@ -5,16 +5,21 @@
 
 namespace hisilicon::mpp::venc {
 
-#define BPP 0.12f
+#define DEFAULT_BPP 0.1f
+
+// TODO мб более точный метод высчитывания битрейта для h264 есть
 
 // https://www.sri.com/wp-content/uploads/pdf/3_07_h264_format_bitrate_quality_tradeoff_study.pdf
-static constexpr HI_U32 bitrate(const SIZE_S &size, const HI_U32 &fps,
+static constexpr HI_U32 bitrate(float bpp, const SIZE_S &size,
+                                const HI_U32 &fps,
                                 float scaleFactor) {
-    return (BPP * size.u32Width * size.u32Height * scaleFactor * fps) / 1000;
+    return (bpp * size.u32Width * size.u32Height * scaleFactor * fps) / 1000;
 }
 
 H264AttributesBuilder::H264AttributesBuilder() :
-    m_bitrateType(Channel::BitrateType::VBR) {
+    m_bitrateType(Channel::BitrateType::VBR),
+    m_profile(Profile::HIGH),
+    m_bpp(DEFAULT_BPP) {
 }
 
 VENC_CHN_ATTR_S *H264AttributesBuilder::build(IChannelSource *source) {
@@ -25,7 +30,7 @@ VENC_CHN_ATTR_S *H264AttributesBuilder::build(IChannelSource *source) {
     const HI_U32 fps = source->pal() ? 25 : 30;
     const float scaleFactor = source->pixelFormat() ==
                               PIXEL_FORMAT_YUV_SEMIPLANAR_422 ? 2.0f : 1.5f;
-    const HI_U32 bit_rate = bitrate(picSize, fps, scaleFactor);
+    const HI_U32 bit_rate = bitrate(m_bpp, picSize, fps, scaleFactor);
 
     result->stVeAttr.enType = PT_H264;
 
@@ -39,25 +44,32 @@ VENC_CHN_ATTR_S *H264AttributesBuilder::build(IChannelSource *source) {
     const HI_U32 bufSize = std::ceil(picSize.u32Width * picSize.u32Height * 1.5f);
     stH264Attr.u32BufSize = CEILING_2_POWER(bufSize, 64);
 
-    stH264Attr.u32Profile = 0; /*0: baseline; 1:MP; 2:HP   ? */
-    stH264Attr.bByFrame = HI_TRUE; /*get stream mode is slice mode or frame mode?*/
-    stH264Attr.bField =
-        HI_FALSE; /* surpport frame code only for hi3516, bfield = HI_FALSE */
-    stH264Attr.bMainStream =
-        HI_TRUE; /* surpport main stream only for hi3516, bMainStream = HI_TRUE */
-    stH264Attr.u32Priority = 0; /*channels precedence level. invalidate for hi3516*/
-    stH264Attr.bVIField =
-        HI_FALSE; /*the sign of the VI picture is field or frame. Invalidate for hi3516*/
+    /*0: baseline; 1:MP; 2:HP */
+    stH264Attr.u32Profile = static_cast<HI_U32>(m_profile);
+    /*get stream mode is slice mode or frame mode?*/
+    stH264Attr.bByFrame = HI_TRUE;
+    /* surpport frame code only for hi3516, bfield = HI_FALSE */
+    stH264Attr.bField = HI_FALSE;
+    /* surpport main stream only for hi3516, bMainStream = HI_TRUE */
+    stH264Attr.bMainStream = HI_TRUE;
+    /*channels precedence level. invalidate for hi3516*/
+    stH264Attr.u32Priority = 0;
+    /*the sign of the VI picture is field or frame. Invalidate for hi3516*/
+    stH264Attr.bVIField = HI_FALSE;
 
     if (m_bitrateType == Channel::BitrateType::CBR) {
         VENC_ATTR_H264_CBR_S &stH264Cbr = result->stRcAttr.stAttrH264Cbr;
 
         result->stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
         stH264Cbr.u32Gop = fps;
-        stH264Cbr.u32StatTime = 1; /* stream rate statics time(s) */
-        stH264Cbr.u32ViFrmRate = fps; /* input (vi) frame rate */
-        stH264Cbr.fr32TargetFrmRate = fps; /* target frame rate */
-        stH264Cbr.u32FluctuateLevel = 0; /* average bit rate */
+        /* stream rate statics time(s) */
+        stH264Cbr.u32StatTime = 1;
+        /* input (vi) frame rate */
+        stH264Cbr.u32ViFrmRate = fps;
+        /* target frame rate */
+        stH264Cbr.fr32TargetFrmRate = fps;
+        /* average bit rate */
+        stH264Cbr.u32FluctuateLevel = 0;
 
         // page 652
         // Average bit rate, in kbit/s
@@ -80,16 +92,24 @@ VENC_CHN_ATTR_S *H264AttributesBuilder::build(IChannelSource *source) {
         stH264Vbr.fr32TargetFrmRate = fps;
         stH264Vbr.u32MinQp = 10;
         stH264Vbr.u32MaxQp = 40;
-        stH264Vbr.u32MaxBitRate = 2 * bit_rate;
+        stH264Vbr.u32MaxBitRate = bit_rate;
     } else
         throw std::runtime_error("Unknown bitrate type");
 
     return result.release();
 }
 
+void H264AttributesBuilder::setBpp(float bpp) {
+    m_bpp = bpp;
+}
+
 void H264AttributesBuilder::setBitrateType(const Channel::BitrateType
         &bitrateType) {
     m_bitrateType = bitrateType;
+}
+
+void H264AttributesBuilder::setProfile(const Profile &profile) {
+    m_profile = profile;
 }
 
 H264AttributesBuilder::~H264AttributesBuilder() {

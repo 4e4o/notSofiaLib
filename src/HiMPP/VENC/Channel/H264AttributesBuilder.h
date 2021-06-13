@@ -11,12 +11,22 @@ class H264AttributesBuilder : public IAttributesBuilder {
     H264AttributesBuilder();
     ~H264AttributesBuilder();
 
-    VENC_CHN_ATTR_S *build(IChannelSource *) override final;
+    enum class Profile : HI_U32 {
+        BASELINE = 0,
+        MAIN,
+        HIGH
+    };
 
     void setBitrateType(const Channel::BitrateType &bitrateType);
+    void setProfile(const Profile &profile);
+    void setBpp(float bpp);
+
+    VENC_CHN_ATTR_S *build(IChannelSource *) override final;
 
   private:
     Channel::BitrateType m_bitrateType;
+    Profile m_profile;
+    float m_bpp;
 };
 
 }
