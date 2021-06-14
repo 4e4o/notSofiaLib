@@ -1,27 +1,17 @@
 #include "Subsystem.h"
 #include "Group.h"
 #include "HiMPP/VB/VBPool.h"
-#include "Channel/StreamLoop.h"
-#include "Misc/Utils.h"
-
-#define DEFAULT_STREAM_LOOPS_COUNT 1
 
 namespace hisilicon::mpp::venc {
 
 Subsystem::Subsystem(MPP *p)
     : ASubsystem(p),
       m_poolMode(PoolAllocationMode::PRIVATE_VB_POOL),
-      m_pool(nullptr),
-      m_streamLoopsCount(DEFAULT_STREAM_LOOPS_COUNT),
-      m_channelLoopIndex(0) {
+      m_pool(nullptr) {
     registerDefaultTypes();
 }
 
 Subsystem::~Subsystem() {
-    stop();
-    joinStreamThreads();
-    Utils::clearPtrContainer(m_threads);
-    Utils::clearPtrContainer(m_streamLoops);
 }
 
 void Subsystem::registerDefaultTypes() {
@@ -47,7 +37,6 @@ VBPool *Subsystem::pool() const {
 
 bool Subsystem::configureImpl() {
     createUserPool();
-    createStreamLoops();
     return ConfiguratorBinder::configureImpl();
 }
 
@@ -69,53 +58,6 @@ bool Subsystem::needUserPool() {
     }
 
     return false;
-}
-
-// Назначает лупы каналам по порядку
-StreamLoop *Subsystem::getLoopForChannel() {
-    if (m_streamLoops.empty())
-        throw std::runtime_error("No stream loops");
-
-    if (m_channelLoopIndex >= (int) m_streamLoops.size())
-        m_channelLoopIndex = 0;
-
-    return m_streamLoops[m_channelLoopIndex++];
-}
-
-void Subsystem::createStreamLoops() {
-    for (int i = 0 ; i < m_streamLoopsCount ; i++)
-        m_streamLoops.push_back(new StreamLoop());
-}
-
-void Subsystem::stop() {
-    for (int i = 0 ; i < (int) m_streamLoops.size() ; i++)
-        m_streamLoops[i]->stop();
-}
-
-void Subsystem::run() {
-    if (m_streamLoops.empty())
-        throw std::runtime_error("No stream loops to run");
-
-    // создаём потоки для лупов > 0
-    for (int i = 1 ; i < (int) m_streamLoops.size() ; i++) {
-        m_threads.push_back(new std::thread([this, i] () {
-            m_streamLoops[i]->run();
-        }));
-    }
-
-    // первый луп будет в текущем потоке бегать
-    m_streamLoops[0]->run();
-
-    joinStreamThreads();
-}
-
-void Subsystem::joinStreamThreads() {
-    for (int i = 0 ; i < (int) m_threads.size() ; i++)
-        m_threads[i]->join();
-}
-
-void Subsystem::setStreamLoopsCount(int streamLoopsCount) {
-    m_streamLoopsCount = streamLoopsCount;
 }
 
 void Subsystem::setPoolAllocationMode(PoolAllocationMode m) {

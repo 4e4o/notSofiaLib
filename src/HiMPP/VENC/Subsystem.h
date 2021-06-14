@@ -1,8 +1,6 @@
 #ifndef MPP_VENC_SUBSYSTEM_H
 #define MPP_VENC_SUBSYSTEM_H
 
-#include <thread>
-
 #include "HiMPP/ASubsystem/ASubsystem.h"
 #include "HiMPP/VPSS/Binder/ConfiguratorBinder.h"
 
@@ -13,7 +11,6 @@ class VBPool;
 namespace hisilicon::mpp::venc {
 
 class Group;
-class StreamLoop;
 
 class Subsystem : public ASubsystem<vpss::ConfiguratorBinder, Group> {
   public:
@@ -34,12 +31,6 @@ class Subsystem : public ASubsystem<vpss::ConfiguratorBinder, Group> {
 
     VBPool *pool() const;
 
-    void setStreamLoopsCount(int streamLoopsCount);
-    StreamLoop *getLoopForChannel();
-
-    void run();
-    void stop();
-
   protected:
     bool configureImpl() override;
     void registerDefaultTypes();
@@ -47,15 +38,9 @@ class Subsystem : public ASubsystem<vpss::ConfiguratorBinder, Group> {
   private:
     void createUserPool();
     bool needUserPool();
-    void createStreamLoops();
-    void joinStreamThreads();
 
     PoolAllocationMode m_poolMode;
     VBPool *m_pool;
-    std::vector<StreamLoop *> m_streamLoops;
-    int m_streamLoopsCount;
-    std::vector<std::thread *> m_threads;
-    int m_channelLoopIndex;
 };
 
 }

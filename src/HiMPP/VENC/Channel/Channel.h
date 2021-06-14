@@ -17,7 +17,6 @@ class IAttributesBuilder;
 class IGroupSource;
 class StreamReader;
 class IStreamOut;
-class StreamLoop;
 
 class Channel : public IdHolder, public Holder<Group *>,
     public Configurable, public IVBufferizable {

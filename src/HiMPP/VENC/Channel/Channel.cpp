@@ -6,7 +6,6 @@
 #include "HiMPP/Misc/Utils.h"
 #include "H264AttributesBuilder.h"
 #include "HiMPP/VB/VBPool.h"
-#include "StreamLoop.h"
 #include "IStreamOut.h"
 #include "StreamReader.h"
 
@@ -108,8 +107,8 @@ bool Channel::configureImpl() {
     if (HI_MPI_VENC_StartRecvPic(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_StartRecvPic failed");
 
-    StreamLoop *sl = group()->subsystem()->getLoopForChannel();
-    m_streamReader->attach(sl);
+    ReadLoop *l = group()->subsystem()->parent()->assignLoop();
+    m_streamReader->attach(l);
 
     return true;
 }

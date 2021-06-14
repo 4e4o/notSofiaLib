@@ -5,6 +5,7 @@
 
 #include "Misc/Configurator/Configurator.h"
 #include "Misc/Configurator/ConfigurableFactory.h"
+#include "ASubsystem/ReadLoop/LoopManager.h"
 
 namespace hisilicon::mpp {
 
@@ -23,7 +24,8 @@ class Subsystem;
 class Sys;
 class VideoBuffer;
 
-class MPP : public Configurator, public ConfigurableFactory {
+class MPP : public Configurator, public ConfigurableFactory,
+    public LoopManager {
   public:
     MPP();
 
@@ -38,9 +40,6 @@ class MPP : public Configurator, public ConfigurableFactory {
 
     int veduCount() const;
     void setVeduCount(int veduCount);
-
-    void run();
-    void stop();
 
   protected:
     bool configureImpl() override;

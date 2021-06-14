@@ -1,7 +1,8 @@
 #include "StreamReader.h"
-#include "StreamBuffer.h"
-#include "StreamLoop.h"
+#include "HiMPP/ASubsystem/ReadLoop/ReadLoop.h"
+#include "HiMPP/ASubsystem/ReadLoop/DataBuffer.h"
 #include "Channel.h"
+#include "StreamBuffer.h"
 
 #include <mpi_venc.h>
 
@@ -15,25 +16,27 @@ StreamReader::StreamReader(Channel *c)
 StreamReader::~StreamReader() {
 }
 
-void StreamReader::attach(StreamLoop *loop) {
+void StreamReader::attach(ReadLoop *loop) {
     const HI_S32 fd = HI_MPI_VENC_GetFd(m_channel->id());
 
     if (fd < 0)
         throw std::runtime_error("HI_MPI_VENC_GetFd failed");
 
-    loop->addFd(fd, [this] (StreamBuffer * buffer) {
-        read(buffer);
+    m_buffer.reset(new StreamBuffer(loop->buffer()));
+
+    loop->addFd(fd, [this] () {
+        read();
     });
 }
 
-void StreamReader::read(StreamBuffer *buffer) {
+void StreamReader::read() {
     VENC_CHN_STAT_S stStat{};
     VENC_STREAM_S stStream;
 
     if (HI_MPI_VENC_Query(m_channel->id(), &stStat) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_Query failed");
 
-    stStream.pstPack = buffer->getPackBuffer(stStat.u32CurPacks);
+    stStream.pstPack = m_buffer->getPackBuffer(stStat.u32CurPacks);
     stStream.u32PackCount = stStat.u32CurPacks;
 
     if (stStream.pstPack == nullptr)
@@ -55,7 +58,7 @@ void StreamReader::read(StreamBuffer *buffer) {
             if (m_consecutiveMode)
                 data = stStream.pstPack[i].pu8Addr[0];
             else
-                data = buffer->getConsecutiveStreamBuffer(i);
+                data = m_buffer->getConsecutiveStreamBuffer(stStream.pstPack[i]);
 
             m_event(data, stStream.pstPack[i].u32Len[0] + stStream.pstPack[i].u32Len[1]);
         } else {

@@ -34,19 +34,13 @@ bool MPP::configureImpl() {
         // page 512
         throw std::runtime_error("You must set veduCount for your hi chip");
 
+    createLoops();
+
     // Здесь порядок важен
     addSubsystem<Sys, false>(m_sys);
     addSubsystem<VideoBuffer, false>(m_vb);
 
     return Configurator::configureImpl();
-}
-
-void MPP::run() {
-    m_venc->run();
-}
-
-void MPP::stop() {
-    m_venc->stop();
 }
 
 vi::Subsystem *MPP::addViSubsystem() {

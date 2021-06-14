@@ -1,21 +1,21 @@
-#ifndef STREAM_LOOP_H
-#define STREAM_LOOP_H
+#ifndef READ_SELECT_LOOP_H
+#define READ_SELECT_LOOP_H
 
 #include <atomic>
 #include <functional>
 #include <vector>
 #include <memory>
 
-namespace hisilicon::mpp::venc {
+namespace hisilicon::mpp {
 
-class StreamBuffer;
+class DataBuffer;
 
-class StreamLoop {
+class ReadLoop {
   public:
-    typedef std::function<void(StreamBuffer *)> Event;
+    typedef std::function<void()> Event;
 
-    StreamLoop();
-    ~StreamLoop();
+    ReadLoop();
+    ~ReadLoop();
 
     template<class Callable>
     void addFd(int fd, Callable &&c) {
@@ -29,8 +29,9 @@ class StreamLoop {
     void setTimeoutSec(int);
 
     void run();
-
     void stop();
+
+    DataBuffer *buffer() const;
 
   private:
     int maxFd() const;
@@ -42,10 +43,10 @@ class StreamLoop {
     std::vector<int> m_fds;
     std::vector<Event> m_events;
     int m_timeoutSec;
-    std::unique_ptr<StreamBuffer> m_buffer;
+    std::unique_ptr<DataBuffer> m_buffer;
 };
 
 }
 
-#endif // STREAM_LOOP_H
+#endif // READ_SELECT_LOOP_H
 
