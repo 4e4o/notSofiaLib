@@ -1,5 +1,5 @@
-#ifndef MPP_GROUP_SOURCE_H
-#define MPP_GROUP_SOURCE_H
+#ifndef MPP_VENC_GROUP_SOURCE_H
+#define MPP_VENC_GROUP_SOURCE_H
 
 #include <hi_comm_venc.h>
 
@@ -17,4 +17,4 @@ class IGroupSource {
 
 }
 
-#endif // MPP_GROUP_SOURCE_H
+#endif // MPP_VENC_GROUP_SOURCE_H
