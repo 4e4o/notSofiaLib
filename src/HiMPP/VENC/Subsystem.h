@@ -37,8 +37,6 @@ class Subsystem : public ASubsystem<vpss::ConfiguratorBinder, Group> {
     void setStreamLoopsCount(int streamLoopsCount);
     StreamLoop *getLoopForChannel();
 
-    void addSourceFromVpss1by1();
-
     void run();
     void stop();
 

@@ -1,15 +1,7 @@
 #include "Subsystem.h"
-#include "HiMPP/MPP.h"
 #include "Group.h"
-#include "Channel/Channel.h"
-#include "Channel/H264AttributesBuilder.h"
-#include "HiMPP/VPSS/Subsystem.h"
-#include "HiMPP/VPSS/Group.h"
-#include "HiMPP/VPSS/Channel.h"
 #include "HiMPP/VB/VBPool.h"
 #include "Channel/StreamLoop.h"
-#include "Channel/StreamFileOut.h"
-#include "Channel/StreamDummyOut.h"
 #include "Misc/Utils.h"
 
 #define DEFAULT_STREAM_LOOPS_COUNT 1
@@ -77,25 +69,6 @@ bool Subsystem::needUserPool() {
     }
 
     return false;
-}
-
-// Добавляет venc группу на каждую группу vpss.
-// в каждой группе по одному каналу.
-// Должен быть вызван когда группы и каналы vpss уже добавлены.
-void Subsystem::addSourceFromVpss1by1() {
-    int id = 0;
-
-    for (auto &vpss_group : parent()->vpss()->groups()) {
-        Group *venc_group = addGroup(id);
-        bind(vpss_group, venc_group);
-
-        Channel *channel = venc_group->addChannel(id++);
-        H264AttributesBuilder *ab = new H264AttributesBuilder();
-        channel->setAttributesBuilder(ab);
-        channel->setStreamOut(new StreamFileOut(channel));
-        //        channel->setStreamOut(new StreamDummyOut());
-
-    }
 }
 
 // Назначает лупы каналам по порядку

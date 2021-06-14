@@ -16,8 +16,6 @@ class Subsystem : public ASubsystem<ConfiguratorBinder, Group> {
 
     const std::vector<Group *> &groups() const;
 
-    void addSourceFromVi1by1();
-
   private:
     void registerDefaultTypes();
 };
