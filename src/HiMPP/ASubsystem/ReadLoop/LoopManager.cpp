@@ -57,8 +57,8 @@ void LoopManager::run() {
 }
 
 void LoopManager::join() {
-    for (int i = 0 ; i < (int) m_threads.size() ; i++)
-        m_threads[i]->join();
+    for (auto &thread : m_threads)
+        thread->join();
 }
 
 void LoopManager::setLoopsCount(int loopsCount) {
