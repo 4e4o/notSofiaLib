@@ -81,7 +81,13 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
         for (auto &device : p->vi()->devices()) {
             for (auto &channel : device->channels()) {
                 Group *group = s->addGroup(groupId++);
-                group->addChannel(0);
+                // id vpss каналов фиксированы и зависят от хики чипа
+                // определённый канал с id обладает определёнными свойствами и функциями
+                // мы тут юзаем Hi3520d 0 (VPSS_BSTR_CHN) vpss канал
+                // он юзается для "Large stream encoding"
+                // HiMPP Media Processing Software Development Reference.pdf
+                // page 422
+                group->addChannel(VPSS_BSTR_CHN);
                 s->bind(channel, group);
             }
         }
