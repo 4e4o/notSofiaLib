@@ -5,12 +5,11 @@
 
 namespace hisilicon::mpp::vpss {
 
-class BindSource;
-class BindReceiver;
+class BindItem;
 
 class ConfiguratorBinder : public Configurator {
   public:
-    void bind(vpss::BindSource *, vpss::BindReceiver *);
+    void bind(BindItem *, BindItem *);
 };
 
 }

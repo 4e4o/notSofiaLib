@@ -40,7 +40,7 @@ void Device::initMode() {
     case Subsystem::HI3520DV200_MODE::MODE_4CH_72OP: {
         m_attr = DEV_ATTR_BT656_2MUX;
         set4ch720pMask(id(), &m_attr);
-        setAttr(&m_attr);
+        setAttributes(&m_attr);
         break;
     }
     default:

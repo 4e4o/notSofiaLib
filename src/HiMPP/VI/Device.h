@@ -5,17 +5,16 @@
 
 #include <hi_comm_vi.h>
 
-#include "Misc/IdHolder.h"
 #include "Misc/Configurator/Configurator.h"
+#include "HiMPP/ASubsystem/ASubsystemItem.h"
+#include "Channel.h"
 
 namespace hisilicon::mpp::vi {
 
-class Channel;
 class Subsystem;
 class ChannelInfo;
 
-class Device : public Holder<Subsystem *>, public IdHolder,
-    public Configurator {
+class Device : public ASubsystemItem<Subsystem, Configurator, Channel> {
   public:
     Device(Subsystem *, int id);
     ~Device();
@@ -25,19 +24,13 @@ class Device : public Holder<Subsystem *>, public IdHolder,
 
   protected:
     bool configureImpl() override;
-    void setAttr(VI_DEV_ATTR_S *attr);
-
-    template<class T = Subsystem>
-    T * subsystem() const {
-        return static_cast<T *>(Holder<Subsystem *>::value());
-    }
+    void setAttributes(VI_DEV_ATTR_S *attr);
 
   private:
     virtual int getBindWay(int i, Channel *);
     Channel *addChannel(const ChannelInfo *, int id);
     void bindChannels();
 
-    std::vector<Channel *> m_channels;
     VI_DEV_ATTR_S *m_attr;
 };
 

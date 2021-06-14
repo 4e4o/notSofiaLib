@@ -1,7 +1,7 @@
 #ifndef MPP_VB_POOL_H
 #define MPP_VB_POOL_H
 
-#include <mpi_vb.h>
+#include <hi_comm_vb.h>
 
 #include "VBBase.h"
 

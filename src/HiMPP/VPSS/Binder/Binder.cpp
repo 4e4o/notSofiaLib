@@ -8,23 +8,15 @@
 
 namespace hisilicon::mpp::vpss {
 
-static MPP_CHN_S *createBindSource(BindSource *source) {
+static MPP_CHN_S *createBindItem(BindItem *item, bool source) {
     MPP_CHN_S *param = new MPP_CHN_S();
-    param->enModId = source->sourceBindMode();
-    param->s32DevId = source->sourceBindDeviceId();
-    param->s32ChnId = source->sourceBindChannelId();
+    param->enModId = item->bindMode(source);
+    param->s32DevId = item->bindDeviceId(source);
+    param->s32ChnId = item->bindChannelId(source);
     return param;
 }
 
-static MPP_CHN_S *createBindReceiver(BindReceiver *source) {
-    MPP_CHN_S *param = new MPP_CHN_S();
-    param->enModId = source->receiverBindMode();
-    param->s32DevId = source->receiverBindDeviceId();
-    param->s32ChnId = source->receiverBindChannelId();
-    return param;
-}
-
-Binder::Binder(BindSource *in, BindReceiver *out)
+Binder::Binder(BindItem *in, BindItem *out)
     : m_source(in), m_receiver(out) {
 }
 
@@ -33,8 +25,8 @@ Binder::~Binder() {
 }
 
 bool Binder::configureImpl() {
-    m_in.reset(createBindSource(m_source));
-    m_out.reset(createBindReceiver(m_receiver));
+    m_in.reset(createBindItem(m_source, true));
+    m_out.reset(createBindItem(m_receiver, false));
 
     if (HI_MPI_SYS_Bind(m_in.get(), m_out.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_SYS_Bind failed");

@@ -1,16 +1,14 @@
 #ifndef MPP_VPSS_SUBSYSTEM_H
 #define MPP_VPSS_SUBSYSTEM_H
 
-#include <vector>
-
-#include "HiMPP/MPPChild.h"
+#include "HiMPP/ASubsystem/ASubsystem.h"
 #include "Binder/ConfiguratorBinder.h"
 
 namespace hisilicon::mpp::vpss {
 
 class Group;
 
-class Subsystem : public MPPChild, public ConfiguratorBinder {
+class Subsystem : public ASubsystem<ConfiguratorBinder, Group> {
   public:
     Subsystem(MPP *);
 
@@ -20,11 +18,8 @@ class Subsystem : public MPPChild, public ConfiguratorBinder {
 
     void addSourceFromVi1by1();
 
-  protected:
-    void registerDefaultTypes();
-
   private:
-    std::vector<Group *> m_groups;
+    void registerDefaultTypes();
 };
 
 }

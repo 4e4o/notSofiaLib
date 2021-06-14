@@ -35,7 +35,7 @@ bool Sys::configureImpl() {
 }
 
 void Sys::setSysWidthAlign(HI_U32 sa) {
-    // resrictions:
+    // restrictions:
     // HiMPP Media Processing Software Development Reference.pdf
     // page 90
     if ((sa < 1) || (sa > 1024))

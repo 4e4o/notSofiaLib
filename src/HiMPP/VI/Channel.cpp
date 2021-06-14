@@ -1,7 +1,7 @@
 #include "Channel.h"
 #include "Device.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
-#include "HiMPP/Utils.h"
+#include "HiMPP/Misc/Utils.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -14,10 +14,7 @@ namespace hisilicon::mpp::vi {
 static VI_CHN_ATTR_S *createStandardAttr() {
     VI_CHN_ATTR_S *attr = new VI_CHN_ATTR_S{};
 
-    attr->bMirror = HI_FALSE;
-    attr->bFlip = HI_FALSE;
     attr->enCapSel = VI_CAPSEL_BOTH;
-    attr->bChromaResample = HI_FALSE;
     attr->s32SrcFrameRate = -1;
     attr->s32FrameRate = -1;
 
@@ -26,6 +23,7 @@ static VI_CHN_ATTR_S *createStandardAttr() {
 
 Channel::Channel(Device *d, const ChannelInfo *info, int id)
     : IdHolder(id), Holder<Device*>(d),
+      ViBindItem(d, this),
       m_info(info),
       m_attr(createStandardAttr()) {
 }
@@ -56,14 +54,6 @@ bool Channel::configureImpl() {
         throw std::runtime_error("HI_MPI_VI_EnableChn failed");
 
     return true;
-}
-
-HI_S32 Channel::sourceBindDeviceId() {
-    return device()->id();
-}
-
-HI_S32 Channel::sourceBindChannelId() {
-    return id();
 }
 
 SIZE_S *Channel::createDestSize() const {

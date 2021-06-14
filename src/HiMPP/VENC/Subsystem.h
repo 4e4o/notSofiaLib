@@ -1,12 +1,10 @@
 #ifndef MPP_VENC_SUBSYSTEM_H
 #define MPP_VENC_SUBSYSTEM_H
 
-#include <vector>
 #include <thread>
 
-#include "HiMPP/MPPChild.h"
+#include "HiMPP/ASubsystem/ASubsystem.h"
 #include "HiMPP/VPSS/Binder/ConfiguratorBinder.h"
-
 
 namespace hisilicon::mpp {
 class VBPool;
@@ -17,7 +15,7 @@ namespace hisilicon::mpp::venc {
 class Group;
 class StreamLoop;
 
-class Subsystem : public MPPChild, public vpss::ConfiguratorBinder {
+class Subsystem : public ASubsystem<vpss::ConfiguratorBinder, Group> {
   public:
     Subsystem(MPP *);
     ~Subsystem();
@@ -54,7 +52,6 @@ class Subsystem : public MPPChild, public vpss::ConfiguratorBinder {
     void createStreamLoops();
     void joinStreamThreads();
 
-    std::vector<Group *> m_groups;
     PoolAllocationMode m_poolMode;
     VBPool *m_pool;
     std::vector<StreamLoop *> m_streamLoops;

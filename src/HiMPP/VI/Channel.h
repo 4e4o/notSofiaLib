@@ -19,7 +19,7 @@ class Device;
 class ChannelInfo;
 
 class Channel : public IdHolder, public Holder<Device *>,
-    public Configurable, public vpss::ViBindSource,
+    public Configurable, public vpss::ViBindItem,
     public vpss::IGroupSource, public IVBufferizable {
   public:
     Channel(Device *, const ChannelInfo *, int id);
@@ -38,8 +38,6 @@ class Channel : public IdHolder, public Holder<Device *>,
   private:
     virtual SIZE_S *createDestSize() const;
     bool configureImpl() override final;
-    HI_S32 sourceBindDeviceId() override final;
-    HI_S32 sourceBindChannelId() override final;
     SIZE_S vbImageSize() override final;
     PIXEL_FORMAT_E vbPixelFormat() override final;
 

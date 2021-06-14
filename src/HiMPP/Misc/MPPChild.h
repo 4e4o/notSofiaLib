@@ -2,7 +2,7 @@
 #define MPP_CHILD_H
 
 #include "Misc/Child.h"
-#include "MPP.h"
+#include "HiMPP/MPP.h"
 
 namespace hisilicon::mpp {
 using MPPChild = Child<MPP>;

@@ -1,7 +1,7 @@
 #ifndef MPP_VBUFFERIZABLE_H
 #define MPP_VBUFFERIZABLE_H
 
-#include <mpi_vb.h>
+#include <hi_common.h>
 
 namespace hisilicon::mpp {
 

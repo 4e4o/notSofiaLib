@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include <mpi_vb.h>
+
 namespace hisilicon::mpp {
 
 VBPool::VBPool(MPP *p)

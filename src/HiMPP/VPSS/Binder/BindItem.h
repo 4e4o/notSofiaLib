@@ -3,56 +3,62 @@
 
 #include <hi_common.h>
 
+#include "Misc/IdHolder.h"
+
 namespace hisilicon::mpp::vpss {
 
-class BindSource {
+class BindItem {
   public:
-    virtual ~BindSource() { }
+    virtual ~BindItem() { }
 
-    virtual MOD_ID_E sourceBindMode() = 0;
-    virtual HI_S32 sourceBindDeviceId() = 0;
-    virtual HI_S32 sourceBindChannelId() = 0;
+    virtual MOD_ID_E bindMode(bool source) = 0;
+
+    virtual HI_S32 bindDeviceId(bool) {
+        return m_devIdHolder->id();
+    }
+
+    virtual HI_S32 bindChannelId(bool) {
+        if (m_chnIdHolder == nullptr)
+            return 0;
+
+        return m_chnIdHolder->id();
+    }
 
   protected:
-    BindSource() { }
-};
+    BindItem(IdHolder *dev, IdHolder *chn = nullptr)
+        : m_devIdHolder(dev), m_chnIdHolder(chn) {}
 
-class BindReceiver {
-  public:
-    virtual ~BindReceiver() { }
-
-    virtual MOD_ID_E receiverBindMode() = 0;
-    virtual HI_S32 receiverBindDeviceId() = 0;
-    virtual HI_S32 receiverBindChannelId() = 0;
-
-  protected:
-    BindReceiver() { }
-};
-
-class ViBindSource : public BindSource {
   private:
-    MOD_ID_E sourceBindMode() override final {
+    IdHolder *m_devIdHolder;
+    IdHolder *m_chnIdHolder;
+};
+
+class ViBindItem : public BindItem {
+  protected:
+    using BindItem::BindItem;
+
+  private:
+    MOD_ID_E bindMode(bool) override final {
         return HI_ID_VIU;
     }
 };
 
-class VpssBindReceiver : public BindReceiver {
+class VpssBindItem : public BindItem {
+  protected:
+    using BindItem::BindItem;
+
   private:
-    MOD_ID_E receiverBindMode() override final {
+    MOD_ID_E bindMode(bool) override final {
         return HI_ID_VPSS;
     }
 };
 
-class VpssBindSource : public BindSource {
-  private:
-    MOD_ID_E sourceBindMode() override final {
-        return HI_ID_VPSS;
-    }
-};
+class GroupBindItem : public BindItem {
+  protected:
+    using BindItem::BindItem;
 
-class GroupBindReceiver : public BindReceiver {
   private:
-    MOD_ID_E receiverBindMode() override final {
+    MOD_ID_E bindMode(bool) override final {
         return HI_ID_GROUP;
     }
 };

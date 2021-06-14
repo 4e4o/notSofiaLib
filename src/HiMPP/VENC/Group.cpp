@@ -1,8 +1,5 @@
 #include "Group.h"
-#include "Channel/Channel.h"
-#include "HiMPP/MPP.h"
 #include "Subsystem.h"
-#include "HiMPP/VI/Channel.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -11,36 +8,26 @@
 
 namespace hisilicon::mpp::venc {
 
-Group::Group(Subsystem *p, int id)
-    : Holder<Subsystem*>(p), IdHolder(id) {
+Group::Group(Subsystem *s, int id)
+    : ASubsystemItem(s, id),
+      GroupBindItem(this) {
 }
 
 Group::~Group() {
-    // Сначала каналы удаляем
-    Configurator::clear();
+    // Сначала удаляем каналы
+    ASubsystemItem::clear();
 
     // потом удаляем группу
     HI_MPI_VENC_DestroyGroup(id());
     std::cout << "~venc::Group " << this << " , " << id() << std::endl;
 }
 
-Subsystem *Group::subsystem() const {
-    return Holder<Subsystem *>::value();
-}
-
-HI_S32 Group::receiverBindDeviceId() {
-    return id();
-}
-
-HI_S32 Group::receiverBindChannelId() {
-    return 0;
-}
-
 Channel *Group::addChannel(int id) {
-    Channel *ch = subsystem()->parent()->create<Channel>(this, id);
-    addItemBack(ch);
-    m_channels.push_back(ch);
-    return ch;
+    return addSubItem(this, id);
+}
+
+const std::vector<Channel *> &Group::channels() const {
+    return subItems();
 }
 
 bool Group::configureImpl() {
@@ -50,10 +37,6 @@ bool Group::configureImpl() {
 
     // стартуем каналы
     return Configurator::configureImpl();
-}
-
-const std::vector<Channel *> &Group::channels() const {
-    return m_channels;
 }
 
 }

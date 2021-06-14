@@ -6,20 +6,19 @@
 
 #include <hi_comm_vpss.h>
 
-#include "Misc/IdHolder.h"
+#include "HiMPP/ASubsystem/ASubsystemItem.h"
 #include "Misc/Configurator/Configurator.h"
 #include "HiMPP/VENC/Channel/IChannelSource.h"
 #include "Binder/BindItem.h"
+#include "Channel.h"
 
 namespace hisilicon::mpp::vpss {
 
-class Channel;
 class Subsystem;
 class IGroupSource;
 
-class Group : public Holder<Subsystem *>, public IdHolder,
-    public Configurator, public VpssBindReceiver,
-    public vpss::VpssBindSource, public venc::IChannelSource  {
+class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
+    public VpssBindItem, public venc::IChannelSource  {
   public:
     Group(Subsystem *, int id);
     ~Group();
@@ -32,23 +31,15 @@ class Group : public Holder<Subsystem *>, public IdHolder,
     Channel *addChannel(int id);
     const std::vector<Channel *> &channels() const;
 
-    Subsystem *subsystem() const;
-
   protected:
     bool configureImpl() override final;
 
   private:
-    HI_S32 receiverBindDeviceId() override final;
-    HI_S32 receiverBindChannelId() override final;
-    HI_S32 sourceBindDeviceId() override final;
-    HI_S32 sourceBindChannelId() override final;
-
     // venc::IChannelSource
     SIZE_S imgSize() const override final;
     bool pal() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
-    std::vector<Channel *> m_channels;
     std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;
     std::unique_ptr<VPSS_GRP_PARAM_S> m_params;
     IGroupSource *m_source;

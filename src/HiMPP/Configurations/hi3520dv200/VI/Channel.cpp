@@ -2,7 +2,7 @@
 
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "HiMPP/VI/Device.h"
-#include "HiMPP/Utils.h"
+#include "HiMPP/Misc/Utils.h"
 
 namespace hisilicon::mpp::vi::hi3520dv200 {
 

@@ -2,7 +2,7 @@
 #include "HiMPP/VENC/Group.h"
 #include "HiMPP/VENC/Subsystem.h"
 #include "IAttributesBuilder.h"
-#include "HiMPP/Utils.h"
+#include "HiMPP/Misc/Utils.h"
 #include "H264AttributesBuilder.h"
 #include "IChannelSource.h"
 #include "HiMPP/VB/VBPool.h"

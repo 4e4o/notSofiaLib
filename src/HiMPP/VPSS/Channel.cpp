@@ -1,6 +1,6 @@
 #include "Channel.h"
 #include "Group.h"
-#include "HiMPP/Utils.h"
+#include "HiMPP/Misc/Utils.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -11,20 +11,7 @@
 namespace hisilicon::mpp::vpss {
 
 static VPSS_CHN_ATTR_S *createStandardAttr() {
-    VPSS_CHN_ATTR_S *attr = new VPSS_CHN_ATTR_S{};
-
-    attr->bSpEn = HI_FALSE;
-    attr->bFrameEn = HI_FALSE;/*
-    attr->stFrame.u32Color[VPSS_FRAME_WORK_LEFT] = 0xff00;
-    attr->stFrame.u32Color[VPSS_FRAME_WORK_RIGHT] = 0xff00;
-    attr->stFrame.u32Color[VPSS_FRAME_WORK_BOTTOM] = 0xff00;
-    attr->stFrame.u32Color[VPSS_FRAME_WORK_TOP] = 0xff00;
-    attr->stFrame.u32Width[VPSS_FRAME_WORK_LEFT] = 2;
-    attr->stFrame.u32Width[VPSS_FRAME_WORK_RIGHT] = 2;
-    attr->stFrame.u32Width[VPSS_FRAME_WORK_TOP] = 2;
-    attr->stFrame.u32Width[VPSS_FRAME_WORK_BOTTOM] = 2;
-*/
-    return attr;
+    return new VPSS_CHN_ATTR_S{};
 }
 
 Channel::Channel(Group *g, int id)

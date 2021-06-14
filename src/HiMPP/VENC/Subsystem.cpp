@@ -17,7 +17,7 @@
 namespace hisilicon::mpp::venc {
 
 Subsystem::Subsystem(MPP *p)
-    : MPPChild(p),
+    : ASubsystem(p),
       m_poolMode(PoolAllocationMode::PRIVATE_VB_POOL),
       m_pool(nullptr),
       m_streamLoopsCount(DEFAULT_STREAM_LOOPS_COUNT),
@@ -33,12 +33,20 @@ Subsystem::~Subsystem() {
 }
 
 void Subsystem::registerDefaultTypes() {
-    parent()->registerType([](Subsystem * p, int id) -> Group* {
+    factory()->registerType([](Subsystem * p, int id) -> Group* {
         return new Group(p, id);
     }, false);
-    parent()->registerType([](Group * g, int id) -> Channel* {
+    factory()->registerType([](Group * g, int id) -> Channel* {
         return new Channel(g, id);
     }, false);
+}
+
+Group *Subsystem::addGroup(int id) {
+    return addSubItem(this, id);
+}
+
+const std::vector<Group *> &Subsystem::groups() const {
+    return subItems();
 }
 
 VBPool *Subsystem::pool() const {
@@ -61,7 +69,7 @@ void Subsystem::createUserPool() {
 }
 
 bool Subsystem::needUserPool() {
-    for (auto &group : m_groups) {
+    for (auto &group : groups()) {
         for (auto &channel : group->channels()) {
             if (channel->needUserPool())
                 return true;
@@ -102,13 +110,6 @@ StreamLoop *Subsystem::getLoopForChannel() {
     return m_streamLoops[m_channelLoopIndex++];
 }
 
-Group *Subsystem::addGroup(int id) {
-    Group *group = parent()->create<Group>(this, id);
-    addItemBack(group);
-    m_groups.push_back(group);
-    return group;
-}
-
 void Subsystem::createStreamLoops() {
     for (int i = 0 ; i < m_streamLoopsCount ; i++)
         m_streamLoops.push_back(new StreamLoop());
@@ -143,10 +144,6 @@ void Subsystem::joinStreamThreads() {
 
 void Subsystem::setStreamLoopsCount(int streamLoopsCount) {
     m_streamLoopsCount = streamLoopsCount;
-}
-
-const std::vector<Group *> &Subsystem::groups() const {
-    return m_groups;
 }
 
 void Subsystem::setPoolAllocationMode(PoolAllocationMode m) {

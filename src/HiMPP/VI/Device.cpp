@@ -12,22 +12,23 @@
 namespace hisilicon::mpp::vi {
 
 Device::Device(Subsystem *p, int id)
-    : Holder<Subsystem*>(p), IdHolder(id),
+    : ASubsystemItem(p, id),
       m_attr(nullptr) {
 }
 
 Device::~Device() {
     // delete channels first
-    Configurator::clear();
+    ASubsystemItem::clear();
     HI_MPI_VI_DisableDev(id());
     std::cout << "~vi::Device " << this << " , " << id() << std::endl;
 }
 
 Channel *Device::addChannel(const ChannelInfo *i, int id) {
-    Channel *ch = subsystem()->parent()->create<Channel>(this, i, id);
-    addItemBack(ch);
-    m_channels.push_back(ch);
-    return ch;
+    return addSubItem(this, i, id);
+}
+
+const std::vector<Channel *> &Device::channels() const {
+    return subItems();
 }
 
 bool Device::configureImpl() {
@@ -42,10 +43,6 @@ bool Device::configureImpl() {
 
     bindChannels();
     return Configurator::configureImpl();
-}
-
-const std::vector<Channel *> &Device::channels() const {
-    return m_channels;
 }
 
 Channel *Device::addChannel(int id, int infoDevId, int infoChId) {
@@ -83,7 +80,7 @@ int Device::getBindWay(int i, Channel *) {
     return i;
 }
 
-void Device::setAttr(VI_DEV_ATTR_S *attr) {
+void Device::setAttributes(VI_DEV_ATTR_S *attr) {
     m_attr = attr;
 }
 

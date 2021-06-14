@@ -9,35 +9,32 @@
 namespace hisilicon::mpp::vi {
 
 Subsystem::Subsystem(MPP *p)
-    : MPPChild(p),
+    : ASubsystem<Configurator, Device>(p),
       m_infoProvider(p->create<InfoProvider>()) {
     registerDefaultTypes();
     addItemBack(m_infoProvider);
 }
 
 void Subsystem::registerDefaultTypes() {
-    parent()->registerType([](Subsystem * p, int id) -> Device* {
+    factory()->registerType([](Subsystem * p, int id) -> Device* {
         return new Device(p, id);
     }, false);
-    parent()->registerType([](Device * d, const ChannelInfo * i,
+    factory()->registerType([](Device * d, const ChannelInfo * i,
     int id) -> Channel* {
         return new Channel(d, i, id);
     }, false);
 }
 
 Device *Subsystem::addDevice(int id) {
-    Device *dev = parent()->create<Device>(this, id);
-    addItemBack(dev);
-    m_devices.push_back(dev);
-    return dev;
+    return addSubItem(this, id);
+}
+
+const std::vector<Device *> &Subsystem::devices() const {
+    return subItems();
 }
 
 vi::InfoProvider *Subsystem::infoProvider() const {
     return m_infoProvider;
-}
-
-const std::vector<Device *> &Subsystem::devices() const {
-    return m_devices;
 }
 
 }

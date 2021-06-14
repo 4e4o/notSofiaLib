@@ -6,34 +6,26 @@
 
 #include <hi_comm_venc.h>
 
-#include "Misc/IdHolder.h"
+#include "HiMPP/ASubsystem/ASubsystemItem.h"
 #include "Misc/Configurator/Configurator.h"
 #include "HiMPP/VPSS/Binder/BindItem.h"
+#include "Channel/Channel.h"
 
 namespace hisilicon::mpp::venc {
 
-class Channel;
 class Subsystem;
 
-class Group : public Holder<Subsystem *>, public IdHolder,
-    public Configurator, public vpss::GroupBindReceiver {
+class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
+    public vpss::GroupBindItem {
   public:
-    Group(Subsystem *, int id);
+    Group(Subsystem *s, int id);
     ~Group();
-
-    Subsystem *subsystem() const;
 
     Channel *addChannel(int id);
     const std::vector<Channel *> &channels() const;
 
   protected:
     bool configureImpl() override final;
-
-  private:
-    HI_S32 receiverBindDeviceId() override final;
-    HI_S32 receiverBindChannelId() override final;
-
-    std::vector<Channel *> m_channels;
 };
 
 }

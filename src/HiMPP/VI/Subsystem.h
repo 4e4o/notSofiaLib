@@ -1,9 +1,7 @@
 #ifndef MPP_VI_SUBSYSTEM_H
 #define MPP_VI_SUBSYSTEM_H
 
-#include <vector>
-
-#include "HiMPP/MPPChild.h"
+#include "HiMPP/ASubsystem/ASubsystem.h"
 #include "Misc/Configurator/Configurator.h"
 
 namespace hisilicon::mpp::vi {
@@ -11,7 +9,7 @@ namespace hisilicon::mpp::vi {
 class Device;
 class InfoProvider;
 
-class Subsystem : public MPPChild, public Configurator {
+class Subsystem : public ASubsystem<Configurator, Device> {
   public:
     Subsystem(MPP *);
 
@@ -24,7 +22,6 @@ class Subsystem : public MPPChild, public Configurator {
     void registerDefaultTypes();
 
   private:
-    std::vector<Device *> m_devices;
     InfoProvider *m_infoProvider;
 };
 
