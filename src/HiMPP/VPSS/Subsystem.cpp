@@ -40,7 +40,6 @@ void Subsystem::addSourceFromVi1by1() {
     for (auto &device : parent()->vi()->devices()) {
         for (auto &channel : device->channels()) {
             Group *group = addGroup(groupId++);
-            group->setSource(channel);
             group->addChannel(0);
             bind(channel, group);
         }

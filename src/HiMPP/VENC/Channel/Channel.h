@@ -14,7 +14,7 @@ namespace hisilicon::mpp::venc {
 
 class Group;
 class IAttributesBuilder;
-class IChannelSource;
+class IGroupSource;
 class StreamReader;
 class IStreamOut;
 class StreamLoop;
@@ -32,7 +32,6 @@ class Channel : public IdHolder, public Holder<Group *>,
     };
 
     void setAttributesBuilder(IAttributesBuilder *);
-    void setSource(IChannelSource *source);
     void setStreamOut(IStreamOut *, bool getOwnership = true);
 
     const Group *group() const;
@@ -52,7 +51,7 @@ class Channel : public IdHolder, public Holder<Group *>,
     std::unique_ptr<StreamReader> m_streamReader;
     std::unique_ptr<IStreamOut> m_streamOut;
     bool m_ownsStreamOut;
-    IChannelSource *m_source;
+    IGroupSource *m_source;
 };
 
 }

@@ -13,7 +13,7 @@ class StreamBuffer {
     ~StreamBuffer();
 
     VENC_PACK_S *getPackBuffer(HI_U32 packsCount);
-    HI_U8 *getConsecutveStreamBuffer(int packIndex);
+    HI_U8 *getConsecutiveStreamBuffer(int packIndex);
 
   private:
     void freePackBuffer();

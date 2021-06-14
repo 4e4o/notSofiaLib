@@ -21,6 +21,7 @@ class Binder : public Configurable {
 
   private:
     bool configureImpl() override final;
+    MPP_CHN_S *createBindItem(BindItem *item, bool source);
 
     BindItem *m_source;
     BindItem *m_receiver;

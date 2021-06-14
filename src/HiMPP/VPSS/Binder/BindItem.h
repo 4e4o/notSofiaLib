@@ -7,9 +7,21 @@
 
 namespace hisilicon::mpp::vpss {
 
+class Binder;
+
 class BindItem {
   public:
     virtual ~BindItem() { }
+
+    template<class Derived = BindItem>
+    Derived * bindedItem() const {
+        return dynamic_cast<Derived *>(m_bindedItem);
+    }
+
+  protected:
+    BindItem(IdHolder *dev, IdHolder *chn = nullptr)
+        : m_devIdHolder(dev), m_chnIdHolder(chn),
+          m_bindedItem(nullptr) {}
 
     virtual MOD_ID_E bindMode(bool source) = 0;
 
@@ -24,13 +36,16 @@ class BindItem {
         return m_chnIdHolder->id();
     }
 
-  protected:
-    BindItem(IdHolder *dev, IdHolder *chn = nullptr)
-        : m_devIdHolder(dev), m_chnIdHolder(chn) {}
+    virtual void setBindedItem(BindItem *bi, bool) {
+        m_bindedItem = bi;
+    }
 
   private:
+    friend class Binder;
+
     IdHolder *m_devIdHolder;
     IdHolder *m_chnIdHolder;
+    BindItem *m_bindedItem;
 };
 
 class ViBindItem : public BindItem {

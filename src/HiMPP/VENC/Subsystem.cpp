@@ -86,16 +86,15 @@ void Subsystem::addSourceFromVpss1by1() {
     int id = 0;
 
     for (auto &vpss_group : parent()->vpss()->groups()) {
-        Group *group = addGroup(id);
+        Group *venc_group = addGroup(id);
+        bind(vpss_group, venc_group);
 
-        Channel *channel = group->addChannel(id++);
-        channel->setSource(vpss_group);
+        Channel *channel = venc_group->addChannel(id++);
         H264AttributesBuilder *ab = new H264AttributesBuilder();
         channel->setAttributesBuilder(ab);
         channel->setStreamOut(new StreamFileOut(channel));
         //        channel->setStreamOut(new StreamDummyOut());
 
-        bind(vpss_group, group);
     }
 }
 

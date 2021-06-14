@@ -8,16 +8,10 @@
 
 namespace hisilicon::mpp::vpss {
 
-static MPP_CHN_S *createBindItem(BindItem *item, bool source) {
-    MPP_CHN_S *param = new MPP_CHN_S();
-    param->enModId = item->bindMode(source);
-    param->s32DevId = item->bindDeviceId(source);
-    param->s32ChnId = item->bindChannelId(source);
-    return param;
-}
-
 Binder::Binder(BindItem *in, BindItem *out)
     : m_source(in), m_receiver(out) {
+    in->setBindedItem(out, false);
+    out->setBindedItem(in, true);
 }
 
 Binder::~Binder() {
@@ -32,6 +26,14 @@ bool Binder::configureImpl() {
         throw std::runtime_error("HI_MPI_SYS_Bind failed");
 
     return true;
+}
+
+MPP_CHN_S *Binder::createBindItem(BindItem *item, bool source) {
+    MPP_CHN_S *param = new MPP_CHN_S();
+    param->enModId = item->bindMode(source);
+    param->s32DevId = item->bindDeviceId(source);
+    param->s32ChnId = item->bindChannelId(source);
+    return param;
 }
 
 }

@@ -21,7 +21,7 @@ class H264AttributesBuilder : public IAttributesBuilder {
     void setProfile(const Profile &profile);
     void setBpp(float bpp);
 
-    VENC_CHN_ATTR_S *build(IChannelSource *) override final;
+    VENC_CHN_ATTR_S *build(IGroupSource *) override final;
 
   private:
     Channel::BitrateType m_bitrateType;

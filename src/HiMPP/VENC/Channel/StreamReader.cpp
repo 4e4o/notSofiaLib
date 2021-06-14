@@ -55,7 +55,7 @@ void StreamReader::read(StreamBuffer *buffer) {
             if (m_consecutiveMode)
                 data = stStream.pstPack[i].pu8Addr[0];
             else
-                data = buffer->getConsecutveStreamBuffer(i);
+                data = buffer->getConsecutiveStreamBuffer(i);
 
             m_event(data, stStream.pstPack[i].u32Len[0] + stStream.pstPack[i].u32Len[1]);
         } else {

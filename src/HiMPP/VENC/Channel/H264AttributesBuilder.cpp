@@ -1,5 +1,5 @@
 #include "H264AttributesBuilder.h"
-#include "IChannelSource.h"
+#include "HiMPP/VENC/IGroupSource.h"
 
 #include <cmath>
 
@@ -22,7 +22,7 @@ H264AttributesBuilder::H264AttributesBuilder() :
     m_bpp(DEFAULT_BPP) {
 }
 
-VENC_CHN_ATTR_S *H264AttributesBuilder::build(IChannelSource *source) {
+VENC_CHN_ATTR_S *H264AttributesBuilder::build(IGroupSource *source) {
     std::unique_ptr<VENC_CHN_ATTR_S> result(new VENC_CHN_ATTR_S());
     VENC_ATTR_H264_S &stH264Attr = result->stVeAttr.stAttrH264e;
 

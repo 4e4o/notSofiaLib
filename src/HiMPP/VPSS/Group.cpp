@@ -49,6 +49,11 @@ bool Group::configureImpl() {
     if (m_attrs.get() == nullptr)
         throw std::runtime_error("vi::Group attributes not set");
 
+    const SIZE_S size = m_source->destSize();
+    m_attrs->enPixFmt = m_source->pixelFormat();
+    m_attrs->u32MaxW = size.u32Width;
+    m_attrs->u32MaxH = size.u32Height;
+
     // создаём группу
     if (HI_MPI_VPSS_CreateGrp(id(), m_attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_CreateGrp failed");
@@ -74,13 +79,15 @@ void Group::setAttributes(VPSS_GRP_ATTR_S *attr) {
     m_attrs.reset(attr);
 }
 
-void Group::setSource(IGroupSource *s) {
-    m_source = s;
+void Group::setBindedItem(BindItem *bi, bool source) {
+    BindItem::setBindedItem(bi, source);
 
-    const SIZE_S size = s->destSize();
-    m_attrs->enPixFmt = s->pixelFormat();
-    m_attrs->u32MaxW = size.u32Width;
-    m_attrs->u32MaxH = size.u32Height;
+    if (source) {
+        m_source = bindedItem<vpss::IGroupSource>();
+
+        if (m_source == nullptr)
+            throw std::runtime_error("BindItem must realize IGroupSource");
+    }
 }
 
 SIZE_S Group::imgSize() const {

@@ -23,7 +23,7 @@ VENC_PACK_S *StreamBuffer::getPackBuffer(HI_U32 packsCount) {
     return m_packBuffer.data();
 }
 
-HI_U8 *StreamBuffer::getConsecutveStreamBuffer(int packIndex) {
+HI_U8 *StreamBuffer::getConsecutiveStreamBuffer(int packIndex) {
     VENC_PACK_S &pack = m_packBuffer[packIndex];
     const HI_U32 totalLength = pack.u32Len[0] + pack.u32Len[1];
 

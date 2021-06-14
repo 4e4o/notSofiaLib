@@ -1,10 +1,10 @@
 #include "Channel.h"
 #include "HiMPP/VENC/Group.h"
+#include "HiMPP/VENC/IGroupSource.h"
 #include "HiMPP/VENC/Subsystem.h"
 #include "IAttributesBuilder.h"
 #include "HiMPP/Misc/Utils.h"
 #include "H264AttributesBuilder.h"
-#include "IChannelSource.h"
 #include "HiMPP/VB/VBPool.h"
 #include "StreamLoop.h"
 #include "IStreamOut.h"
@@ -21,7 +21,7 @@ namespace hisilicon::mpp::venc {
 Channel::Channel(Group *g, int id)
     : IdHolder(id), Holder<Group*>(g),
       m_ownsStreamOut(true),
-      m_source(nullptr) {
+      m_source(g->bindedItem<IGroupSource>()) {
 }
 
 Channel::~Channel() {
@@ -54,10 +54,6 @@ void Channel::setStreamOut(IStreamOut *out, bool getOwnership) {
     m_streamReader->setEvent([out](const HI_U8 * data, const HI_U32 & size) {
         out->write(data, size);
     });
-}
-
-void Channel::setSource(IChannelSource *source) {
-    m_source = source;
 }
 
 void Channel::setAttributesBuilder(IAttributesBuilder *b) {

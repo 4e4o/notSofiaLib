@@ -5,14 +5,14 @@
 
 namespace hisilicon::mpp::venc {
 
-class IChannelSource;
+class IGroupSource;
 
 class IAttributesBuilder {
   public:
     IAttributesBuilder() { }
     virtual ~IAttributesBuilder() { }
 
-    virtual VENC_CHN_ATTR_S *build(IChannelSource *) = 0;
+    virtual VENC_CHN_ATTR_S *build(IGroupSource *) = 0;
 };
 
 }
