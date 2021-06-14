@@ -30,11 +30,11 @@ class ChannelInfo : public Holder<DeviceInfo *>, public IdHolder {
     VI_SCAN_MODE_E scanMode() const;
     void setScanMode(const VI_SCAN_MODE_E &scanMode);
 
-    bool pal() const;
-    void setPal(bool pal);
+    HI_U32 fps() const;
+    void setFps(const HI_U32 &fps);
 
   private:
-    bool m_pal;
+    HI_U32 m_fps;
     VI_SCAN_MODE_E m_scanMode;
     PIXEL_FORMAT_E m_pixelFormat;
     TSize m_imgSize;

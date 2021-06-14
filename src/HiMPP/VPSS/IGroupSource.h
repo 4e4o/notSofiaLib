@@ -12,7 +12,7 @@ class IGroupSource {
 
     virtual SIZE_S destSize() const = 0;
     virtual SIZE_S imgSize() const = 0;
-    virtual bool pal() const = 0;
+    virtual HI_U32 fps() const = 0;
     virtual PIXEL_FORMAT_E pixelFormat() const = 0;
 };
 

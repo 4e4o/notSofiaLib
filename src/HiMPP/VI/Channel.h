@@ -29,7 +29,7 @@ class Channel : public IdHolder, public Holder<Device *>,
 
     SIZE_S destSize() const override final;
     SIZE_S imgSize() const override final;
-    bool pal() const override final;
+    HI_U32 fps() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
   protected:

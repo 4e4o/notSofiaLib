@@ -75,8 +75,8 @@ SIZE_S Channel::imgSize() const {
     return Utils::toMppSize(m_info->imgSize());
 }
 
-bool Channel::pal() const {
-    return m_info->pal();
+HI_U32 Channel::fps() const {
+    return m_info->fps();
 }
 
 PIXEL_FORMAT_E Channel::pixelFormat() const {

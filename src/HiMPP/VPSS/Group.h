@@ -36,7 +36,7 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     void setBindedItem(BindItem *bi, bool source) override final;
     // venc::IGroupSource
     SIZE_S imgSize() const override final;
-    bool pal() const override final;
+    HI_U32 fps() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
     std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;

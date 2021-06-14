@@ -53,7 +53,7 @@ void InfoProvider::initInfo() {
             if (ch[j]->formatDetected()) {
                 info->setCapSize(channel->captureSize());
                 info->setImgSize(channel->imageSize());
-                info->setPal(channel->pal());
+                info->setFps(channel->pal() ? 25 : 30);
                 info->setScanMode(toMppScanMode(channel.get()));
                 info->setPixelFormat(toMppPixelFormat(channel.get()));
                 dev->addChannel(info);

@@ -23,11 +23,11 @@ H264AttributesBuilder::H264AttributesBuilder() :
 }
 
 VENC_CHN_ATTR_S *H264AttributesBuilder::build(IGroupSource *source) {
-    std::unique_ptr<VENC_CHN_ATTR_S> result(new VENC_CHN_ATTR_S());
+    std::unique_ptr<VENC_CHN_ATTR_S> result(new VENC_CHN_ATTR_S{});
     VENC_ATTR_H264_S &stH264Attr = result->stVeAttr.stAttrH264e;
 
     const SIZE_S picSize = source->imgSize();
-    const HI_U32 fps = source->pal() ? 25 : 30;
+    const HI_U32 fps = source->fps();
     const float scaleFactor = source->pixelFormat() ==
                               PIXEL_FORMAT_YUV_SEMIPLANAR_422 ? 2.0f : 1.5f;
     const HI_U32 bit_rate = bitrate(m_bpp, picSize, fps, scaleFactor);

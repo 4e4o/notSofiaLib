@@ -18,6 +18,7 @@ void InfoProvider::setDeviceInfo(const TViDevicesInfo &d) {
     m_devices = d;
 }
 
+#ifdef FAKE_NOT_FOUNDED_CHANNEL_INFO
 static ChannelInfo *fakeInfo(DeviceInfo *dev, int chId) {
     ChannelInfo *info = new ChannelInfo(dev, chId);
     TSize size{.width = 352, .height = 240};
@@ -25,13 +26,14 @@ static ChannelInfo *fakeInfo(DeviceInfo *dev, int chId) {
     info->setCapSize(size);
     info->setImgSize(size);
 
-    info->setPal(false);
+    info->setFps(25);
     info->setScanMode(VI_SCAN_PROGRESSIVE);
     info->setPixelFormat(PIXEL_FORMAT_YUV_SEMIPLANAR_422);
     dev->addChannel(info);
 
     return info;
 }
+#endif
 
 const ChannelInfo *InfoProvider::findChannelInfo(int devId, int chId) const {
     for (auto &device : m_devices) {

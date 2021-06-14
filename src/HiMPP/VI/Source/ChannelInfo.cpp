@@ -5,7 +5,7 @@ namespace hisilicon::mpp::vi {
 ChannelInfo::ChannelInfo(DeviceInfo *d, int id)
     : Holder<DeviceInfo *>(d),
       IdHolder(id),
-      m_pal(false),
+      m_fps(0),
       m_scanMode(VI_SCAN_BUTT),
       m_pixelFormat(PIXEL_FORMAT_BUTT) {
 }
@@ -45,12 +45,12 @@ void ChannelInfo::setScanMode(const VI_SCAN_MODE_E &scanMode) {
     m_scanMode = scanMode;
 }
 
-bool ChannelInfo::pal() const {
-    return m_pal;
+HI_U32 ChannelInfo::fps() const {
+    return m_fps;
 }
 
-void ChannelInfo::setPal(bool pal) {
-    m_pal = pal;
+void ChannelInfo::setFps(const HI_U32 &fps) {
+    m_fps = fps;
 }
 
 }

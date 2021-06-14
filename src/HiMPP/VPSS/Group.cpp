@@ -94,8 +94,8 @@ SIZE_S Group::imgSize() const {
     return m_source->imgSize();
 }
 
-bool Group::pal() const {
-    return m_source->pal();
+HI_U32 Group::fps() const {
+    return m_source->fps();
 }
 
 PIXEL_FORMAT_E Group::pixelFormat() const {
