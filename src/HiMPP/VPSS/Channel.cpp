@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <iostream>
 
-#include <hi_comm_vpss.h>
 #include <mpi_vpss.h>
 
 namespace hisilicon::mpp::vpss {

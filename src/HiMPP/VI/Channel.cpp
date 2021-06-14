@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <iostream>
 
-#include <hi_comm_vi.h>
 #include <mpi_vi.h>
 
 namespace hisilicon::mpp::vi {

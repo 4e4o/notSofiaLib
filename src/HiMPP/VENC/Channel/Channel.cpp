@@ -13,7 +13,6 @@
 #include <stdexcept>
 #include <iostream>
 
-#include <hi_comm_venc.h>
 #include <mpi_venc.h>
 
 namespace hisilicon::mpp::venc {
