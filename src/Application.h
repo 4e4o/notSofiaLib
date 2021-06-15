@@ -5,7 +5,7 @@
 
 class Application : public AApplication {
   public:
-    Application();
+    Application(int count = 0, char **argv = nullptr);
 };
 
 #endif // APPLICATION_H

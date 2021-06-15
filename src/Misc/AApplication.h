@@ -2,6 +2,7 @@
 #define AAPPLICATION_H
 
 #include <memory>
+#include <span>
 
 #include "Boards/ABoard.h"
 #include "Misc/GenericFactory.h"
@@ -12,7 +13,10 @@
 
 class AApplication : public GenericFactory<boards::ABoard> {
   public:
-    AApplication();
+    typedef std::span<char> TArg;
+    typedef std::vector<TArg> TArgs;
+
+    AApplication(int count = 0, char **argv = nullptr);
     virtual ~AApplication();
 
     virtual int run();
@@ -22,6 +26,8 @@ class AApplication : public GenericFactory<boards::ABoard> {
 
     boards::ABoard *board() const;
 
+    const TArgs &args() const;
+
   protected:
     virtual void beforeBoardRun();
 
@@ -29,6 +35,8 @@ class AApplication : public GenericFactory<boards::ABoard> {
     void setExit();
 
     std::unique_ptr<boards::ABoard> m_board;
+    TArgs m_args;
+
     static AApplication *g_app;
 };
 

@@ -18,7 +18,7 @@ class LoopReader : public Holder<IdHolder *> {
 
     void attach(int fd, ReadLoop *loop) {
         if (fd < 0)
-            throw std::runtime_error("HI_MPI_VENC_GetFd failed");
+            throw std::runtime_error("[LoopReader] invalid fd");
 
         m_buffer.reset(new DataBufferWrapper(loop->buffer()));
 

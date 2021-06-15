@@ -2,14 +2,19 @@
 
 #include <signal.h>
 #include <iostream>
+#include <string.h>
 
 AApplication *AApplication::g_app = nullptr;
 
 using boards::ABoard;
 
-AApplication::AApplication() {
-    g_app = this;
+AApplication::AApplication(int count, char **argv) {
     setExit();
+
+    for (int i = 0 ; i < count ; i++)
+        m_args.emplace_back(argv[i], strlen(argv[i]));
+
+    g_app = this;
 }
 
 AApplication::~AApplication() {
@@ -24,6 +29,10 @@ void AApplication::setExit() {
         signal(SIGINT, SIG_IGN);
         g_app->stop();
     });
+}
+
+const AApplication::TArgs &AApplication::args() const {
+    return m_args;
 }
 
 boards::ABoard *AApplication::board() const {
