@@ -2,25 +2,19 @@
 #define STREAM_READER_H
 
 #include <functional>
-#include <memory>
 
 #include <hi_comm_venc.h>
 
-namespace hisilicon::mpp {
-class ReadLoop;
-}
+#include "HiMPP/ASubsystem/ReadLoop/LoopReader.h"
+#include "StreamBuffer.h"
 
 namespace hisilicon::mpp::venc {
 
-class Channel;
-class StreamBuffer;
-
-class StreamReader {
+class StreamReader : public LoopReader<StreamBuffer> {
   public:
     typedef std::function<void(const HI_U8 *, const HI_U32 &)> Event;
 
-    StreamReader(Channel *);
-    ~StreamReader();
+    StreamReader(IdHolder *);
 
     void attach(ReadLoop *);
 
@@ -32,12 +26,10 @@ class StreamReader {
     void setConsecutiveMode(bool consecutiveMode);
 
   private:
-    void read();
+    void read() override final;
 
-    Channel *m_channel;
     Event m_event;
     bool m_consecutiveMode;
-    std::unique_ptr<StreamBuffer> m_buffer;
 };
 
 }
