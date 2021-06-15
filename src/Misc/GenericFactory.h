@@ -15,8 +15,8 @@
 template<class Base>
 class GenericFactory {
   public:
-    template<LambdaPtrResultDerived<Base> Callable>
-    void registerType(Callable &&c, bool replaceExisting = true) {
+    template<bool replaceExisting = true, LambdaPtrResultDerived<Base> Callable>
+    void registerType(Callable && c) {
         typedef typename
         MakeCreator<typename LambdaTraits<Callable>::args_tuple>::TCreator TCreator;
         TCreator creator{std::move(c)};
@@ -24,7 +24,7 @@ class GenericFactory {
                         std::remove_pointer<typename LambdaTraits<Callable>::result_type>::type;
         constexpr auto className = getFullTypeName<RetType>();
 
-        if (replaceExisting)
+        if constexpr (replaceExisting)
             m_types.erase(className);
 
         m_types.emplace(className, std::move(creator));

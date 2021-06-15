@@ -10,12 +10,12 @@ Subsystem::Subsystem(MPP *p)
 }
 
 void Subsystem::registerDefaultTypes() {
-    factory()->registerType([](Subsystem * p, int id) -> Group* {
+    factory()->registerType<false>([](Subsystem * p, int id) -> Group* {
         return new Group(p, id);
-    }, false);
-    factory()->registerType([](Group * g, int id) -> Channel* {
+    });
+    factory()->registerType<false>([](Group * g, int id) -> Channel* {
         return new Channel(g, id);
-    }, false);
+    });
 }
 
 Group *Subsystem::addGroup(int id) {
