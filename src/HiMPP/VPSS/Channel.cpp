@@ -14,7 +14,7 @@ static VPSS_CHN_ATTR_S *createStandardAttr() {
 }
 
 Channel::Channel(Group *g, int id)
-    : IdHolder(id), Holder<Group*>(g),
+    : ASubsystemLeaf(g, id),
       m_attr(createStandardAttr()) {
 }
 

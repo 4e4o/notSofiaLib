@@ -5,10 +5,9 @@
 
 #include <hi_comm_venc.h>
 
-#include "Misc/Configurator/Configurable.h"
-#include "Misc/IdHolder.h"
-#include "Misc/Size.h"
 #include "HiMPP/ASubsystem/InfoSources/IFrameFormatSource.h"
+#include "HiMPP/ASubsystem/ASubsystemLeaf.h"
+#include "Misc/Size.h"
 
 namespace hisilicon::mpp {
 class IVideoFormatSource;
@@ -21,8 +20,7 @@ class IAttributesBuilder;
 class StreamReader;
 class IStreamOut;
 
-class Channel : public IdHolder, public Holder<Group *>,
-    public Configurable, public IFrameFormatSource {
+class Channel : public ASubsystemLeaf<Group>, public IFrameFormatSource {
   public:
     Channel(Group *, int id);
     ~Channel();

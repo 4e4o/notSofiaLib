@@ -6,19 +6,17 @@
 
 #include <hi_comm_vi.h>
 
-#include "Misc/Configurator/Configurable.h"
-#include "Misc/IdHolder.h"
-#include "Misc/Size.h"
-#include "HiMPP/VPSS/Binder/BindItem.h"
 #include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
+#include "HiMPP/ASubsystem/ASubsystemLeaf.h"
+#include "HiMPP/VPSS/Binder/BindItem.h"
+#include "Misc/Size.h"
 
 namespace hisilicon::mpp::vi {
 
 class Device;
 class ChannelInfo;
 
-class Channel : public IdHolder, public Holder<Device *>,
-    public Configurable, public vpss::ViBindItem,
+class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     public IVideoCaptureFormatSource {
   public:
     Channel(Device *, const ChannelInfo *, int id);

@@ -21,7 +21,7 @@ static VI_CHN_ATTR_S *createStandardAttr() {
 }
 
 Channel::Channel(Device *d, const ChannelInfo *info, int id)
-    : IdHolder(id), Holder<Device*>(d),
+    : ASubsystemLeaf(d, id),
       ViBindItem(d, this),
       m_info(info),
       m_attr(createStandardAttr()) {

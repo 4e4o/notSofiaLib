@@ -5,16 +5,14 @@
 
 #include <hi_comm_vpss.h>
 
-#include "Misc/Configurator/Configurable.h"
-#include "Misc/IdHolder.h"
+#include "HiMPP/ASubsystem/ASubsystemLeaf.h"
 #include "Misc/Size.h"
 
 namespace hisilicon::mpp::vpss {
 
 class Group;
 
-class Channel : public IdHolder, public Holder<Group *>,
-    public Configurable {
+class Channel : public ASubsystemLeaf<Group> {
   public:
     Channel(Group *, int id);
     ~Channel();
