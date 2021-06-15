@@ -2,7 +2,7 @@
 #define AAPPLICATION_H
 
 #include <memory>
-#include <span>
+#include <string_view>
 
 #include "Boards/ABoard.h"
 #include "Misc/GenericFactory.h"
@@ -13,7 +13,7 @@
 
 class AApplication : public GenericFactory<boards::ABoard> {
   public:
-    typedef std::span<char> TArg;
+    typedef std::string_view TArg;
     typedef std::vector<TArg> TArgs;
 
     AApplication(int count = 0, char **argv = nullptr);
