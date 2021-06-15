@@ -13,8 +13,6 @@ class VBPool : public VBBase {
 
     ~VBPool();
 
-    void initForVenc();
-
     void setBlockSize(const HI_U32 &blockSize);
     void setBlockCount(const HI_U32 &blockCount);
     void setName(const std::string &name);
@@ -23,7 +21,6 @@ class VBPool : public VBBase {
 
   private:
     bool configureImpl() override final;
-    HI_U32 maxVencBlkSize(int &);
 
     HI_U32 m_blockSize;
     HI_U32 m_blockCount;

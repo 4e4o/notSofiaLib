@@ -1,6 +1,6 @@
 #include "Subsystem.h"
 #include "Group.h"
-#include "HiMPP/VB/VBPool.h"
+#include "HiMPP/VB/VencVBPool.h"
 
 namespace hisilicon::mpp::venc {
 
@@ -27,7 +27,7 @@ const std::vector<Group *> &Subsystem::groups() const {
     return subItems();
 }
 
-VBPool *Subsystem::pool() const {
+mpp::VBPool *Subsystem::pool() const {
     return m_pool;
 }
 
@@ -40,9 +40,7 @@ void Subsystem::createUserPool() {
     if (!needUserPool())
         return;
 
-    m_pool = new VBPool(parent());
-    m_pool->initForVenc();
-    addItemFront(m_pool);
+    addItemFront(m_pool = new VBPool(parent()));
 }
 
 bool Subsystem::needUserPool() {
