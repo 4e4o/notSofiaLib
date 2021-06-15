@@ -15,19 +15,36 @@
 template<class Base>
 class GenericFactory {
   public:
-    template<bool replaceExisting = true, LambdaPtrResultDerived<Base> Callable>
-    void registerType(Callable && c) {
+    // Для дефолтных типов
+    template<typename T, typename... CreatorArgs>
+    void registerDefaultType() {
+        return registerType<T, T, CreatorArgs...>();
+    }
+
+    // для простых типов без доп. параметров в конструкторах
+    template<typename T, typename Derived, typename... CreatorArgs>
+    requires std::derived_from<Derived, T>
+    void registerType() {
+        typedef typename MakeCreator<CreatorArgs...>::TCreator TCreator;
+
+        TCreator creator{[] (auto &&... args) -> T * {
+                return new Derived(args...);
+            }
+        };
+
+        insert <T>(std::move(creator));
+    }
+
+    // для лямбд
+    template<LambdaPtrResultDerived<Base> Callable>
+    void registerType(Callable &&c) {
         typedef typename
         MakeCreator<typename LambdaTraits<Callable>::args_tuple>::TCreator TCreator;
         TCreator creator{std::move(c)};
         using RetType = typename
                         std::remove_pointer<typename LambdaTraits<Callable>::result_type>::type;
-        constexpr auto className = getFullTypeName<RetType>();
 
-        if constexpr (replaceExisting)
-            m_types.erase(className);
-
-        m_types.emplace(className, std::move(creator));
+        insert <RetType>(std::move(creator));
     }
 
     template<class T, typename... CreatorArgs>
@@ -54,6 +71,13 @@ class GenericFactory {
     struct MakeCreator<std::tuple<Ts...>> {
         typedef std::function<Base*(Ts...)> TCreator;
     };
+
+    template<class KeyType, class Creator>
+    void insert(Creator &&creator) {
+        constexpr auto className = getFullTypeName<KeyType>();
+        m_types.erase(className);
+        m_types.emplace(className, std::move(creator));
+    }
 
     std::map<std::string, std::any> m_types;
 };

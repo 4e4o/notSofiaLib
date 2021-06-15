@@ -20,12 +20,8 @@ MPP::MPP()
 }
 
 void MPP::registerDefaultTypes() {
-    registerType<false>([] (MPP * p) -> VideoBuffer* {
-        return new VideoBuffer(p);
-    });
-    registerType<false>([] (MPP * p) -> Sys* {
-        return new Sys(p);
-    });
+    registerDefaultType<VideoBuffer, MPP *>();
+    registerDefaultType<Sys, MPP *>();
 }
 
 bool MPP::configureImpl() {

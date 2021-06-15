@@ -7,10 +7,7 @@ namespace boards::nvp6134 {
 Board::Board(int chipCount) :
     m_chipCount(chipCount),
     m_nvpDriver(new ::nvp6134::DriverCommunicator(chipCount)) {
-    registerType<false>([](::nvp6134::DriverCommunicator * d,
-    int id) -> ::nvp6134::Chip* {
-        return new ::nvp6134::Chip(d, id);
-    });
+    registerDefaultType<::nvp6134::Chip, ::nvp6134::DriverCommunicator *, int>();
 }
 
 bool Board::configureImpl() {

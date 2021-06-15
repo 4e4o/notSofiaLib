@@ -1,11 +1,15 @@
 #include "Subsystem.h"
 #include "HiMPP/VI/Device.h"
+#include "Channel.h"
+#include "Device.h"
 
 namespace hisilicon::mpp::vi::hi3520dv200 {
 
 Subsystem::Subsystem(mpp::MPP *mpp)
     : mpp::vi::Subsystem(mpp),
       m_mode(HI3520DV200_MODE::MODE_UNKNOWN) {
+    mpp->registerType<vi::Device, vi::hi3520dv200::Device, vi::Subsystem *, int>();
+    mpp->registerType<vi::Channel, vi::hi3520dv200::Channel, vi::Device *, const vi::ChannelInfo *, int>();
 }
 
 void Subsystem::setHiMode(const Subsystem::HI3520DV200_MODE &mode) {
@@ -24,8 +28,8 @@ void Subsystem::initMode() {
         // в нашем случае 4channel 720p режим для hi3520d v200
         // Hi3520D／Hi3515A／Hi3515C H.264 CODEC Processor Data Sheet.pdf
         // page 616
-        Device *dev0 = addDevice(0);
-        Device *dev1 = addDevice(1);
+        vi::Device *dev0 = addDevice(0);
+        vi::Device *dev1 = addDevice(1);
 
         dev0->addChannel(0, 0, 0);
         dev0->addChannel(2, 0, 1);

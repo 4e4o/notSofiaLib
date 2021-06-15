@@ -28,9 +28,7 @@ using hisilicon::mpp::hi3520dv200::MPP;
 
 Board::Board()
     : boards::nvp6134::Board(NVP_CHIPS_COUNT) {
-    registerType([](::nvp6134::DriverCommunicator * d, int id) -> ::nvp6134::Chip* {
-        return new ::nvp6134::lm7004v3::Chip(d, id);
-    });
+    registerType<::nvp6134::Chip, ::nvp6134::lm7004v3::Chip, ::nvp6134::DriverCommunicator *, int>();
 
     registerType([this]() -> ::hisilicon::mpp::MPP* {
         MPP *mpp = new MPP();

@@ -2,7 +2,5 @@
 #include "Boards/7004_lm_v3/Board.h"
 
 Application::Application() {
-    registerType([]() -> ::boards::ABoard* {
-        return new boards::lm7004v3::Board();
-    });
+    registerType<::boards::ABoard, boards::lm7004v3::Board>();
 }
