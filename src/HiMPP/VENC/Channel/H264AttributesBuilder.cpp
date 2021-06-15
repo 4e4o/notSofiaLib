@@ -2,10 +2,11 @@
 #include "HiMPP/ASubsystem/InfoSources/IVideoFormatSource.h"
 
 #include <cmath>
+#include <iostream>
 
 namespace hisilicon::mpp::venc {
 
-#define DEFAULT_BPP 0.1f
+#define DEFAULT_BPP 0.03f
 
 // TODO мб более точный метод высчитывания битрейта для h264 есть
 
@@ -31,6 +32,10 @@ VENC_CHN_ATTR_S *H264AttributesBuilder::build(IVideoFormatSource *source) {
     const float scaleFactor = source->pixelFormat() ==
                               PIXEL_FORMAT_YUV_SEMIPLANAR_422 ? 2.0f : 1.5f;
     const HI_U32 bit_rate = bitrate(m_bpp, picSize, fps, scaleFactor);
+
+    std::cout << "H264AttributesBuilder bitrate "
+              << bit_rate << " kib/s, "
+              << (((bit_rate * 1000) / 8) * 60) / (1024 * 1024) << " Mb/min" << std::endl;
 
     result->stVeAttr.enType = PT_H264;
 
