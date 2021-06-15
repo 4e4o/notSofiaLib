@@ -67,6 +67,24 @@ hisilicon::mpp::vi::Subsystem *Board::initVi(hisilicon::mpp::MPP *p) {
     return s;
 }
 
+static void setVpssGroupAttributes(hisilicon::mpp::vpss::Group *g) {
+    g->enableNoiseReduction();
+}
+
+static void setVpssGroupParameters(hisilicon::mpp::vpss::Group *g) {
+    VPSS_GRP_PARAM_S *p = new VPSS_GRP_PARAM_S{};
+
+    p->u32Contrast = 64;
+    p->u32IeStrength = 1;
+    p->u32SfStrength = 4;
+    p->u32TfStrength = 8;
+    // незнаю зачем это, в мане описания нету - написано Reserved
+    // София также делает, пусть будет так же
+    p->u32MotionThresh = 2;
+
+    g->setParameters(p);
+}
+
 hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
     using namespace hisilicon::mpp::vpss;
     Subsystem *s = new Subsystem(p);
@@ -79,6 +97,8 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
         for (auto &device : p->vi()->devices()) {
             for (auto &channel : device->channels()) {
                 Group *group = s->addGroup(groupId++);
+                setVpssGroupAttributes(group);
+                setVpssGroupParameters(group);
                 // id vpss каналов фиксированы и зависят от хики чипа
                 // определённый канал с id обладает определёнными свойствами и функциями
                 // мы тут юзаем Hi3520d 0 (VPSS_BSTR_CHN) vpss канал

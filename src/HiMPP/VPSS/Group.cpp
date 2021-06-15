@@ -75,6 +75,10 @@ bool Group::configureImpl() {
     return true;
 }
 
+void Group::enableNoiseReduction() {
+    m_attrs->bNrEn = HI_TRUE;
+}
+
 void Group::setAttributes(VPSS_GRP_ATTR_S *attr) {
     m_attrs.reset(attr);
 }

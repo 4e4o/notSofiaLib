@@ -26,6 +26,8 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     Group(Subsystem *, int id);
     ~Group();
 
+    void enableNoiseReduction();
+
     void setAttributes(VPSS_GRP_ATTR_S *);
     void setParameters(VPSS_GRP_PARAM_S *);
 
