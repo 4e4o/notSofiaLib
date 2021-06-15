@@ -65,7 +65,7 @@ VENC_CHN_ATTR_S *H264AttributesBuilder::build(IVideoFormatSource *source) {
     if (m_bitrateType == Channel::BitrateType::CBR) {
         VENC_ATTR_H264_CBR_S &stH264Cbr = result->stRcAttr.stAttrH264Cbr;
 
-        result->stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
+        result->stRcAttr.enRcMode = VENC_RC_MODE_H264CBRv2;
         stH264Cbr.u32Gop = fps;
         /* stream rate statics time(s) */
         stH264Cbr.u32StatTime = 1;
@@ -90,13 +90,13 @@ VENC_CHN_ATTR_S *H264AttributesBuilder::build(IVideoFormatSource *source) {
         stH264FixQp.u32PQp = 23;
     } else if (m_bitrateType == Channel::BitrateType::VBR) {
         VENC_ATTR_H264_VBR_S &stH264Vbr = result->stRcAttr.stAttrH264Vbr;
-        result->stRcAttr.enRcMode = VENC_RC_MODE_H264VBR;
+        result->stRcAttr.enRcMode = VENC_RC_MODE_H264VBRv2;
         stH264Vbr.u32Gop = fps;
         stH264Vbr.u32StatTime = 1;
         stH264Vbr.u32ViFrmRate = fps;
         stH264Vbr.fr32TargetFrmRate = fps;
         stH264Vbr.u32MinQp = 10;
-        stH264Vbr.u32MaxQp = 40;
+        stH264Vbr.u32MaxQp = 51;
         stH264Vbr.u32MaxBitRate = bit_rate;
     } else
         throw std::runtime_error("Unknown bitrate type");
