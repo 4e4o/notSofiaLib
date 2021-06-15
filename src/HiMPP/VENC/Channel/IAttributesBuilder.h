@@ -3,16 +3,18 @@
 
 #include <hi_comm_venc.h>
 
-namespace hisilicon::mpp::venc {
+namespace hisilicon::mpp {
+class IVideoFormatSource;
+}
 
-class IGroupSource;
+namespace hisilicon::mpp::venc {
 
 class IAttributesBuilder {
   public:
     IAttributesBuilder() { }
     virtual ~IAttributesBuilder() { }
 
-    virtual VENC_CHN_ATTR_S *build(IGroupSource *) = 0;
+    virtual VENC_CHN_ATTR_S *build(IVideoFormatSource *) = 0;
 };
 
 }

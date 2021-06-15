@@ -5,8 +5,6 @@
 
 namespace hisilicon::mpp {
 
-class IVBufferizable;
-
 class VideoBuffer : public VBBase {
   public:
     using VBBase::VBBase;

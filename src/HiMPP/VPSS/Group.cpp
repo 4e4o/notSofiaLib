@@ -2,7 +2,7 @@
 #include "Channel.h"
 #include "HiMPP/MPP.h"
 #include "Subsystem.h"
-#include "IGroupSource.h"
+#include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -83,10 +83,10 @@ void Group::setBindedItem(BindItem *bi, bool source) {
     BindItem::setBindedItem(bi, source);
 
     if (source) {
-        m_source = bindedItem<vpss::IGroupSource>();
+        m_source = bindedItem<IVideoCaptureFormatSource>();
 
         if (m_source == nullptr)
-            throw std::runtime_error("BindItem must realize IGroupSource");
+            throw std::runtime_error("BindItem must realize IVideoCaptureFormatSource");
     }
 }
 

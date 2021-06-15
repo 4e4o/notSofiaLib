@@ -6,19 +6,22 @@
 
 #include <hi_comm_vpss.h>
 
+#include "HiMPP/ASubsystem/InfoSources/IVideoFormatSource.h"
 #include "HiMPP/ASubsystem/ASubsystemItem.h"
 #include "Misc/Configurator/Configurator.h"
-#include "HiMPP/VENC/IGroupSource.h"
 #include "Binder/BindItem.h"
 #include "Channel.h"
+
+namespace hisilicon::mpp {
+class IVideoCaptureFormatSource;
+}
 
 namespace hisilicon::mpp::vpss {
 
 class Subsystem;
-class IGroupSource;
 
 class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
-    public VpssBindItem, public venc::IGroupSource  {
+    public VpssBindItem, public IVideoFormatSource {
   public:
     Group(Subsystem *, int id);
     ~Group();
@@ -33,15 +36,16 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     bool configureImpl() override final;
 
   private:
+    // BindItem
     void setBindedItem(BindItem *bi, bool source) override final;
-    // venc::IGroupSource
+    // IVideoFormatSource
     SIZE_S imgSize() const override final;
     HI_U32 fps() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
     std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;
     std::unique_ptr<VPSS_GRP_PARAM_S> m_params;
-    vpss::IGroupSource *m_source;
+    IVideoCaptureFormatSource *m_source;
 };
 
 }

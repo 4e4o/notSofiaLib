@@ -66,10 +66,6 @@ SIZE_S Channel::destSize() const {
     return *m_destSize.get();
 }
 
-RECT_S Channel::capRect() const {
-    return Utils::toMppRect(m_info->capSize());
-}
-
 SIZE_S Channel::imgSize() const {
     return Utils::toMppSize(m_info->imgSize());
 }
@@ -86,16 +82,8 @@ const Device *Channel::device() const {
     return Holder<Device *>::value();
 }
 
-SIZE_S Channel::vbImageSize() {
-    // Тут нет уверенности что именно imgSize() юзать надо,
-    // проверено destSize, capSize -
-    // так же работает буффер без ошибок
-    // значит будем юзать наименьшее значение
-    return imgSize();
-}
-
-PIXEL_FORMAT_E Channel::vbPixelFormat() {
-    return pixelFormat();
+RECT_S Channel::capRect() const {
+    return Utils::toMppRect(m_info->capSize());
 }
 
 }

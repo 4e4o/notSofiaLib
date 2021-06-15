@@ -8,18 +8,21 @@
 #include "Misc/Configurator/Configurable.h"
 #include "Misc/IdHolder.h"
 #include "Misc/Size.h"
-#include "HiMPP/VB/VBufferizable.h"
+#include "HiMPP/ASubsystem/InfoSources/IFrameFormatSource.h"
+
+namespace hisilicon::mpp {
+class IVideoFormatSource;
+}
 
 namespace hisilicon::mpp::venc {
 
 class Group;
 class IAttributesBuilder;
-class IGroupSource;
 class StreamReader;
 class IStreamOut;
 
 class Channel : public IdHolder, public Holder<Group *>,
-    public Configurable, public IVBufferizable {
+    public Configurable, public IFrameFormatSource {
   public:
     Channel(Group *, int id);
     ~Channel();
@@ -36,12 +39,14 @@ class Channel : public IdHolder, public Holder<Group *>,
     const Group *group() const;
     bool needUserPool() const;
     bool h264Mode() const;
-    SIZE_S imgSize() const;
+    // IFrameFormatSource
+    SIZE_S imgSize() const override final;
 
   private:
     bool configureImpl() override final;
-    SIZE_S vbImageSize() override final;
-    PIXEL_FORMAT_E vbPixelFormat() override final;
+    // IFrameFormatSource
+    PIXEL_FORMAT_E pixelFormat() const override final;
+
     void setAttributes(VENC_CHN_ATTR_S *attr);
     void releaseStreamOut();
 
@@ -50,7 +55,7 @@ class Channel : public IdHolder, public Holder<Group *>,
     std::unique_ptr<StreamReader> m_streamReader;
     std::unique_ptr<IStreamOut> m_streamOut;
     bool m_ownsStreamOut;
-    IGroupSource *m_source;
+    IVideoFormatSource *m_source;
 };
 
 }

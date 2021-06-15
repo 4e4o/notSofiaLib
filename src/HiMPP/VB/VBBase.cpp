@@ -1,5 +1,5 @@
 #include "VBBase.h"
-#include "VBufferizable.h"
+#include "HiMPP/ASubsystem/InfoSources/IFrameFormatSource.h"
 #include "HiMPP/Sys/Sys.h"
 
 #include <cmath>
@@ -10,10 +10,14 @@ namespace hisilicon::mpp {
 // HiMPP Media Processing Software Development Reference.pdf
 // page 90
 
-HI_U32 VBBase::picVbBlkSize(IVBufferizable *b) {
+HI_U32 VBBase::picVbBlkSize(IFrameFormatSource *b) {
     const HI_U32 sysAlignWidth = parent()->sys()->sysWidthAlign();
-    const SIZE_S imgSize = b->vbImageSize();
-    const PIXEL_FORMAT_E pixFmt = b->vbPixelFormat();
+    // Тут нет уверенности что именно imgSize() юзать надо,
+    // проверено destSize, capSize -
+    // так же работает буффер без ошибок
+    // значит будем юзать наименьшее значение
+    const SIZE_S imgSize = b->imgSize();
+    const PIXEL_FORMAT_E pixFmt = b->pixelFormat();
 
     if ((PIXEL_FORMAT_YUV_SEMIPLANAR_422 != pixFmt) &&
         (PIXEL_FORMAT_YUV_SEMIPLANAR_420 != pixFmt)) {

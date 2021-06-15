@@ -10,8 +10,7 @@
 #include "Misc/IdHolder.h"
 #include "Misc/Size.h"
 #include "HiMPP/VPSS/Binder/BindItem.h"
-#include "HiMPP/VPSS/IGroupSource.h"
-#include "HiMPP/VB/VBufferizable.h"
+#include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
 
 namespace hisilicon::mpp::vi {
 
@@ -20,13 +19,14 @@ class ChannelInfo;
 
 class Channel : public IdHolder, public Holder<Device *>,
     public Configurable, public vpss::ViBindItem,
-    public vpss::IGroupSource, public IVBufferizable {
+    public IVideoCaptureFormatSource {
   public:
     Channel(Device *, const ChannelInfo *, int id);
     ~Channel();
 
     const Device *device() const;
 
+    // IVideoCaptureFormatSource
     SIZE_S destSize() const override final;
     SIZE_S imgSize() const override final;
     HI_U32 fps() const override final;
@@ -38,8 +38,6 @@ class Channel : public IdHolder, public Holder<Device *>,
   private:
     virtual SIZE_S *createDestSize() const;
     bool configureImpl() override final;
-    SIZE_S vbImageSize() override final;
-    PIXEL_FORMAT_E vbPixelFormat() override final;
 
     const ChannelInfo *m_info;
     std::unique_ptr<VI_CHN_ATTR_S> m_attr;

@@ -1,6 +1,6 @@
 #include "Channel.h"
 #include "HiMPP/VENC/Group.h"
-#include "HiMPP/VENC/IGroupSource.h"
+#include "HiMPP/ASubsystem/InfoSources/IVideoFormatSource.h"
 #include "HiMPP/VENC/Subsystem.h"
 #include "IAttributesBuilder.h"
 #include "HiMPP/Misc/Utils.h"
@@ -19,7 +19,7 @@ namespace hisilicon::mpp::venc {
 Channel::Channel(Group *g, int id)
     : IdHolder(id), Holder<Group*>(g),
       m_ownsStreamOut(true),
-      m_source(g->bindedItem<IGroupSource>()) {
+      m_source(g->bindedItem<IVideoFormatSource>()) {
 }
 
 Channel::~Channel() {
@@ -67,6 +67,10 @@ bool Channel::h264Mode() const {
 
 SIZE_S Channel::imgSize() const {
     return m_source->imgSize();
+}
+
+PIXEL_FORMAT_E Channel::pixelFormat() const {
+    return m_source->pixelFormat();
 }
 
 bool Channel::needUserPool() const {
@@ -119,14 +123,6 @@ void Channel::setAttributes(VENC_CHN_ATTR_S *attr) {
 
 const Group *Channel::group() const {
     return Holder<Group *>::value();
-}
-
-SIZE_S Channel::vbImageSize() {
-    return m_source->imgSize();
-}
-
-PIXEL_FORMAT_E Channel::vbPixelFormat() {
-    return m_source->pixelFormat();
 }
 
 }
