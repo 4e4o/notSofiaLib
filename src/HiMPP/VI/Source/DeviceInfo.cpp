@@ -1,5 +1,6 @@
 #include "DeviceInfo.h"
 #include "Misc/Utils.h"
+#include "ChannelInfo.h"
 
 namespace hisilicon::mpp::vi {
 

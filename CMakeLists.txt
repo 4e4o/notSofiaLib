@@ -33,8 +33,11 @@ set(LINK_LIBS
 file(GLOB_RECURSE PRJ_SRCS src/*.c src/*.cpp src/*.h src/*.hpp notSofia.astylerc)
 target_sources(${PROJECT_NAME} PRIVATE ${PRJ_SRCS})
 
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/src
+    )
+
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
     ${HI_SDK_INCLUDE}
     ${EXT_DRV_DIRS}
     ${NVP6134_PATH}
