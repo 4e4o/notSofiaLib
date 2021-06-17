@@ -99,6 +99,8 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
 
         for (auto &device : p->vi()->devices()) {
             for (auto &channel : device->channels()) {
+                channel->attributes()->set<hisilicon::mpp::vi::ChannelAttributes::FrameRate>(5);
+
                 Group *group = s->addGroup(groupId++);
                 setVpssGroupAttributes(group);
                 setVpssGroupParameters(group);
