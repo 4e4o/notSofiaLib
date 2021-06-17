@@ -11,20 +11,22 @@
 namespace hisilicon::mpp::vpss {
 
 class Group;
+class ChannelAttributes;
 
 class Channel : public ASubsystemLeaf<Group> {
   public:
     Channel(Group *, int id);
     ~Channel();
 
-    void setAttributes(VPSS_CHN_ATTR_S *attr);
+    void setAttributes(ChannelAttributes *);
+    ChannelAttributes *attributes() const;
 
     const Group *group() const;
 
   private:
     bool configureImpl() override final;
 
-    std::unique_ptr<VPSS_CHN_ATTR_S> m_attr;
+    std::unique_ptr<ChannelAttributes> m_attrBuilder;
 };
 
 }

@@ -3,6 +3,7 @@
 #include "HiMPP/MPP.h"
 #include "Subsystem.h"
 #include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
+#include "GroupAttributes.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -11,14 +12,10 @@
 
 namespace hisilicon::mpp::vpss {
 
-static VPSS_GRP_ATTR_S *createStandardAttr() {
-    return new VPSS_GRP_ATTR_S{};
-}
-
 Group::Group(Subsystem *s, int id)
     : ASubsystemItem(s, id),
       VpssBindItem(this),
-      m_attrs(createStandardAttr()),
+      m_attrBuilder(new GroupAttributes()),
       m_source(nullptr) {
 }
 
@@ -46,22 +43,26 @@ bool Group::configureImpl() {
     if (m_source == nullptr)
         throw std::runtime_error("vi::Group source is not set");
 
-    if (m_attrs.get() == nullptr)
-        throw std::runtime_error("vi::Group attributes not set");
+    if (m_attrBuilder.get() == nullptr)
+        throw std::runtime_error("vi::Group attributes builder is null");
 
-    const SIZE_S size = m_source->destSize();
-    m_attrs->enPixFmt = m_source->pixelFormat();
-    m_attrs->u32MaxW = size.u32Width;
-    m_attrs->u32MaxH = size.u32Height;
+    std::unique_ptr<VPSS_GRP_ATTR_S> attrs(m_attrBuilder->build(m_source));
+
+    if (attrs.get() == nullptr)
+        throw std::runtime_error("vi::Group attributes is null");
 
     // создаём группу
-    if (HI_MPI_VPSS_CreateGrp(id(), m_attrs.get()) != HI_SUCCESS)
+    if (HI_MPI_VPSS_CreateGrp(id(), attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_CreateGrp failed");
 
-    if (m_params.get() != nullptr) {
-        // устанавливаем параметры
-        if (HI_MPI_VPSS_SetGrpParam(id(), m_params.get()) != HI_SUCCESS)
-            throw std::runtime_error("HI_MPI_VPSS_SetGrpParam failed");
+    if (m_paramsBuilder.get() != nullptr) {
+        std::unique_ptr<VPSS_GRP_PARAM_S> params(m_paramsBuilder->build());
+
+        if (params.get() != nullptr) {
+            // устанавливаем параметры
+            if (HI_MPI_VPSS_SetGrpParam(id(), params.get()) != HI_SUCCESS)
+                throw std::runtime_error("HI_MPI_VPSS_SetGrpParam failed");
+        }
     }
 
     // стартуем каналы
@@ -75,12 +76,16 @@ bool Group::configureImpl() {
     return true;
 }
 
-void Group::enableNoiseReduction() {
-    m_attrs->bNrEn = HI_TRUE;
+void Group::setAttributes(GroupAttributes *builder) {
+    m_attrBuilder.reset(builder);
 }
 
-void Group::setAttributes(VPSS_GRP_ATTR_S *attr) {
-    m_attrs.reset(attr);
+void Group::setParameters(GroupParameters *p) {
+    m_paramsBuilder.reset(p);
+}
+
+GroupAttributes *Group::attributes() const {
+    return m_attrBuilder.get();
 }
 
 void Group::setBindedItem(BindItem *bi, bool source) {
@@ -104,10 +109,6 @@ HI_U32 Group::fps() const {
 
 PIXEL_FORMAT_E Group::pixelFormat() const {
     return m_source->pixelFormat();
-}
-
-void Group::setParameters(VPSS_GRP_PARAM_S *p) {
-    m_params.reset(p);
 }
 
 }

@@ -1,6 +1,7 @@
 #include "Channel.h"
 #include "Group.h"
 #include "HiMPP/Misc/Utils.h"
+#include "ChannelAttributes.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -9,13 +10,9 @@
 
 namespace hisilicon::mpp::vpss {
 
-static VPSS_CHN_ATTR_S *createStandardAttr() {
-    return new VPSS_CHN_ATTR_S{};
-}
-
 Channel::Channel(Group *g, int id)
     : ASubsystemLeaf(g, id),
-      m_attr(createStandardAttr()) {
+      m_attrBuilder(new ChannelAttributes()) {
 }
 
 Channel::~Channel() {
@@ -24,10 +21,15 @@ Channel::~Channel() {
 }
 
 bool Channel::configureImpl() {
-    if (m_attr.get() == nullptr)
-        throw std::runtime_error("[vpps::Channel] attr is not set");
+    if (m_attrBuilder.get() == nullptr)
+        throw std::runtime_error("[vpps::Channel] m_attrBuilder is not set");
 
-    if (HI_MPI_VPSS_SetChnAttr(group()->id(), id(), m_attr.get()) != HI_SUCCESS)
+    std::unique_ptr<VPSS_CHN_ATTR_S> attrs(m_attrBuilder->build());
+
+    if (attrs.get() == nullptr)
+        throw std::runtime_error("[vpps::Channel] attrs is nullptr");
+
+    if (HI_MPI_VPSS_SetChnAttr(group()->id(), id(), attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_SetChnAttr failed");
 
     if (HI_MPI_VPSS_EnableChn(group()->id(), id()) != HI_SUCCESS)
@@ -36,8 +38,12 @@ bool Channel::configureImpl() {
     return true;
 }
 
-void Channel::setAttributes(VPSS_CHN_ATTR_S *attr) {
-    m_attr.reset(attr);
+void Channel::setAttributes(ChannelAttributes *attr) {
+    m_attrBuilder.reset(attr);
+}
+
+ChannelAttributes *Channel::attributes() const {
+    return m_attrBuilder.get();
 }
 
 const Group *Channel::group() const {

@@ -2,6 +2,7 @@
 #include "Device.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "HiMPP/Misc/Utils.h"
+#include "ChannelAttributes.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -10,21 +11,11 @@
 
 namespace hisilicon::mpp::vi {
 
-static VI_CHN_ATTR_S *createStandardAttr() {
-    VI_CHN_ATTR_S *attr = new VI_CHN_ATTR_S{};
-
-    attr->enCapSel = VI_CAPSEL_BOTH;
-    attr->s32SrcFrameRate = -1;
-    attr->s32FrameRate = -1;
-
-    return attr;
-}
-
 Channel::Channel(Device *d, const ChannelInfo *info, int id)
     : ASubsystemLeaf(d, id),
       ViBindItem(d, this),
       m_info(info),
-      m_attr(createStandardAttr()) {
+      m_attrBuilder(new ChannelAttributes()) {
 }
 
 Channel::~Channel() {
@@ -36,23 +27,32 @@ bool Channel::configureImpl() {
     if (m_info == nullptr)
         throw std::runtime_error("[vi::Channel] Vi info is not set");
 
-    if (m_attr.get() == nullptr)
-        throw std::runtime_error("[vi::Channel] Vi attr is not set");
+    if (m_attrBuilder.get() == nullptr)
+        throw std::runtime_error("[vi::Channel] Vi m_attrBuilder is not set");
 
-    m_attr->enPixFormat = pixelFormat();
-    m_attr->stCapRect = capRect();
-    m_attr->stDestSize = destSize();
+    std::unique_ptr<VI_CHN_ATTR_S> attrs(m_attrBuilder->build(this, m_info));
+
+    if (attrs.get() == nullptr)
+        throw std::runtime_error("[vi::Channel] Vi attr is nullptr");
 
     if (HI_MPI_VI_SetChnScanMode(id(), m_info->scanMode()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetChnScanMode failed");
 
-    if (HI_MPI_VI_SetChnAttr(id(), m_attr.get()) != HI_SUCCESS)
+    if (HI_MPI_VI_SetChnAttr(id(), attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetChnAttr failed");
 
     if (HI_MPI_VI_EnableChn(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_EnableChn failed");
 
     return true;
+}
+
+void Channel::setAttributes(ChannelAttributes *a) {
+    m_attrBuilder.reset(a);
+}
+
+ChannelAttributes *Channel::attributes() const {
+    return m_attrBuilder.get();
 }
 
 SIZE_S *Channel::createDestSize() const {
@@ -71,6 +71,9 @@ SIZE_S Channel::imgSize() const {
 }
 
 HI_U32 Channel::fps() const {
+    if (m_attrBuilder->contains<ChannelAttributes::FrameRate>())
+        return m_attrBuilder->get<ChannelAttributes::FrameRate>();
+
     return m_info->fps();
 }
 

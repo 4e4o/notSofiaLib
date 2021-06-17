@@ -15,6 +15,7 @@ namespace hisilicon::mpp::vi {
 
 class Device;
 class ChannelInfo;
+class ChannelAttributes;
 
 class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     public IVideoCaptureFormatSource {
@@ -23,6 +24,9 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     ~Channel();
 
     const Device *device() const;
+
+    void setAttributes(ChannelAttributes *);
+    ChannelAttributes *attributes() const;
 
     // IVideoCaptureFormatSource
     SIZE_S destSize() const override final;
@@ -38,7 +42,7 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     bool configureImpl() override final;
 
     const ChannelInfo *m_info;
-    std::unique_ptr<VI_CHN_ATTR_S> m_attr;
+    std::unique_ptr<ChannelAttributes> m_attrBuilder;
     mutable std::unique_ptr<SIZE_S> m_destSize;
 };
 

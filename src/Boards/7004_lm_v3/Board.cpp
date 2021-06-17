@@ -10,13 +10,16 @@
 #include "HiMPP/VI/Subsystem.h"
 #include "HiMPP/VI/Device.h"
 #include "HiMPP/VI/Channel.h"
+#include "HiMPP/VI/ChannelAttributes.h"
 
 #include "HiMPP/VPSS/Group.h"
 #include "HiMPP/VPSS/Subsystem.h"
+#include "HiMPP/VPSS/GroupAttributes.h"
+#include "HiMPP/VPSS/ChannelAttributes.h"
 
 #include "HiMPP/VENC/Subsystem.h"
 #include "HiMPP/VENC/Group.h"
-#include "HiMPP/VENC/Channel/H264AttributesBuilder.h"
+#include "HiMPP/VENC/Channel/H264Attributes.h"
 #include "HiMPP/VENC/Channel/StreamFileOut.h"
 #include "HiMPP/VENC/Channel/StreamDummyOut.h"
 
@@ -68,19 +71,19 @@ hisilicon::mpp::vi::Subsystem *Board::initVi(hisilicon::mpp::MPP *p) {
 }
 
 static void setVpssGroupAttributes(hisilicon::mpp::vpss::Group *g) {
-    g->enableNoiseReduction();
+    using Attr = hisilicon::mpp::vpss::GroupAttributes;
+    g->attributes()->set<Attr::NoiseReduction>(true);
 }
 
 static void setVpssGroupParameters(hisilicon::mpp::vpss::Group *g) {
-    VPSS_GRP_PARAM_S *p = new VPSS_GRP_PARAM_S{};
+    using namespace hisilicon::mpp::vpss;
+    using Params = GroupParameters;
+    GroupParameters *p = new GroupParameters();
 
-    p->u32Contrast = 64;
-    p->u32IeStrength = 1;
-    p->u32SfStrength = 4;
-    p->u32TfStrength = 8;
-    // незнаю зачем это, в мане описания нету - написано Reserved
-    // София также делает, пусть будет так же
-    p->u32MotionThresh = 2;
+    p->set<Params::Contrast>(64);
+    p->set<Params::ImageEnhancementStrength>(1);
+    p->set<Params::SpatialNoiseReductionStrength>(4);
+    p->set<Params::TimeNoiseReductionStrength>(8);
 
     g->setParameters(p);
 }
@@ -131,8 +134,8 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
             s->bind(vpss_group, venc_group);
 
             Channel *channel = venc_group->addChannel(id++);
-            H264AttributesBuilder *ab = new H264AttributesBuilder();
-            channel->setAttributesBuilder(ab);
+            H264Attributes *ab = new H264Attributes();
+            channel->setAttributes(ab);
             setStreamOut(channel);
         }
     }

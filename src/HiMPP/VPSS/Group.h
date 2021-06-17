@@ -19,6 +19,8 @@ class IVideoCaptureFormatSource;
 namespace hisilicon::mpp::vpss {
 
 class Subsystem;
+class GroupAttributes;
+class GroupParameters;
 
 class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     public VpssBindItem, public IVideoFormatSource {
@@ -26,10 +28,11 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     Group(Subsystem *, int id);
     ~Group();
 
-    void enableNoiseReduction();
+    void setAttributes(GroupAttributes *);
+    GroupAttributes *attributes() const;
 
-    void setAttributes(VPSS_GRP_ATTR_S *);
-    void setParameters(VPSS_GRP_PARAM_S *);
+    void setParameters(GroupParameters *);
+    GroupParameters *parameters() const;
 
     Channel *addChannel(int id);
     const std::vector<Channel *> &channels() const;
@@ -45,8 +48,8 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     HI_U32 fps() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
-    std::unique_ptr<VPSS_GRP_ATTR_S> m_attrs;
-    std::unique_ptr<VPSS_GRP_PARAM_S> m_params;
+    std::unique_ptr<GroupAttributes> m_attrBuilder;
+    std::unique_ptr<GroupParameters> m_paramsBuilder;
     IVideoCaptureFormatSource *m_source;
 };
 
