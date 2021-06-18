@@ -55,6 +55,7 @@ void Channel::setStreamOut(IStreamOut *out, bool getOwnership) {
 
 void Channel::setAttributes(ChannelAttributes *b) {
     m_attrBuilder.reset(b);
+    b->onAttach(this, m_source);
 }
 
 ChannelAttributes *Channel::attributes() const {
@@ -99,6 +100,8 @@ bool Channel::configureImpl() {
 
     if (HI_MPI_VENC_CreateChn(id(), attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_CreateChn failed");
+
+    m_attrBuilder->onChannelCreated(this, m_source);
 
     if (needUserPool()) {
         // HiMPP Media Processing Software Development Reference.pdf
