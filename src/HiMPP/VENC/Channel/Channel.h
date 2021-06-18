@@ -25,10 +25,10 @@ class Channel : public ASubsystemLeaf<Group>, public IFrameFormatSource {
     Channel(Group *, int id);
     ~Channel();
 
+    StreamReader *streamReader() const;
+
     void setAttributes(ChannelAttributes *);
     ChannelAttributes *attributes() const;
-
-    void setStreamOut(IStreamOut *, bool getOwnership = true);
 
     const Group *group() const;
     bool needUserPool() const;
@@ -41,12 +41,8 @@ class Channel : public ASubsystemLeaf<Group>, public IFrameFormatSource {
     // IFrameFormatSource
     PIXEL_FORMAT_E pixelFormat() const override final;
 
-    void releaseStreamOut();
-
     std::unique_ptr<ChannelAttributes> m_attrBuilder;
     std::unique_ptr<StreamReader> m_streamReader;
-    std::unique_ptr<IStreamOut> m_streamOut;
-    bool m_ownsStreamOut;
     IVideoFormatSource *m_source;
 };
 

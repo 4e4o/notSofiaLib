@@ -20,8 +20,10 @@
 #include "HiMPP/VENC/Subsystem.h"
 #include "HiMPP/VENC/Group.h"
 #include "HiMPP/VENC/Channel/H264Attributes.h"
-#include "HiMPP/VENC/Channel/StreamFileOut.h"
-#include "HiMPP/VENC/Channel/StreamDummyOut.h"
+#include "HiMPP/VENC/Channel/StreamReader.h"
+
+#include "HiMPP/ASubsystem/ReadLoop/ReaderMemFileOut.h"
+#include "HiMPP/ASubsystem/ReadLoop/ReaderDummyOut.h"
 
 #define NVP_CHIPS_COUNT 1
 
@@ -99,8 +101,8 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
 
         for (auto &device : p->vi()->devices()) {
             for (auto &channel : device->channels()) {
-                channel->attributes()->set<hisilicon::mpp::vi::ChannelAttributes::FrameRate>
-                (12);
+                using Attr = hisilicon::mpp::vi::ChannelAttributes;
+                channel->attributes()->set<Attr::FrameRate>(20);
 
                 Group *group = s->addGroup(groupId++);
                 setVpssGroupAttributes(group);
@@ -113,6 +115,7 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
                 // page 422
                 group->addChannel(VPSS_BSTR_CHN);
                 s->bind(channel, group);
+                return s;
             }
         }
     }
@@ -148,8 +151,17 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
 
 void Board::setStreamOut(hisilicon::mpp::venc::Channel *c) {
     using namespace hisilicon::mpp::venc;
-    c->setStreamOut(new StreamFileOut(c), true);
-    //        c->setStreamOut(new StreamDummyOut());
+
+    using Out = hisilicon::mpp::ReaderMemFileOut;
+    const std::string fname = "stream_" + std::to_string(c->id()) + ".h264";
+    const size_t buf_size = 512 * 1024;
+    c->streamReader()->setOut(new Out(fname, buf_size), true);
+
+    //using Out = hisilicon::mpp::ReaderFileOut;
+    //c->streamReader()->setOut(new Out(fname), true);
+
+    //using Out = hisilicon::mpp::ReaderDummyOut;
+    //c->streamReader()->setOut(new Out(), true);
 }
 
 }
