@@ -10,10 +10,14 @@
 
 namespace hisilicon::mpp::venc {
 
-#define DEFAULT_SAMPLE_RATE     90000
-#define DEFAULT_BPP             0.03f
+#define DEFAULT_SAMPLE_RATE         90000
+#define DEFAULT_BPP                 0.03f
+#define DEFAULT_NAL_PREFIX_SIZE     4
 
 // TODO мб более точный метод высчитывания битрейта для h264 есть
+// Зависит от того чего мы хотим, битрейт влияет на качество и объем трафа
+// Надо наверно какие-то две функции на выбор выдавать, большее качество
+// или меньший траф
 
 // https://www.sri.com/wp-content/uploads/pdf/3_07_h264_format_bitrate_quality_tradeoff_study.pdf
 static constexpr HI_U32 bitrate(float bpp, const SIZE_S &size,
@@ -23,6 +27,7 @@ static constexpr HI_U32 bitrate(float bpp, const SIZE_S &size,
 }
 
 H264Attributes::H264Attributes() {
+    set<NALPrefixSize>(DEFAULT_NAL_PREFIX_SIZE);
     set<SampleRate>(DEFAULT_SAMPLE_RATE);
     set<Bpp>(DEFAULT_BPP);
     set<BitrateType>(TBitrate::VBR);
@@ -65,36 +70,21 @@ VENC_CHN_ATTR_S *H264Attributes::buildImpl(IVideoFormatSource *source) {
     const HI_U32 bufSize = std::ceil(picSize.u32Width * picSize.u32Height * 1.5f);
     stH264Attr.u32BufSize = CEILING_2_POWER(bufSize, 64);
 
-    /*0: baseline; 1:MP; 2:HP */
     stH264Attr.u32Profile = static_cast<HI_U32>(profile);
-    /*get stream mode is slice mode or frame mode?*/
     stH264Attr.bByFrame = HI_TRUE;
-    /* surpport frame code only for hi3516, bfield = HI_FALSE */
     stH264Attr.bField = HI_FALSE;
-    /* surpport main stream only for hi3516, bMainStream = HI_TRUE */
     stH264Attr.bMainStream = HI_TRUE;
-    /*channels precedence level. invalidate for hi3516*/
     stH264Attr.u32Priority = 0;
-    /*the sign of the VI picture is field or frame. Invalidate for hi3516*/
     stH264Attr.bVIField = HI_FALSE;
 
     if (bitrateType == TBitrate::CBR) {
         VENC_ATTR_H264_CBR_S &stH264Cbr = result->stRcAttr.stAttrH264Cbr;
-
         result->stRcAttr.enRcMode = VENC_RC_MODE_H264CBRv2;
         stH264Cbr.u32Gop = target_fps;
-        /* stream rate statics time(s) */
         stH264Cbr.u32StatTime = 1;
-        /* input (vi) frame rate */
         stH264Cbr.u32ViFrmRate = source_fps;
-        /* target frame rate */
         stH264Cbr.fr32TargetFrmRate = target_fps;
-        /* average bit rate */
         stH264Cbr.u32FluctuateLevel = 0;
-
-        // page 652
-        // Average bit rate, in kbit/s
-        // Value range: [2, 40960]
         stH264Cbr.u32BitRate = bit_rate;
     } else if (bitrateType == TBitrate::FIXQP) {
         VENC_ATTR_H264_FIXQP_S &stH264FixQp = result->stRcAttr.stAttrH264FixQp;
@@ -125,7 +115,7 @@ void H264Attributes::onChannelCreated(Channel *channel,
     std::unique_ptr<VENC_PARAM_H264_VUI_S> attrs(new VENC_PARAM_H264_VUI_S{});
 
     attrs->timing_info_present_flag = 1;
-    attrs->fixed_frame_rate_flag = 0;
+    attrs->fixed_frame_rate_flag = 1;
     attrs->time_scale = get<SampleRate>();
     attrs->num_units_in_tick = attrs->time_scale / (2 * get<FrameRate>());
 

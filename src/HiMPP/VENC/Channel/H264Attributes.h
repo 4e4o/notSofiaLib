@@ -26,6 +26,7 @@ class H264Attributes : public ChannelAttributes {
     MPP_ATTRIBUTE(Bpp, float);
     MPP_ATTRIBUTE(SampleRate, HI_S32);
     MPP_ATTRIBUTE(FrameRate, HI_S32);
+    MPP_ATTRIBUTE(NALPrefixSize, HI_S32);
 
   protected:
     VENC_CHN_ATTR_S *buildImpl(IVideoFormatSource *) override;

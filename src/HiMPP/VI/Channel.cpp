@@ -71,10 +71,7 @@ SIZE_S Channel::imgSize() const {
 }
 
 HI_U32 Channel::fps() const {
-    if (m_attrBuilder->contains<ChannelAttributes::FrameRate>())
-        return m_attrBuilder->get<ChannelAttributes::FrameRate>();
-
-    return m_info->fps();
+    return m_attrBuilder->get<ChannelAttributes::FrameRate>(m_info->fps());
 }
 
 PIXEL_FORMAT_E Channel::pixelFormat() const {

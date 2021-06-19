@@ -40,12 +40,12 @@ class PropertyContainer {
     }
 
     template<class KeyClass>
-    auto get() const {
+    auto get(const typename KeyClass::TValueType &def = {}) const {
         typedef typename KeyClass::TValueType TValueType;
         constexpr auto className = getFullTypeName<KeyClass>();
 
         if (!m_properties.contains(className))
-            m_properties.emplace(className, TValueType{});
+            return def;
 
         return std::any_cast<const TValueType &>(m_properties.at(className));
     }
@@ -61,7 +61,7 @@ class PropertyContainer {
     }
 
   private:
-    mutable std::map<std::string, std::any> m_properties;
+    std::map<std::string, std::any> m_properties;
     TPropertyChanged m_changedEvent;
     bool m_notifyChanged;
 };
