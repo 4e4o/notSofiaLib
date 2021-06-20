@@ -11,6 +11,10 @@ InfoProvider::InfoProvider() {
 }
 
 InfoProvider::~InfoProvider() {
+    for (const auto & [key, value] : m_channels)
+        delete value;
+
+    m_channels.clear();
 }
 
 #ifdef FAKE_NOT_FOUNDED_CHANNEL_INFO

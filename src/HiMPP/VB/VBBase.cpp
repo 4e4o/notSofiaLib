@@ -1,5 +1,5 @@
 #include "VBBase.h"
-#include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
+#include "HiMPP/ASubsystem/InfoSources/IFrameFormatSource.h"
 #include "HiMPP/Sys/Sys.h"
 
 #include <cmath>

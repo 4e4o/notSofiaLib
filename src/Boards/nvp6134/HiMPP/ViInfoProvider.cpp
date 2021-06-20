@@ -6,7 +6,7 @@
 
 #include <stdexcept>
 
-#define ADD_ONE_CHANNEL_ID 2
+//#define ADD_ONE_CHANNEL_ID 2
 
 namespace boards::nvp6134::mpp::vi {
 
