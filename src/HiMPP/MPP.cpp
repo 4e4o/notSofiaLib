@@ -16,6 +16,7 @@ MPP::MPP()
       m_vi(nullptr),
       m_vpss(nullptr),
       m_venc(nullptr),
+      m_vda(nullptr),
       m_veduCount(0) {
     registerDefaultTypes();
 }
