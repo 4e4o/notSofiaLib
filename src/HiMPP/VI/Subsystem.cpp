@@ -1,7 +1,6 @@
 #include "Subsystem.h"
 #include "HiMPP/MPP.h"
 #include "HiMPP/VI/Source/InfoProvider.h"
-#include "HiMPP/VI/Source/DeviceInfo.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Device.h"
 #include "Channel.h"
@@ -13,6 +12,8 @@ Subsystem::Subsystem(MPP *p)
       m_infoProvider(p->create<InfoProvider>()) {
     registerDefaultTypes();
     addItemBack(m_infoProvider);
+    // конфигурируем его сразу
+    m_infoProvider->configure();
 }
 
 void Subsystem::registerDefaultTypes() {

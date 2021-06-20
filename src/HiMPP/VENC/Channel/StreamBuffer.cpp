@@ -9,19 +9,15 @@
 
 namespace hisilicon::mpp::venc {
 
-StreamBuffer::StreamBuffer(DataBuffer *b)
-    : m_buffer(b) {
-}
-
 VENC_PACK_S *StreamBuffer::getPackBuffer(HI_U32 packsCount) {
     const size_t size = sizeof(VENC_PACK_S) * packsCount;
-    int8_t *buf = m_buffer->getBuffer(size, PACK_BUFFER_INDEX);
+    int8_t *buf = buffer()->getBuffer(size, PACK_BUFFER_INDEX);
     return reinterpret_cast<VENC_PACK_S *>(buf);
 }
 
 HI_U8 *StreamBuffer::getConsecutiveStreamBuffer(const VENC_PACK_S &pack) {
     const size_t totalLength = pack.u32Len[0] + pack.u32Len[1];
-    int8_t *buf = m_buffer->getBuffer(totalLength, STREAM_BUFFER_INDEX);
+    int8_t *buf = buffer()->getBuffer(totalLength, STREAM_BUFFER_INDEX);
     std::memcpy(buf, pack.pu8Addr[0], pack.u32Len[0]);
     std::memcpy(buf + pack.u32Len[0], pack.pu8Addr[1], pack.u32Len[1]);
     //    std::cout << "getConsecutiveStreamBuffer " << totalLength << std::endl;

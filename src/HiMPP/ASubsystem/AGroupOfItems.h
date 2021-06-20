@@ -21,7 +21,13 @@ class AGroupOfItems : public TConfiguratorBase {
 
     template<typename... ConstrArgs>
     TSubItem *addSubItem(ConstrArgs... args) {
-        TSubItem *subItem = m_factory->template create<TSubItem>(args...);
+        return addDerivedSubItem<TSubItem, ConstrArgs...>(args...);
+    }
+
+    template<class Derived, typename... ConstrArgs>
+    requires std::derived_from<Derived, TSubItem>
+    Derived *addDerivedSubItem(ConstrArgs... args) {
+        Derived *subItem = m_factory->template create<Derived>(args...);
         TConfiguratorBase::addItemBack(subItem);
         m_subItems.push_back(subItem);
         return subItem;

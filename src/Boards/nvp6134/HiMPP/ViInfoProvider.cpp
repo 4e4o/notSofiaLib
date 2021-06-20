@@ -1,5 +1,4 @@
 #include "ViInfoProvider.h"
-#include "HiMPP/VI/Source/DeviceInfo.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
 #include "Boards/nvp6134/Board.h"
 #include "ADC/nvp6134/Chip.h"
@@ -7,9 +6,10 @@
 
 #include <stdexcept>
 
+#define ADD_ONE_CHANNEL_ID 2
+
 namespace boards::nvp6134::mpp::vi {
 
-using hisilicon::mpp::vi::DeviceInfo;
 using hisilicon::mpp::vi::ChannelInfo;
 using ::nvp6134::ViChannel;
 
@@ -33,37 +33,31 @@ static VI_SCAN_MODE_E toMppScanMode(ViChannel *ch) {
     }
 }
 
-InfoProvider::InfoProvider(Board *b)
-    : Holder<Board *>(b) {
-    initInfo();
-}
+bool InfoProvider::configureImpl() {
+    for (auto &chip : value()->nvp()) {
+        for (const auto &channel : chip->viChannels()) {
+#ifdef ADD_ONE_CHANNEL_ID
+            if (channel->id() != ADD_ONE_CHANNEL_ID)
+                continue;
+#endif
+            if (channel->formatDetected()) {
+                ChannelInfo *info = new ChannelInfo();
 
-void InfoProvider::initInfo() {
-    hisilicon::mpp::vi::InfoProvider::TViDevicesInfo result;
-    auto &nvp = value()->nvp();
-
-    for (auto &chip : nvp) {
-        DeviceInfo *dev = new DeviceInfo(chip->id());
-        auto &ch = chip->viChannels();
-
-        for (int j = 0 ; j < (int) ch.size() ; j++) {
-            ChannelInfo *info = new ChannelInfo(dev, j);
-            auto &channel = ch[j];
-
-            if (ch[j]->formatDetected()) {
                 info->setCapSize(channel->captureSize());
                 info->setImgSize(channel->imageSize());
                 info->setFps(channel->pal() ? 25 : 30);
                 info->setScanMode(toMppScanMode(channel.get()));
                 info->setPixelFormat(toMppPixelFormat(channel.get()));
-                dev->addChannel(info);
+                addChannel({chip->id(), channel->id()}, info);
+
+#ifdef ADD_ONE_CHANNEL_ID
+                return true;
+#endif
             }
         }
-
-        result.push_back(dev);
     }
 
-    setDeviceInfo(result);
+    return true;
 }
 
 }

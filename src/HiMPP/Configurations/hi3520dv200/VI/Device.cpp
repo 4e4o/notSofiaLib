@@ -48,4 +48,33 @@ void Device::initMode() {
     }
 }
 
+Device::TIntPair Device::getBindWay(const TIntPair &i) {
+    using vi::hi3520dv200::Subsystem;
+    Subsystem *s = subsystem<Subsystem>();
+
+    switch (s->hiMode()) {
+    case Subsystem::HI3520DV200_MODE::MODE_4CH_72OP: {
+        // Hi3520D／Hi3515A／Hi3515C H.264 CODEC Processor Data Sheet.pdf
+        // page 616
+        if (i.first == 0) {
+            if (i.second == 0)
+                return {0, 0};
+            else if ((i.second == 2) || (i.second == 3))
+                return {0, 1};
+        } else if (i.first == 1) {
+            if (i.second == 4)
+                return {1, 0};
+            else if ((i.second == 6) || (i.second == 7))
+                return {1, 1};
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    throw std::runtime_error("[vi::hi3520dv200::Device] Unsupported HI3520DV200_MODE");
+}
+
+
 }

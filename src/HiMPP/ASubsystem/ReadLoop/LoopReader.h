@@ -3,59 +3,41 @@
 
 #include <memory>
 
+#include <hi_common.h>
+
 #include "Misc/IdHolder.h"
-#include "ReadLoop.h"
-#include "IReaderOut.h"
 
 namespace hisilicon::mpp {
 
-template<class DataBufferWrapper>
+class DataBuffer;
+class IReaderOut;
+class ReadLoop;
+class DataBufferWrapper;
+
 class LoopReader : public Holder<IdHolder *> {
   public:
-    void setOut(IReaderOut *out, bool getOwnership = true) {
-        releaseOut();
-        m_out.reset(out);
-        m_ownsOut = getOwnership;
-    }
+    LoopReader(IdHolder *h);
+    virtual ~LoopReader();
+
+    void setOut(IReaderOut *out, bool getOwnership = true);
 
   protected:
-    LoopReader(IdHolder *h)
-        : Holder(h), m_ownsOut(true) { }
 
-    virtual ~LoopReader() {
-        releaseOut();
+    void attach(int fd, ReadLoop *loop);
+
+    template<class TBuffer = DataBufferWrapper>
+    TBuffer * buffer() const {
+        return static_cast<TBuffer *>(m_buffer.get());
     }
 
-    void attach(int fd, ReadLoop *loop) {
-        if (fd < 0)
-            throw std::runtime_error("[LoopReader] invalid fd");
-
-        m_buffer.reset(new DataBufferWrapper(loop->buffer()));
-
-        loop->addFd(fd, [this] () {
-            read();
-        });
-    }
-
-    DataBufferWrapper *buffer() const {
-        return m_buffer.get();
-    }
-
-    int id() const {
-        return Holder::value()->id();
-    }
-
-    void write(const HI_U8 *data, const HI_U32 &size) {
-        m_out->write(data, size);
-    }
+    int id() const;
+    void write(const HI_U8 *data, const HI_U32 &size);
 
   private:
+    virtual DataBufferWrapper *createBufferWrapper(DataBuffer *) = 0;
     virtual void read() = 0;
 
-    void releaseOut() {
-        if (!m_ownsOut)
-            m_out.release();
-    }
+    void releaseOut();
 
     std::unique_ptr<DataBufferWrapper> m_buffer;
     std::unique_ptr<IReaderOut> m_out;

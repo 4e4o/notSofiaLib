@@ -31,11 +31,11 @@ void Subsystem::initMode() {
         vi::Device *dev0 = addDevice(0);
         vi::Device *dev1 = addDevice(1);
 
-        dev0->addChannel(0, 0, 0);
-        dev0->addChannel(2, 0, 1);
+        dev0->addChannel(0);
+        dev0->addChannel(2);
 
-        dev1->addChannel(4, 0, 2);
-        dev1->addChannel(6, 0, 3);
+        dev1->addChannel(4);
+        dev1->addChannel(6);
         break;
     }
     default:

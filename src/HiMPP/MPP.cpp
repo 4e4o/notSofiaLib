@@ -4,6 +4,7 @@
 #include "VI/Subsystem.h"
 #include "VPSS/Subsystem.h"
 #include "VENC/Subsystem.h"
+#include "VDA/Subsystem.h"
 
 #include <stdexcept>
 
@@ -51,6 +52,10 @@ venc::Subsystem *MPP::addVencSubsystem() {
     return addSubsystem<venc::Subsystem>(m_venc);
 }
 
+vda::Subsystem *MPP::addVdaSubsystem() {
+    return addSubsystem<vda::Subsystem>(m_vda);
+}
+
 Sys *MPP::sys() const {
     return m_sys;
 }
@@ -65,6 +70,10 @@ vpss::Subsystem *MPP::vpss() const {
 
 venc::Subsystem *MPP::venc() const {
     return m_venc;
+}
+
+vda::Subsystem *MPP::vda() const {
+    return m_vda;
 }
 
 int MPP::veduCount() const {

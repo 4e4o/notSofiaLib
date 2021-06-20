@@ -1,8 +1,9 @@
 #include "VBBase.h"
-#include "HiMPP/ASubsystem/InfoSources/IFrameFormatSource.h"
+#include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
 #include "HiMPP/Sys/Sys.h"
 
 #include <cmath>
+#include <iostream>
 
 namespace hisilicon::mpp {
 
@@ -10,12 +11,8 @@ namespace hisilicon::mpp {
 // HiMPP Media Processing Software Development Reference.pdf
 // page 90
 
-HI_U32 VBBase::picVbBlkSize(IFrameFormatSource *b) {
+HI_U32 VBBase::picVbBlkSize(const IFrameFormatSource *b) {
     const HI_U32 sysAlignWidth = parent()->sys()->sysWidthAlign();
-    // Тут нет уверенности что именно imgSize() юзать надо,
-    // проверено destSize, capSize -
-    // так же работает буффер без ошибок
-    // значит будем юзать наименьшее значение
     const SIZE_S imgSize = b->imgSize();
     const PIXEL_FORMAT_E pixFmt = b->pixelFormat();
 
@@ -33,6 +30,8 @@ HI_U32 VBBase::picVbBlkSize(IFrameFormatSource *b) {
     const HI_U32 bufSize = std::ceil(imgSize.u32Width * imgSize.u32Height *
                                      bytesPerPixel);
 
+
+    std::cout << "bufSize: " << bufSize << std::endl;
     // потому что степень для CEILING_2_POWER должна быть кратна 2
     if (sysAlignWidth > 1)
         return CEILING_2_POWER(bufSize, sysAlignWidth);

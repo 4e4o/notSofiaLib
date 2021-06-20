@@ -1,6 +1,7 @@
 #include "Channel.h"
 #include "Device.h"
 #include "HiMPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/ASubsystem/InfoSources/FrameFormatSource.h"
 #include "HiMPP/Misc/Utils.h"
 #include "ChannelAttributes.h"
 
@@ -13,7 +14,7 @@ namespace hisilicon::mpp::vi {
 
 Channel::Channel(Device *d, const ChannelInfo *info, int id)
     : ASubsystemLeaf(d, id),
-      ViBindItem(d, this),
+      vpss::ViBindItem(d, this),
       m_info(info),
       m_attrBuilder(new ChannelAttributes()) {
 }
@@ -72,6 +73,17 @@ SIZE_S Channel::imgSize() const {
 
 HI_U32 Channel::fps() const {
     return m_attrBuilder->get<ChannelAttributes::FrameRate>(m_info->fps());
+}
+
+const IFrameFormatSource *Channel::vbFormatInfo() const {
+    // Для буфера надо возвращать размер захватываемых данных
+    // Сначало здесь было imgSize - т.е. результирующий размер картинки
+    // и это работало, потому что я запускал на двух камерах пример
+    // и буферы второй камеры юзались для первой.
+    // Потом я отключил вторую камеру, оставил первую, а у меня в первая камера cvbs
+    // для неё imgSize() != destSize() и получал ошибки vb fail.
+    // Ну и по логике тут и надо размер захвата юзать.
+    return new FrameFormatSource(destSize(), pixelFormat());
 }
 
 PIXEL_FORMAT_E Channel::pixelFormat() const {

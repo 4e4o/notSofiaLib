@@ -34,6 +34,8 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     HI_U32 fps() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
+    const IFrameFormatSource *vbFormatInfo() const;
+
   protected:
     RECT_S capRect() const;
 

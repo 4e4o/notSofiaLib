@@ -1,21 +1,15 @@
 #ifndef MPP_VI_CHANNEL_INFO_H
 #define MPP_VI_CHANNEL_INFO_H
 
-#include <vector>
-
-#include <hi_comm_video.h>
 #include <hi_comm_vi.h>
 
-#include "Misc/IdHolder.h"
 #include "Misc/Size.h"
 
 namespace hisilicon::mpp::vi {
 
-class DeviceInfo;
-
-class ChannelInfo : public Holder<DeviceInfo *>, public IdHolder {
+class ChannelInfo {
   public:
-    ChannelInfo(DeviceInfo *, int id);
+    ChannelInfo();
     ~ChannelInfo();
 
     void setPixelFormat(PIXEL_FORMAT_E);

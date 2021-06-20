@@ -6,7 +6,7 @@
 
 namespace hisilicon::mpp::venc {
 
-class StreamReader : public LoopReader<StreamBuffer> {
+class StreamReader : public LoopReader {
   public:
     StreamReader(IdHolder *);
 
@@ -14,6 +14,7 @@ class StreamReader : public LoopReader<StreamBuffer> {
     void setConsecutiveMode(bool consecutiveMode);
 
   private:
+    DataBufferWrapper *createBufferWrapper(DataBuffer *) override final;
     void read() override final;
 
     bool m_consecutiveMode;

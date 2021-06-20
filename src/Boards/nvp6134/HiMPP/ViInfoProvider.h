@@ -15,10 +15,10 @@ namespace mpp::vi {
 class InfoProvider : public Holder<Board *>,
     public hisilicon::mpp::vi::InfoProvider {
   public:
-    InfoProvider(Board *);
+    using Holder::Holder;
 
   private:
-    void initInfo();
+    bool configureImpl() override final;
 };
 
 }

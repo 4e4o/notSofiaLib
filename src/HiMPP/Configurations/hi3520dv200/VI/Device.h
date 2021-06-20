@@ -10,6 +10,7 @@ class Device : public mpp::vi::Device {
     Device(mpp::vi::Subsystem *, int id);
 
   private:
+    TIntPair getBindWay(const TIntPair &i) override final;
     void initMode();
 
     VI_DEV_ATTR_S m_attr;

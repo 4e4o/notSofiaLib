@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string.h>
 
+#define CATCH_EXCEPTIONS
+
 AApplication *AApplication::g_app = nullptr;
 
 using boards::ABoard;
@@ -42,17 +44,21 @@ boards::ABoard *AApplication::board() const {
 int AApplication::run() {
     m_board.reset(create<ABoard>());
 
+#ifdef CATCH_EXCEPTIONS
     try {
+#endif
         if (!m_board->configure())
             throw std::runtime_error("board configure failed");
 
         beforeBoardRun();
         m_board->run();
+#ifdef CATCH_EXCEPTIONS
     } catch (const std::exception &e) {
         std::cout << "Exception: " << e.what() << std::endl;
     } catch (...) {
         std::cout << "Unknown exception: " << std::endl;
     }
+#endif
 
     return 0;
 }

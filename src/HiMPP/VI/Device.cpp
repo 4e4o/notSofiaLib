@@ -45,14 +45,20 @@ bool Device::configureImpl() {
     return Configurator::configureImpl();
 }
 
-Channel *Device::addChannel(int id, int infoDevId, int infoChId) {
+Channel *Device::addChannel(int chId) {
+    // HiMPP Media Processing Software Development Reference.pdf
+    // page 109
+    // смотрим на диаграмму.
+    // Канал биндится к dev->way
+    // айди dev и way зависят от хики чипа и режима его работы.
+    const auto viId = getBindWay({id(), chId});
     InfoProvider *inf = subsystem()->infoProvider();
-    const ChannelInfo *i = inf->findChannelInfo(infoDevId, infoChId);
+    const ChannelInfo *i = inf->getInfo(viId);
 
     if (i == nullptr)
         return nullptr;
 
-    return addChannel(i, id);
+    return addChannel(i, chId);
 }
 
 void Device::bindChannels() {
@@ -65,8 +71,10 @@ void Device::bindChannels() {
         // HiMPP Media Processing Software Development Reference.pdf
         // page 109
 
-        attr.ViDev = id();
-        attr.ViWay = getBindWay(i, ch);
+        const auto bind = getBindWay({id(), ch->id()});
+
+        attr.ViDev = bind.first;
+        attr.ViWay = bind.second;
 
         if (HI_MPI_VI_ChnUnBind(ch->id()) != HI_SUCCESS)
             throw std::runtime_error("HI_MPI_VI_ChnUnBind failed");
@@ -76,7 +84,7 @@ void Device::bindChannels() {
     }
 }
 
-int Device::getBindWay(int i, Channel *) {
+Device::TIntPair Device::getBindWay(const TIntPair &i) {
     return i;
 }
 

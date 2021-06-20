@@ -51,39 +51,8 @@ bool VideoBuffer::configureImpl() {
 }
 
 HI_U32 VideoBuffer::getBlocksCount(const HI_U32 &channelsCount) {
-
-    // NOTE
-    // Значит тут имеется зависимость от кол-ва каналов на группу в vpps
-    // Сначало было 4 канала на группу, 4 группы vpps и работало только с channelCount * 4
-    // Потом сделал 1 канал на группу, 4 группы, стало работать с channelCount * 3,
-    // - с 2 уже не работает, зависимость пока не понятна
-
-    // Значит делаем следующее:
-    // отключаем подсистемы (venc, vpss, vi)
-    // и пытаемся понять сколько какой нужно blckcnt:
-    // если mpp не достаточно блоков, то во-первых
-    // cat /dev/logmpp будет сыпать ошибки get vb fail, без настройки уровня лога
-    // во вторых, cat /proc/umap/vb MinFree смотрим столбец
-
-    // по тестам выводы такие:
-    // когда только vi работает подсистема, при 4-х канальном захвате жрётся 8 блоков
-    // добавляем vpss на каждый vi канал группу и в каждой группе по одному vpss каналу (без venc)
-    // - жрётся так же 8 блоков ( channelsCount * 2)
-    // добавляем venc c на каждый vpss канал по каналу:
-    // venc юзает свой vb пул, + юзается этот пул почему-то
-    // при channelsCount * 8 MinFree == 15 (4 * 8 = 32 ; 32 - 15 = 17 блоков юзается)
-    // 17 = (channelsCount * 4 + 1)
-    // что за зависимость, хз
-    // я думал может venc модулю не хватает блоков из своего пула и он берёт их из основного,
-    // но нет, добавлял блоки в venc пул и увеличивал их размер - результат тот же
-
-    // HiMPP Media Processing Software Development Reference.pdf
-    // page 40:
-    // "The number of public VB pools and the size and number of
-    // buffers vary according to services."
-
-    // Вот нет конкретной формулы для vi и других подсистем в мануале.
-
+    // Определяется экспериментальным путём, возможно это частный случай
+    // поэтому метод сделан виртуальным.
     return channelsCount * 4 + 1;
 }
 
@@ -99,7 +68,8 @@ HI_U32 VideoBuffer::maxViBlkSize(HI_U32 &channelsCount) {
     for (auto &device : vi->devices()) {
         for (auto &channel : device->channels()) {
             channelsCount++;
-            tmp = picVbBlkSize(channel);
+            std::unique_ptr<const IFrameFormatSource> info(channel->vbFormatInfo());
+            tmp = picVbBlkSize(info.get());
 
             if (tmp > max)
                 max = tmp;

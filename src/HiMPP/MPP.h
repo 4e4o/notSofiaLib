@@ -21,6 +21,10 @@ namespace venc {
 class Subsystem;
 }
 
+namespace vda {
+class Subsystem;
+}
+
 class Sys;
 class VideoBuffer;
 
@@ -32,11 +36,13 @@ class MPP : public Configurator, public ConfigurableFactory,
     vi::Subsystem *addViSubsystem();
     vpss::Subsystem *addVpssSubsystem();
     venc::Subsystem *addVencSubsystem();
+    vda::Subsystem *addVdaSubsystem();
 
     Sys *sys() const;
     vi::Subsystem *vi() const;
     vpss::Subsystem *vpss() const;
     venc::Subsystem *venc() const;
+    vda::Subsystem *vda() const;
 
     int veduCount() const;
     void setVeduCount(int veduCount);
@@ -67,6 +73,7 @@ class MPP : public Configurator, public ConfigurableFactory,
     vi::Subsystem *m_vi;
     vpss::Subsystem *m_vpss;
     venc::Subsystem *m_venc;
+    vda::Subsystem *m_vda;
     // VEDU in HiMPP Media Processing Software Development Reference.pdf
     int m_veduCount;
 };

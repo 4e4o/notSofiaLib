@@ -1,4 +1,5 @@
 #include "StreamReader.h"
+#include "StreamBuffer.h"
 
 #include <mpi_venc.h>
 
@@ -14,6 +15,10 @@ void StreamReader::attach(ReadLoop *loop) {
     LoopReader::attach(fd, loop);
 }
 
+DataBufferWrapper *StreamReader::createBufferWrapper(DataBuffer *d) {
+    return new StreamBuffer(d);
+}
+
 void StreamReader::read() {
     VENC_CHN_STAT_S stStat{};
     VENC_STREAM_S stStream;
@@ -21,7 +26,7 @@ void StreamReader::read() {
     if (HI_MPI_VENC_Query(id(), &stStat) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_Query failed");
 
-    stStream.pstPack = buffer()->getPackBuffer(stStat.u32CurPacks);
+    stStream.pstPack = buffer<StreamBuffer>()->getPackBuffer(stStat.u32CurPacks);
     stStream.u32PackCount = stStat.u32CurPacks;
 
     if (stStream.pstPack == nullptr)
@@ -42,7 +47,7 @@ void StreamReader::read() {
             if (m_consecutiveMode)
                 data = stStream.pstPack[i].pu8Addr[0];
             else
-                data = buffer()->getConsecutiveStreamBuffer(stStream.pstPack[i]);
+                data = buffer<StreamBuffer>()->getConsecutiveStreamBuffer(stStream.pstPack[i]);
 
             write(data, stStream.pstPack[i].u32Len[0] + stStream.pstPack[i].u32Len[1]);
         } else {

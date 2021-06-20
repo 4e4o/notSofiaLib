@@ -1,25 +1,20 @@
 #ifndef STREAM_BUFFER__H
 #define STREAM_BUFFER__H
 
-#include <hi_comm_venc.h>
+#include "HiMPP/ASubsystem/ReadLoop/DataBufferWrapper.h"
 
-namespace hisilicon::mpp {
-class DataBuffer;
-}
+#include <hi_comm_venc.h>
 
 namespace hisilicon::mpp::venc {
 
 // Враппер над DataBuffer
 
-class StreamBuffer {
+class StreamBuffer : public DataBufferWrapper {
   public:
-    StreamBuffer(DataBuffer *);
+    using DataBufferWrapper::DataBufferWrapper;
 
     VENC_PACK_S *getPackBuffer(HI_U32 packsCount);
     HI_U8 *getConsecutiveStreamBuffer(const VENC_PACK_S &pack);
-
-  private:
-    DataBuffer *m_buffer;
 };
 
 }

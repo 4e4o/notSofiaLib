@@ -2,10 +2,8 @@
 
 namespace hisilicon::mpp::vi {
 
-ChannelInfo::ChannelInfo(DeviceInfo *d, int id)
-    : Holder<DeviceInfo *>(d),
-      IdHolder(id),
-      m_fps(0),
+ChannelInfo::ChannelInfo()
+    : m_fps(0),
       m_scanMode(VI_SCAN_BUTT),
       m_pixelFormat(PIXEL_FORMAT_BUTT) {
 }

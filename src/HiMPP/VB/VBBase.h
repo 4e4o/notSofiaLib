@@ -15,7 +15,7 @@ class VBBase : public MPPChild, public Configurable {
     using MPPChild::MPPChild;
 
   protected:
-    HI_U32 picVbBlkSize(IFrameFormatSource *);
+    HI_U32 picVbBlkSize(const IFrameFormatSource *);
 
     // дополнительное кол-во блоков для выделения в пуле
     // помогает найти нестабильные конфиги пула

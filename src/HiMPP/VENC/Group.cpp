@@ -10,7 +10,7 @@ namespace hisilicon::mpp::venc {
 
 Group::Group(Subsystem *s, int id)
     : ASubsystemItem(s, id),
-      GroupBindItem(this) {
+      vpss::GroupBindItem(this) {
 }
 
 Group::~Group() {

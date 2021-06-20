@@ -48,35 +48,21 @@ class BindItem {
     BindItem *m_bindedItem;
 };
 
-class ViBindItem : public BindItem {
+template<MOD_ID_E T>
+class BaseBindItem : public BindItem {
   protected:
     using BindItem::BindItem;
 
   private:
     MOD_ID_E bindMode(bool) override final {
-        return HI_ID_VIU;
+        return T;
     }
 };
 
-class VpssBindItem : public BindItem {
-  protected:
-    using BindItem::BindItem;
-
-  private:
-    MOD_ID_E bindMode(bool) override final {
-        return HI_ID_VPSS;
-    }
-};
-
-class GroupBindItem : public BindItem {
-  protected:
-    using BindItem::BindItem;
-
-  private:
-    MOD_ID_E bindMode(bool) override final {
-        return HI_ID_GROUP;
-    }
-};
+using ViBindItem = BaseBindItem<HI_ID_VIU>;
+using VpssBindItem = BaseBindItem<HI_ID_VPSS>;
+using GroupBindItem = BaseBindItem<HI_ID_GROUP>;
+using VdaBindItem = BaseBindItem<HI_ID_VDA>;
 
 }
 
