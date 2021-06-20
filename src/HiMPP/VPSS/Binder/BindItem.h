@@ -26,6 +26,9 @@ class BindItem {
     virtual MOD_ID_E bindMode(bool source) = 0;
 
     virtual HI_S32 bindDeviceId(bool) {
+        if (m_devIdHolder == nullptr)
+            return 0;
+
         return m_devIdHolder->id();
     }
 

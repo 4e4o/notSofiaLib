@@ -16,7 +16,7 @@ namespace hisilicon::mpp::vda {
 Channel::Channel(ChannelAttributes *attr, VdaDataReader *reader, Subsystem *s,
                  int id)
     : ASubsystemLeaf(s, id),
-      vpss::VdaBindItem(this),
+      vpss::VdaBindItem(nullptr, this),
       m_attrBuilder(attr),
       m_vdaReader(reader),
       m_source(nullptr) {
