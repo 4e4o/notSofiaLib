@@ -22,9 +22,6 @@
 #include "HiMPP/VENC/Channel/H264Attributes.h"
 #include "HiMPP/VENC/Channel/StreamReader.h"
 
-#include "HiMPP/VDA/Subsystem.h"
-#include "HiMPP/VDA/Channel/Motion/MotionChannel.h"
-
 #include "HiMPP/ASubsystem/ReadLoop/ReaderMemFileOut.h"
 #include "HiMPP/ASubsystem/ReadLoop/ReaderDummyOut.h"
 
@@ -55,10 +52,6 @@ Board::Board()
 
         mpp->registerType([this](hisilicon::mpp::MPP * p) -> hisilicon::mpp::venc::Subsystem* {
             return initVenc(p);
-        });
-
-        mpp->registerType([this](hisilicon::mpp::MPP * p) -> hisilicon::mpp::vda::Subsystem* {
-            return initVda(p);
         });
 
         mpp->addViSubsystem();
@@ -176,23 +169,6 @@ void Board::setStreamOut(hisilicon::mpp::venc::Channel *c) {
 
     //using Out = hisilicon::mpp::ReaderDummyOut;
     //c->streamReader()->setOut(new Out(), true);
-}
-
-hisilicon::mpp::vda::Subsystem *Board::initVda(hisilicon::mpp::MPP *p) {
-    using namespace hisilicon::mpp::vda;
-    Subsystem *s = new Subsystem(p);
-
-    {
-        int channelId = 0;
-
-        for (auto &device : p->vi()->devices()) {
-            for (auto &channel : device->channels()) {
-                MotionChannel *mc = s->addMotionChannel(channelId++);
-                s->bind(channel, mc);
-            }
-        }
-    }
-    return s;
 }
 
 }

@@ -15,9 +15,6 @@ namespace venc {
 class Subsystem;
 class Channel;
 }
-namespace vda {
-class Subsystem;
-}
 }
 
 namespace boards::lm7004v3 {
@@ -35,7 +32,6 @@ class Board : public boards::nvp6134::Board {
     hisilicon::mpp::vi::Subsystem *initVi(hisilicon::mpp::MPP *p);
     hisilicon::mpp::vpss::Subsystem *initVpss(hisilicon::mpp::MPP *p);
     hisilicon::mpp::venc::Subsystem *initVenc(hisilicon::mpp::MPP *p);
-    hisilicon::mpp::vda::Subsystem *initVda(hisilicon::mpp::MPP *p);
 };
 
 }
