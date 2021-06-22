@@ -79,7 +79,6 @@ bool DriverCommunicator::setViChannelMode(const ViChannel *ch, bool pal,
     // pal тут имеет сакральное значние
     // см. комментарии в ViChannel::isNvpPal
 
-    std::cout << "DriverCommunicator::setViChannelMode " << pal << std::endl;
     mode.vformat = pal;
     mode.ch = ind;
 

@@ -1,6 +1,3 @@
-[submodule "nvp6134_ex"]
-	path = 3rdparty/nvp6134_ex
-	url = https://github.com/4e4o/nvp6134_ex.git
 [submodule "3rdparty/nvp6134_ex"]
 	path = 3rdparty/nvp6134_ex
 	url = https://github.com/4e4o/nvp6134_ex.git
