@@ -4,7 +4,7 @@
 #include <array>
 #include <memory>
 
-#include <nvp6134_ex_170306/video.h>
+#include <nvp6134_ex/video.h>
 
 #include "Misc/IdHolder.h"
 #include "Misc/Configurator/Configurable.h"

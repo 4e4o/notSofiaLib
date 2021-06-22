@@ -1,7 +1,7 @@
 #ifndef NVP_6134_VI_CHANNEL_H
 #define NVP_6134_VI_CHANNEL_H
 
-#include <nvp6134_ex_170306/video.h>
+#include <nvp6134_ex/video.h>
 
 #include "ChipChild.h"
 #include "Misc/IdHolder.h"
@@ -13,9 +13,9 @@ class VoChannel;
 
 class ViChannel : public ChipChild, public IdHolder {
   public:
-    // значения взяты из nvp6134_ex_170306/video.c, см. тело функции nvp6134_vfmt_convert
-    // https://github.com/4e4o/nvp6134_ex_170306/blob/master/video.c#L332
-    enum TVideoFormat {
+    // значения взяты из nvp6134_ex/video.c, см. тело функции nvp6134_vfmt_convert
+    // https://github.com/4e4o/nvp6134_ex/blob/master/video.c#L332
+    enum class TVideoFormat {
         DF_NOT_DETECTED = 0x00,
 
         DF_CVBS_NTSC = 0x01,
@@ -64,15 +64,21 @@ class ViChannel : public ChipChild, public IdHolder {
         YUV_422
     };
 
+    enum class ScanMode {
+        PROGRESSIVE,
+        INTERLACED
+    };
+
     ViChannel(Chip *, int id);
     ~ViChannel();
 
     bool formatDetected() const;
-    bool pal() const;
     OutPixelFormat pixelFormat() const;
     TVideoFormat videoFormat() const;
     TSize captureSize() const;
     TSize imageSize() const;
+    float fps() const;
+    ScanMode scanMode() const;
 
     void setMode(NVP6134_VI_MODE m);
     void setOutChannel(VoChannel *);
@@ -82,6 +88,9 @@ class ViChannel : public ChipChild, public IdHolder {
     TSize modeToSize() const;
     TSize videoFormatSize() const;
     bool inXFormatMode() const;
+    bool isCvbsPal() const;
+    bool isNvpPal() const;
+    bool cvbs() const;
 
     TVideoFormat m_videoFormat;
     NVP6134_VI_MODE m_mode;

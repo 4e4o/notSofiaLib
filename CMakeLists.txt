@@ -3,10 +3,11 @@ cmake_minimum_required(VERSION 3.5)
 project(notSofiaLib LANGUAGES CXX C)
 
 set(HI_SDK_PATH "/mnt/disk2/workspace/devices/mars/dvr/hisilicon_sdk_and_tools/Hi3520D_SDK_V1.0.5.1")
-set(NVP6134_PATH "${HI_SDK_PATH}/../NVP6134C/02_SDK/")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty")
 
 add_library(${PROJECT_NAME} STATIC "")
 
@@ -40,7 +41,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
     ${HI_SDK_INCLUDE}
     ${EXT_DRV_DIRS}
-    ${NVP6134_PATH}
+    ${THIRD_PARTY_DIR}
     )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${LINK_LIBS})

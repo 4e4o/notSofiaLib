@@ -1,7 +1,7 @@
 #ifndef NVP_6134_VO_CHANNEL_H
 #define NVP_6134_VO_CHANNEL_H
 
-#include <nvp6134_ex_170306/video.h>
+#include <nvp6134_ex/video.h>
 
 #include "ChipChild.h"
 #include "Misc/IdHolder.h"

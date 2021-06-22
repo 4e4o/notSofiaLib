@@ -76,6 +76,10 @@ bool DriverCommunicator::setViChannelMode(const ViChannel *ch, bool pal,
     nvp6134_chn_mode mode;
 
     mode.chmode = chmode;
+    // pal тут имеет сакральное значние
+    // см. комментарии в ViChannel::isNvpPal
+
+    std::cout << "DriverCommunicator::setViChannelMode " << pal << std::endl;
     mode.vformat = pal;
     mode.ch = ind;
 
@@ -85,17 +89,21 @@ bool DriverCommunicator::setViChannelMode(const ViChannel *ch, bool pal,
     return true;
 }
 
+void DriverCommunicator::resetInputVideoFmt() {
+    // Специально добавленная функция в драйвер чтоб сбрасывать внутренние переменные и
+    // состояние драйвера, иначе детекция видео формата выдаёт ебанутые результаты,
+    // приходилось делать rmmod/insmod nvp6134_ex.ko
+    ::ioctl(m_driverFd, IOC_VDEC_VIDEO_FMT_RESET);
+}
+
 bool DriverCommunicator::getVideoFmt() {
+    resetInputVideoFmt();
+
     m_inputFormat.reset(new nvp6134_input_videofmt{});
 
     if (::ioctl(m_driverFd, IOC_VDEC_GET_INPUT_VIDEO_FMT,
                 m_inputFormat.get()) == -1)
         return false;
-
-    for (int i = 0; i < m_chipCount * ChipSpecs::CS_VI_CHANNELS_COUNT; i++) {
-        cout << "[DriverCommunicator::getVideoFmt] " << i << " fmt = " <<
-             m_inputFormat->getvideofmt[i] << endl; \
-    }
 
     return true;
 }

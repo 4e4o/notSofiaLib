@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include <nvp6134_ex_170306/common.h>
-#include <nvp6134_ex_170306/video.h>
+#include <nvp6134_ex/common.h>
+#include <nvp6134_ex/video.h>
 
 namespace nvp6134 {
 
@@ -30,6 +30,7 @@ class DriverCommunicator {
                           NVP6134_OUTMODE_SEL mode);
 
   private:
+    void resetInputVideoFmt();
     bool getVideoFmt();
     void detectVideoFmt();
     bool openDriver();

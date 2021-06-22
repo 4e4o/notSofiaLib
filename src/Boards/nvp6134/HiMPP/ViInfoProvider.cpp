@@ -24,13 +24,10 @@ static PIXEL_FORMAT_E toMppPixelFormat(ViChannel *ch) {
 }
 
 static VI_SCAN_MODE_E toMppScanMode(ViChannel *ch) {
-    // TODO more formats
-    switch (ch->videoFormat()) {
-    case ViChannel::DF_1080P_NTSC:
+    if (ch->scanMode() == ViChannel::ScanMode::PROGRESSIVE)
         return VI_SCAN_PROGRESSIVE;
-    default:
-        return VI_SCAN_INTERLACED;
-    }
+
+    return VI_SCAN_INTERLACED;
 }
 
 bool InfoProvider::configureImpl() {
@@ -45,7 +42,7 @@ bool InfoProvider::configureImpl() {
 
                 info->setCapSize(channel->captureSize());
                 info->setImgSize(channel->imageSize());
-                info->setFps(channel->pal() ? 25 : 30);
+                info->setFps(channel->fps());
                 info->setScanMode(toMppScanMode(channel.get()));
                 info->setPixelFormat(toMppPixelFormat(channel.get()));
                 addChannel({chip->id(), channel->id()}, info);
