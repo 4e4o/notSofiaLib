@@ -6,7 +6,8 @@ namespace boards {
 using ::hisilicon::mpp::MPP;
 
 ABoard::ABoard()
-    : m_mpp(nullptr) {
+    : m_mpp(nullptr),
+      m_stopped(false) {
 }
 
 ABoard::~ABoard() {
@@ -22,10 +23,21 @@ hisilicon::mpp::MPP *ABoard::mpp() const {
 }
 
 void ABoard::run() {
+    if ((m_mpp == nullptr) || (m_stopped))
+        return;
+
     m_mpp->run();
 }
 
 void ABoard::stop() {
+    if (m_stopped)
+        return;
+
+    m_stopped = true;
+
+    if (m_mpp == nullptr)
+        return;
+
     m_mpp->stop();
 }
 

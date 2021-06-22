@@ -7,12 +7,14 @@
 #include <nvp6134_ex/common.h>
 #include <nvp6134_ex/video.h>
 
+#include "Misc/Configurator/Configurable.h"
+
 namespace nvp6134 {
 
 class ViChannel;
 class VoChannel;
 
-class DriverCommunicator {
+class DriverCommunicator : public Configurable {
   public:
     struct ViChannelFormat {
         unsigned int inputvideofmt;
@@ -30,6 +32,8 @@ class DriverCommunicator {
                           NVP6134_OUTMODE_SEL mode);
 
   private:
+    bool configureImpl() override final;
+
     void resetInputVideoFmt();
     bool getVideoFmt();
     void detectVideoFmt();

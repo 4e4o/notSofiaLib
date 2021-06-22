@@ -9,8 +9,6 @@
 
 #include <stdexcept>
 #include <iostream>
-#include <locale>
-#include <algorithm>
 
 #define CVBS_HEIGHT(PAL) (PAL ? 576 : 480)
 
@@ -37,8 +35,8 @@ ViChannel::~ViChannel() {
 }
 
 void ViChannel::init() {
-    DriverCommunicator::ViChannelFormat *fmt = parent()->driver()->getVideoFmt(
-                this);
+    using TFormat = DriverCommunicator::ViChannelFormat;
+    TFormat *fmt = parent()->driver()->getVideoFmt(this);
 
     if (fmt == nullptr)
         throw std::runtime_error("Driver does not provide vi format");
@@ -49,8 +47,8 @@ void ViChannel::init() {
         throw std::runtime_error("getvideofmt maps to unknown TVideoFormat");
 
     m_videoFormat = optionalFmt.value();
-    std::cout << "ViChannel::init " << id() << ", format: " <<
-              magic_enum::enum_name(m_videoFormat) << std::endl;
+    std::cout << "nvp6134::ViChannel::init " << id() << ", format: " <<
+              magic_enum::enum_name(m_videoFormat) << ", fps: " << fps() << std::endl;
 }
 
 // По даташиту nvp6134 поддерживает только 4:2:2 yuv
@@ -111,6 +109,9 @@ TSize ViChannel::imageSize() const {
 }
 
 float ViChannel::fps() const {
+    if (m_videoFormat == TVideoFormat::DF_NOT_DETECTED)
+        return 0;
+
     // Тут определяем fps по имени енум элемента TVideoFormat
     // если кончается на pal = 25, ntsc = 30, ЧислоБуква = Число fps
     std::string name(magic_enum::enum_name(m_videoFormat));
@@ -134,7 +135,6 @@ float ViChannel::fps() const {
         fps = std::stof(name);
     }
 
-    std::cout << "ViChannel::fps: " << id() << " , " << fps << std::endl;
     return fps;
 }
 

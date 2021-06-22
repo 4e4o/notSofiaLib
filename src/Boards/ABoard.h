@@ -27,6 +27,7 @@ class ABoard : public Configurator, public ConfigurableFactory {
 
   private:
     hisilicon::mpp::MPP *m_mpp;
+    bool m_stopped;
 };
 
 }

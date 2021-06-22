@@ -34,8 +34,9 @@ class AApplication : public GenericFactory<boards::ABoard> {
   private:
     void setExit();
 
-    std::unique_ptr<boards::ABoard> m_board;
     TArgs m_args;
+    bool m_stopped;
+    std::unique_ptr<boards::ABoard> m_board;
 
     static AApplication *g_app;
 };

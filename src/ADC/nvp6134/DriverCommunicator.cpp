@@ -34,15 +34,18 @@ DriverCommunicator::DriverCommunicator(int chipCount)
       m_driverFd(-1) {
     if ((m_chipCount > MAX_CHIP_COUNT) || (m_chipCount < 0))
         throw std::runtime_error("Incorrect chip count");
-
-    if (!openDriver())
-        throw std::runtime_error("Can't open driver");
-
-    detectVideoFmt();
 }
 
 DriverCommunicator::~DriverCommunicator() {
     closeDriver();
+}
+
+bool DriverCommunicator::configureImpl() {
+    if (!openDriver())
+        throw std::runtime_error("Can't open driver");
+
+    detectVideoFmt();
+    return true;
 }
 
 DriverCommunicator::ViChannelFormat *DriverCommunicator::getVideoFmt(

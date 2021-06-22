@@ -13,6 +13,7 @@ NVP6134_VI_MODE Chip::getViChannelMode(ViChannel *ch) {
     //      return NVP6134_VI_960H; // этот не пашет
     //      return NVP6134_VI_720H; // этот не пашет, я бы по логике выбрал бы этот
     case ViChannel::TVideoFormat::DF_1080P_NTSC:
+    case ViChannel::TVideoFormat::DF_1080P_PAL:
     case ViChannel::TVideoFormat::DF_FHD_EXC_30P:
     case ViChannel::TVideoFormat::DF_FHD_EXC_25P:
     case ViChannel::TVideoFormat::DF_FHD_EXT_30P:

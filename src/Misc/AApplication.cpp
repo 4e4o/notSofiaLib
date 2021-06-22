@@ -10,7 +10,8 @@ AApplication *AApplication::g_app = nullptr;
 
 using boards::ABoard;
 
-AApplication::AApplication(int count, char **argv) {
+AApplication::AApplication(int count, char **argv)
+    : m_stopped(false) {
     setExit();
 
     for (int i = 0 ; i < count ; i++)
@@ -20,6 +21,7 @@ AApplication::AApplication(int count, char **argv) {
 }
 
 AApplication::~AApplication() {
+    signal(SIGINT, SIG_IGN);
 }
 
 AApplication *AApplication::app() {
@@ -28,8 +30,8 @@ AApplication *AApplication::app() {
 
 void AApplication::setExit() {
     signal(SIGINT, [](int) {
-        signal(SIGINT, SIG_IGN);
-        g_app->stop();
+        if (g_app != nullptr)
+            g_app->stop();
     });
 }
 
@@ -42,6 +44,9 @@ boards::ABoard *AApplication::board() const {
 }
 
 int AApplication::run() {
+    if (m_stopped)
+        return 0;
+
     m_board.reset(create<ABoard>());
 
 #ifdef CATCH_EXCEPTIONS
@@ -67,5 +72,11 @@ void AApplication::beforeBoardRun() {
 }
 
 void AApplication::stop() {
-    m_board->stop();
+    if (m_stopped)
+        return;
+
+    m_stopped = true;
+
+    if (m_board.get() != nullptr)
+        m_board->stop();
 }

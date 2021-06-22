@@ -6,11 +6,15 @@ namespace boards::nvp6134 {
 
 Board::Board(int chipCount) :
     m_chipCount(chipCount),
-    m_nvpDriver(new ::nvp6134::DriverCommunicator(chipCount)) {
+    m_nvpDriver(nullptr) {
+    registerDefaultType<::nvp6134::DriverCommunicator, int>();
     registerDefaultType<::nvp6134::Chip, ::nvp6134::DriverCommunicator *, int>();
 }
 
 bool Board::configureImpl() {
+    m_nvpDriver.reset(create<::nvp6134::DriverCommunicator>(m_chipCount));
+    m_nvpDriver->configure();
+
     createChipsets();
 
     for (auto &chip : m_nvpChipsets)

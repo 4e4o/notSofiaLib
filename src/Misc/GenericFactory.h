@@ -53,7 +53,7 @@ class GenericFactory {
         constexpr auto className = getFullTypeName<T>();
 
         if (m_types.find(className) == m_types.end())
-            throw std::runtime_error("Types does not registered");
+            throw std::runtime_error("Type does not registered");
 
         typedef typename MakeCreator<CreatorArgs...>::TCreator TCreator;
         std::any &c = m_types[className];
