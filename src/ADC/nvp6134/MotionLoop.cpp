@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define DEFAULT_MOTION_CHECK_INTERVAL_MILLIS 1000
+#define DEFAULT_MOTION_CHECK_INTERVAL_MILLIS 200
 
 namespace nvp6134 {
 

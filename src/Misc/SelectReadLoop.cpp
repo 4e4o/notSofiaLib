@@ -55,8 +55,8 @@ void SelectReadLoop::run() {
             using namespace std::chrono;
             auto sec = duration_cast<seconds>(m_timeout);
             timeout.tv_sec = sec.count();
-            timeout.tv_usec = (duration_cast<nanoseconds>(m_timeout) -
-                               duration_cast<nanoseconds>(sec)).count();
+            timeout.tv_usec = (duration_cast<microseconds>(m_timeout) -
+                               duration_cast<microseconds>(sec)).count();
         }
 
         const int result = select(maxFd() + 1, &m_readFds, nullptr, nullptr, &timeout);
