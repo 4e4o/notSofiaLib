@@ -2,6 +2,8 @@
 #include "ViChannel.h"
 #include "VoChannel.h"
 #include "Chip.h"
+#include "Motion.h"
+#include "MotionLoop.h"
 
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -10,7 +12,10 @@
 #include <unistd.h>
 
 #include <iostream>
+#include <bitset>
 #include <stdexcept>
+
+#include <nvp6134_ex/motion.h>
 
 #define DRIVER_FILE "/dev/nc_vdec"
 
@@ -31,12 +36,14 @@ using namespace std;
 
 DriverCommunicator::DriverCommunicator(int chipCount)
     : m_chipCount(chipCount),
-      m_driverFd(-1) {
+      m_driverFd(-1),
+      m_motionLoop(new MotionLoop(this)) {
     if ((m_chipCount > MAX_CHIP_COUNT) || (m_chipCount < 0))
         throw std::runtime_error("Incorrect chip count");
 }
 
 DriverCommunicator::~DriverCommunicator() {
+    stopMotionThread();
     closeDriver();
 }
 
@@ -45,6 +52,7 @@ bool DriverCommunicator::configureImpl() {
         throw std::runtime_error("Can't open driver");
 
     detectVideoFmt();
+    startMotionThread();
     return true;
 }
 
@@ -122,6 +130,135 @@ bool DriverCommunicator::openDriver() {
     }
 
     return true;
+}
+
+bool DriverCommunicator::setViMotionEnabled(const ViChannel *c) {
+    const unsigned long int req = c->motion()->enabled() ?
+                                  IOC_VDEC_ENABLE_MOTION :
+                                  IOC_VDEC_DISABLE_MOTION ;
+    unsigned int ch = c->id();
+
+    std::cout << "setViMotionEnabled: " << ch << " , " <<
+              c->motion()->enabled() << std::endl;
+
+    if (::ioctl(m_driverFd, req, &ch) == -1)
+        return false;
+
+    return true;
+}
+
+DriverCommunicator::TChipsChannels DriverCommunicator::getMotion() const {
+    unsigned int ids = 0;
+
+    if (::ioctl(m_driverFd, IOC_VDEC_GET_MOTION_INFO, &ids) == -1)
+        return {};
+
+    // std::cout << "getMotion: " << std::dec << (int) ids << std::endl;
+
+    TChipsChannels result;
+    std::bitset<ChipSpecs::CS_VI_CHANNELS_COUNT> channels;
+
+    for (int chip = 0 ; chip < m_chipCount ; chip++) {
+        channels = (ids >> (MAX_CHIP_COUNT * chip)) & 0xFF;
+
+        // std::cout << "getMotion2: " << chip << " , " << channels.to_ulong() << std::endl;
+
+        for (int c = 0 ; c < ChipSpecs::CS_VI_CHANNELS_COUNT ; c++) {
+            if (channels.test(c))
+                result.emplace_back(chip, c);
+        }
+    }
+
+    return result;
+}
+
+bool DriverCommunicator::setViMotion(const ViChannel *c) {
+    Motion *m = c->motion();
+    TChipChannel id{c->parent()->id(), c->id()};
+
+    // если выключаем то не надо другие найстроки крутить
+    if (!m->enabled()) {
+        m_motionLoop->remove(id);
+        return setViMotionEnabled(c);
+    }
+
+    const bool enabled = setViMotionSensitivity(c) &&
+                         setViMotionArea(c) &&
+                         setViMotionVisualize(c) &&
+                         setViMotionEnabled(c);
+
+    if (enabled) {
+        m_motionLoop->watch(id, [m]() { m->event()(m); });
+    }
+
+    return enabled;
+}
+
+bool DriverCommunicator::setViMotionSensitivity(const ViChannel *c) {
+    nvp6134_motion_sens sens;
+
+    sens.ch = c->id();
+    sens.sens = static_cast<uint8_t>(c->motion()->sensitivity());
+
+    if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_SENS, &sens) == -1)
+        return false;
+
+    return true;
+}
+
+bool DriverCommunicator::setViMotionArea(const ViChannel *c) {
+    nvp6134_motion_area area{};
+    area.ch = c->id();
+
+    std::bitset<8> byte;
+    int bitIndex = 7;
+    int blockIndex = 0;
+
+    std::cout << "setViMotionArea: " << std::dec << (int) area.ch << std::endl;
+
+    for (const auto &row : c->motion()->area()) {
+        for (bool column : row) {
+            byte.set(bitIndex--, column);
+
+            if (bitIndex < 0) {
+                area.blockset[blockIndex++] = byte.to_ulong();
+
+                std::cout << std::hex << (int) area.blockset[blockIndex - 1] << " ";
+
+                if ((blockIndex % 2) == 0) {
+                    std::cout << std::endl;
+                }
+
+                bitIndex = 7;
+                byte.reset();
+            }
+        }
+    }
+
+    if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_AREA, &area) == -1)
+        return false;
+
+    return true;
+}
+
+bool DriverCommunicator::setViMotionVisualize(const ViChannel *c) {
+    unsigned int onoff = c->motion()->visualize();
+
+    if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_DISPLAY, &onoff) == -1)
+        return false;
+
+    return true;
+}
+
+void DriverCommunicator::startMotionThread() {
+    m_motionThread.reset(new std::thread([this]() {
+        m_motionLoop->run();
+    }));
+}
+
+void DriverCommunicator::stopMotionThread() {
+    m_motionLoop->stop();
+    m_motionThread->join();
 }
 
 bool DriverCommunicator::setVoChannelMode(const VoChannel *vo,

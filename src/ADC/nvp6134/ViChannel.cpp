@@ -2,6 +2,7 @@
 #include "DriverCommunicator.h"
 #include "Chip.h"
 #include "VoChannel.h"
+#include "Motion.h"
 
 #define MAGIC_ENUM_RANGE_MIN 0
 #define MAGIC_ENUM_RANGE_MAX 255
@@ -27,7 +28,8 @@ ViChannel::ViChannel(Chip *p, int id)
     : ChipChild(p), IdHolder(id),
       m_videoFormat(TVideoFormat::DF_NOT_DETECTED),
       m_mode(NVP6134_VI_BUTT),
-      m_outChannel(nullptr) {
+      m_outChannel(nullptr),
+      m_motion(new Motion(this)) {
     init();
 }
 
@@ -264,6 +266,10 @@ void ViChannel::setMode(NVP6134_VI_MODE m) {
 
 bool ViChannel::formatDetected() const {
     return m_videoFormat != TVideoFormat::DF_NOT_DETECTED;
+}
+
+Motion *ViChannel::motion() const {
+    return m_motion.get();
 }
 
 }

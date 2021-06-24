@@ -10,6 +10,7 @@
 namespace nvp6134 {
 
 class VoChannel;
+class Motion;
 
 class ViChannel : public ChipChild, public IdHolder {
   public:
@@ -79,6 +80,7 @@ class ViChannel : public ChipChild, public IdHolder {
     TSize imageSize() const;
     float fps() const;
     ScanMode scanMode() const;
+    Motion *motion() const;
 
     void setMode(NVP6134_VI_MODE m);
     void setOutChannel(VoChannel *);
@@ -95,6 +97,7 @@ class ViChannel : public ChipChild, public IdHolder {
     TVideoFormat m_videoFormat;
     NVP6134_VI_MODE m_mode;
     VoChannel *m_outChannel;
+    std::unique_ptr<Motion> m_motion;
 };
 
 }

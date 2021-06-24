@@ -26,8 +26,12 @@ class Board : public boards::nvp6134::Board {
     Board();
     ~Board();
 
+  protected:
+    bool configureImpl() override;
+
   private:
     virtual void setStreamOut(hisilicon::mpp::venc::Channel *);
+    void setNvpMotion();
 
     hisilicon::mpp::vi::Subsystem *initVi(hisilicon::mpp::MPP *p);
     hisilicon::mpp::vpss::Subsystem *initVpss(hisilicon::mpp::MPP *p);

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <thread>
 
 #include <nvp6134_ex/common.h>
 #include <nvp6134_ex/video.h>
@@ -11,11 +12,16 @@
 
 namespace nvp6134 {
 
+class Chip;
 class ViChannel;
 class VoChannel;
+class MotionLoop;
 
 class DriverCommunicator : public Configurable {
   public:
+    typedef std::pair<int, int> TChipChannel;
+    typedef std::vector<TChipChannel> TChipsChannels;
+
     struct ViChannelFormat {
         unsigned int inputvideofmt;
         unsigned int getvideofmt;
@@ -30,6 +36,8 @@ class DriverCommunicator : public Configurable {
     bool setViChannelMode(const ViChannel *, bool pal, NVP6134_VI_MODE chmode);
     bool setVoChannelMode(const VoChannel *, unsigned char chid,
                           NVP6134_OUTMODE_SEL mode);
+    bool setViMotion(const ViChannel *);
+    TChipsChannels getMotion() const;
 
   private:
     bool configureImpl() override final;
@@ -39,11 +47,19 @@ class DriverCommunicator : public Configurable {
     void detectVideoFmt();
     bool openDriver();
     bool closeDriver();
+    bool setViMotionSensitivity(const ViChannel *);
+    bool setViMotionArea(const ViChannel *);
+    bool setViMotionEnabled(const ViChannel *);
+    bool setViMotionVisualize(const ViChannel *);
+    void startMotionThread();
+    void stopMotionThread();
 
     int m_chipCount;
     int m_driverFd;
     std::unique_ptr<nvp6134_input_videofmt> m_inputFormat;
     std::vector<std::unique_ptr<ViChannelFormat>> m_channelInputFormats;
+    std::unique_ptr<MotionLoop> m_motionLoop;
+    std::unique_ptr<std::thread> m_motionThread;
 };
 
 }

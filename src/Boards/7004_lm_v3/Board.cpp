@@ -2,6 +2,9 @@
 
 #include "ADC/nvp6134/DriverCommunicator.h"
 #include "ADC/nvp6134/Configurations/7004_lm_v3/Chip.h"
+#include "ADC/nvp6134/ViChannel.h"
+#include "ADC/nvp6134/Motion.h"
+
 #include "HiMPP/ViInfoProvider.h"
 
 #include "HiMPP/Configurations/hi3520dv200/MPP.h"
@@ -24,6 +27,8 @@
 
 #include "HiMPP/ASubsystem/ReadLoop/ReaderMemFileOut.h"
 #include "HiMPP/ASubsystem/ReadLoop/ReaderDummyOut.h"
+
+#include <iostream>
 
 #define NVP_CHIPS_COUNT 1
 
@@ -154,6 +159,34 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
     }
 
     return s;
+}
+
+bool Board::configureImpl() {
+    if (!boards::nvp6134::Board::configureImpl())
+        return false;
+
+    setNvpMotion();
+    return true;
+}
+
+void Board::setNvpMotion() {
+    for (auto &chip : nvp()) {
+        for (auto &channel : chip->viChannels()) {
+            if (channel->formatDetected()) {
+                using namespace ::nvp6134;
+                ViChannel *c = channel.get();
+                Motion *m = channel->motion();
+                m->setAreaAll(true);
+                m->setSensitivity(Motion::Sensitivity::HIGHEST);
+                m->setVisualize(true);
+                m->setEvent([c](Motion *) {
+                    std::cout << "MOTION EVENT!!! " << c->id() << std::endl;
+                });
+                m->setEnabled(true);
+                //                return;
+            }
+        }
+    }
 }
 
 void Board::setStreamOut(hisilicon::mpp::venc::Channel *c) {
