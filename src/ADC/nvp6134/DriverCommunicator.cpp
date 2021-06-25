@@ -148,9 +148,13 @@ bool DriverCommunicator::setViMotionEnabled(const ViChannel *c) {
 }
 
 DriverCommunicator::TChipsChannels DriverCommunicator::getMotion() const {
-    unsigned int ids = 0;
+    nvp6134_motion_data data;
 
-    if (::ioctl(m_driverFd, IOC_VDEC_GET_MOTION_INFO, &ids) == -1)
+    // юзаем hold mode
+    // в котором регистры md будут 1 в случае движения пока мы не прочитаем их
+    data.mode = 1;
+
+    if (::ioctl(m_driverFd, IOC_VDEC_GET_MOTION_INFO, &data) == -1)
         return {};
 
     // std::cout << "getMotion: " << std::dec << (int) ids << std::endl;
@@ -159,7 +163,7 @@ DriverCommunicator::TChipsChannels DriverCommunicator::getMotion() const {
     std::bitset<ChipSpecs::CS_VI_CHANNELS_COUNT> channels;
 
     for (int chip = 0 ; chip < m_chipCount ; chip++) {
-        channels = (ids >> (MAX_CHIP_COUNT * chip)) & 0xFF;
+        channels = (data.motion >> (MAX_CHIP_COUNT * chip)) & 0xFF;
 
         // std::cout << "getMotion2: " << chip << " , " << channels.to_ulong() << std::endl;
 

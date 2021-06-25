@@ -3,7 +3,10 @@
 
 #include <iostream>
 
-#define DEFAULT_MOTION_CHECK_INTERVAL_MILLIS 200
+// читаем раз в секунду, торопиться нам некуда
+// потому что мы читаем с драйвера в hold mode.
+// Ни один сдетекченный эвент от nvp от нас не уйдет
+#define DEFAULT_MOTION_CHECK_INTERVAL_MILLIS 1000
 
 namespace nvp6134 {
 
