@@ -8,9 +8,6 @@ ChannelInfo::ChannelInfo()
       m_pixelFormat(PIXEL_FORMAT_BUTT) {
 }
 
-ChannelInfo::~ChannelInfo() {
-}
-
 void ChannelInfo::setPixelFormat(PIXEL_FORMAT_E pf) {
     m_pixelFormat = pf;
 }

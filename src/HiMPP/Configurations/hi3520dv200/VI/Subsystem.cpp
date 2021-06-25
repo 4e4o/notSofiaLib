@@ -9,7 +9,7 @@ Subsystem::Subsystem(mpp::MPP *mpp)
     : mpp::vi::Subsystem(mpp),
       m_mode(HI3520DV200_MODE::MODE_UNKNOWN) {
     mpp->registerType<vi::Device, vi::hi3520dv200::Device, vi::Subsystem *, int>();
-    mpp->registerType<vi::Channel, vi::hi3520dv200::Channel, vi::Device *, const vi::ChannelInfo *, int>();
+    mpp->registerType<vi::Channel, vi::hi3520dv200::Channel, vi::Device *, const vi::IChannelInfo *, int>();
 }
 
 void Subsystem::setHiMode(const Subsystem::HI3520DV200_MODE &mode) {

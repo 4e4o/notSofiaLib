@@ -17,6 +17,10 @@ class Channel;
 }
 }
 
+namespace nvp6134 {
+class Motion;
+}
+
 namespace boards::lm7004v3 {
 
 // lm7004v3 борда
@@ -26,12 +30,12 @@ class Board : public boards::nvp6134::Board {
     Board();
     ~Board();
 
-  protected:
-    bool configureImpl() override;
-
   private:
+    void initVencChannel(hisilicon::mpp::venc::Channel *);
     virtual void setStreamOut(hisilicon::mpp::venc::Channel *);
-    void setNvpMotion();
+    virtual void setMotion(hisilicon::mpp::venc::Channel *);
+    virtual void setMotionEvent(hisilicon::mpp::venc::Channel *,
+                                ::nvp6134::Motion *);
 
     hisilicon::mpp::vi::Subsystem *initVi(hisilicon::mpp::MPP *p);
     hisilicon::mpp::vpss::Subsystem *initVpss(hisilicon::mpp::MPP *p);

@@ -42,7 +42,7 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
 
   private:
     // BindItem
-    void setBindedItem(BindItem *bi, bool source) override final;
+    void setBindedSource(BindItem *bi) override final;
     // IVideoFormatSource
     SIZE_S imgSize() const override final;
     HI_U32 fps() const override final;

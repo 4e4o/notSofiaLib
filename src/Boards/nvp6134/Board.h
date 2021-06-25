@@ -5,9 +5,14 @@
 
 #include "Boards/ABoard.h"
 
+namespace hisilicon::mpp::venc {
+class Channel;
+}
+
 namespace nvp6134 {
 class Chip;
 class DriverCommunicator;
+class ViChannel;
 }
 
 namespace boards::nvp6134 {
@@ -24,6 +29,8 @@ class Board : public ABoard {
 
   protected:
     bool configureImpl() override;
+
+    ::nvp6134::ViChannel *viChannel(hisilicon::mpp::venc::Channel *) const;
 
   private:
     void createChipsets();

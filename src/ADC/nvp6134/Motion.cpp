@@ -85,4 +85,8 @@ void Motion::setEvent(const TMotionEvent &event) {
     m_event = event;
 }
 
+ViChannel *Motion::channel() const {
+    return value();
+}
+
 }

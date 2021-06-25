@@ -8,7 +8,7 @@
 
 namespace hisilicon::mpp::vi {
 
-class ChannelInfo;
+class IChannelInfo;
 
 // Задача класса -
 // Передавать инфу каналов из источника в vi
@@ -20,14 +20,14 @@ class InfoProvider : public Configurable {
     InfoProvider();
     ~InfoProvider();
 
-    const ChannelInfo *getInfo(const TChannelId &) const;
+    const IChannelInfo *getInfo(const TChannelId &) const;
 
   protected:
-    void addChannel(const TChannelId &inputId, const ChannelInfo *);
+    void addChannel(const TChannelId &inputId, const IChannelInfo *);
     virtual TChannelId inputIdToVi(const TChannelId &) = 0;
 
   private:
-    typedef std::map<TChannelId, const ChannelInfo *> TChannels;
+    typedef std::map<TChannelId, const IChannelInfo *> TChannels;
     TChannels m_channels;
 };
 

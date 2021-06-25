@@ -1,7 +1,7 @@
 #ifndef LM_7003_V3_BOARD_VI_INFO_PROVIDER_H
 #define LM_7003_V3_BOARD_VI_INFO_PROVIDER_H
 
-#include "Boards/nvp6134/HiMPP/ViInfoProvider.h"
+#include "Boards/nvp6134/HiMPP/VI/InfoProvider.h"
 
 namespace boards::lm7004v3::mpp::vi {
 

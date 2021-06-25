@@ -1,6 +1,6 @@
 #include "ChannelAttributes.h"
 #include "Channel.h"
-#include "Source/ChannelInfo.h"
+#include "Source/IChannelInfo.h"
 #include "HiMPP/Misc/Utils.h"
 
 #include <memory>
@@ -11,7 +11,7 @@ ChannelAttributes::ChannelAttributes() {
 }
 
 VI_CHN_ATTR_S *ChannelAttributes::buildImpl(Channel *channel,
-        const ChannelInfo *info) {
+        const IChannelInfo *info) {
     std::unique_ptr<VI_CHN_ATTR_S> result(new VI_CHN_ATTR_S{});
 
     // TODO от чего это зависит ?

@@ -1,6 +1,14 @@
 #include "Board.h"
+
+#include "HiMPP/VI/ChannelInfo.h"
+
 #include "ADC/nvp6134/DriverCommunicator.h"
 #include "ADC/nvp6134/Chip.h"
+#include "ADC/nvp6134/ViChannel.h"
+
+#include "HiMPP/VENC/Channel/Channel.h"
+#include "HiMPP/VENC/Group.h"
+#include "HiMPP/VI/Channel.h"
 
 namespace boards::nvp6134 {
 
@@ -36,6 +44,25 @@ void Board::createChipsets() {
 
 const Board::TNvpChipsets &Board::nvp() const {
     return m_nvpChipsets;
+}
+
+::nvp6134::ViChannel *Board::viChannel(hisilicon::mpp::venc::Channel *c) const {
+    using namespace ::hisilicon::mpp;
+    using vi::Channel;
+    using vpss::BindItem;
+    const Channel *viChannel = BindItem::firstBindedSource<const Channel>(c,
+                               c->group());
+
+    if (viChannel == nullptr)
+        return nullptr;
+
+    using boards::nvp6134::mpp::vi::ChannelInfo;
+    const ChannelInfo *ci = dynamic_cast<const ChannelInfo *>(viChannel->source());
+
+    if (ci == nullptr)
+        return nullptr;
+
+    return ci->viChannel();
 }
 
 }

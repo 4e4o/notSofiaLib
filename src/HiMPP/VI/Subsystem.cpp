@@ -1,7 +1,7 @@
 #include "Subsystem.h"
 #include "HiMPP/MPP.h"
 #include "HiMPP/VI/Source/InfoProvider.h"
-#include "HiMPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/VI/Source/IChannelInfo.h"
 #include "Device.h"
 #include "Channel.h"
 
@@ -18,7 +18,7 @@ Subsystem::Subsystem(MPP *p)
 
 void Subsystem::registerDefaultTypes() {
     factory()->registerDefaultType<Device, Subsystem *, int>();
-    factory()->registerDefaultType<Channel, Device *, const ChannelInfo *, int>();
+    factory()->registerDefaultType<Channel, Device *, const IChannelInfo *, int>();
 }
 
 Device *Subsystem::addDevice(int id) {

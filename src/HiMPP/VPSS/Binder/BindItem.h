@@ -1,6 +1,7 @@
 #ifndef MPP_VPSS_BIND_ITEM_H
 #define MPP_VPSS_BIND_ITEM_H
 
+#include <vector>
 #include <hi_common.h>
 
 #include "Misc/IdHolder.h"
@@ -14,14 +15,27 @@ class BindItem {
     virtual ~BindItem() { }
 
     template<class Derived = BindItem>
-    Derived * bindedItem() const {
-        return dynamic_cast<Derived *>(m_bindedItem);
+    Derived * bindedSource() const {
+        return dynamic_cast<Derived *>(m_bindedSource);
+    }
+
+    template<class Derived = BindItem, class Child>
+    static Derived * firstBindedSource(Child *child,
+                                       const BindItem *parent = nullptr) {
+        const BindItem *provider = parent;
+
+        if constexpr (std::is_base_of<BindItem, Child>::value) {
+            if (child->bindedSource() != nullptr)
+                provider = child;
+        }
+
+        return dynamic_cast<Derived *>(provider->firstBindedSource());
     }
 
   protected:
     BindItem(IdHolder *dev, IdHolder *chn = nullptr)
         : m_devIdHolder(dev), m_chnIdHolder(chn),
-          m_bindedItem(nullptr) {}
+          m_bindedSource(nullptr) {}
 
     virtual MOD_ID_E bindMode(bool source) = 0;
 
@@ -39,16 +53,28 @@ class BindItem {
         return m_chnIdHolder->id();
     }
 
-    virtual void setBindedItem(BindItem *bi, bool) {
-        m_bindedItem = bi;
+    virtual void setBindedSource(BindItem *bi) {
+        m_bindedSource = bi;
+    }
+
+    virtual void addBindedReceiver(BindItem *bi) {
+        m_bindedReceivers.push_back(bi);
     }
 
   private:
     friend class Binder;
 
+    const BindItem *firstBindedSource() const {
+        if (m_bindedSource != nullptr)
+            return m_bindedSource->firstBindedSource();
+
+        return this;
+    }
+
     IdHolder *m_devIdHolder;
     IdHolder *m_chnIdHolder;
-    BindItem *m_bindedItem;
+    BindItem *m_bindedSource;
+    std::vector<BindItem *> m_bindedReceivers;
 };
 
 template<MOD_ID_E T>

@@ -10,8 +10,8 @@ namespace hisilicon::mpp::vpss {
 
 Binder::Binder(BindItem *in, BindItem *out)
     : m_source(in), m_receiver(out) {
-    in->setBindedItem(out, false);
-    out->setBindedItem(in, true);
+    in->addBindedReceiver(out);
+    out->setBindedSource(in);
 }
 
 Binder::~Binder() {

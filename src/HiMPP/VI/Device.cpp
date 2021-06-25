@@ -23,7 +23,7 @@ Device::~Device() {
     std::cout << "~vi::Device " << this << " , " << id() << std::endl;
 }
 
-Channel *Device::addChannel(const ChannelInfo *i, int id) {
+Channel *Device::addChannel(const IChannelInfo *i, int id) {
     return addSubItem(this, i, id);
 }
 
@@ -53,7 +53,7 @@ Channel *Device::addChannel(int chId) {
     // айди dev и way зависят от хики чипа и режима его работы.
     const auto viId = getBindWay({id(), chId});
     InfoProvider *inf = subsystem()->infoProvider();
-    const ChannelInfo *i = inf->getInfo(viId);
+    const IChannelInfo *i = inf->getInfo(viId);
 
     if (i == nullptr)
         return nullptr;

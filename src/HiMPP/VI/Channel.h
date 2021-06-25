@@ -14,13 +14,13 @@
 namespace hisilicon::mpp::vi {
 
 class Device;
-class ChannelInfo;
+class IChannelInfo;
 class ChannelAttributes;
 
 class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     public IVideoCaptureFormatSource {
   public:
-    Channel(Device *, const ChannelInfo *, int id);
+    Channel(Device *, const IChannelInfo *, int id);
     ~Channel();
 
     const Device *device() const;
@@ -36,6 +36,8 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
 
     const IFrameFormatSource *vbFormatInfo() const;
 
+    const IChannelInfo *source() const;
+
   protected:
     RECT_S capRect() const;
 
@@ -43,7 +45,7 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     virtual SIZE_S *createDestSize() const;
     bool configureImpl() override final;
 
-    const ChannelInfo *m_info;
+    const IChannelInfo *m_source;
     std::unique_ptr<ChannelAttributes> m_attrBuilder;
     mutable std::unique_ptr<SIZE_S> m_destSize;
 };

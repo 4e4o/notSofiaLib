@@ -36,11 +36,14 @@ class Motion : public Holder<ViChannel *> {
         LOWEST = 0x98
     };
 
+    TMotionEvent event() const;
+    void setEvent(const TMotionEvent &event);
+
     bool enabled() const;
     void setEnabled(bool enabled);
 
-    TMotionEvent event() const;
-    void setEvent(const TMotionEvent &event);
+    bool visualize() const;
+    void setVisualize(bool visualize);
 
     Sensitivity sensitivity() const;
     void setSensitivity(const Sensitivity &sensitivity);
@@ -49,11 +52,9 @@ class Motion : public Holder<ViChannel *> {
     void setAreaRow(uint8_t row, bool enabled);
     void setAreaColumn(uint8_t column, bool enabled);
     void setAreaAll(bool enabled);
-
     const TArea &area() const;
 
-    bool visualize() const;
-    void setVisualize(bool visualize);
+    ViChannel *channel() const;
 
   private:
     bool m_enabled;

@@ -235,6 +235,8 @@ bool DriverCommunicator::setViMotionArea(const ViChannel *c) {
         }
     }
 
+    std::cout << std::dec;
+
     if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_AREA, &area) == -1)
         return false;
 

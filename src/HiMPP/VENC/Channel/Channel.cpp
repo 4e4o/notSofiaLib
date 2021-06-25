@@ -17,7 +17,7 @@ namespace hisilicon::mpp::venc {
 Channel::Channel(Group *g, int id)
     : ASubsystemLeaf(g, id),
       m_streamReader(new StreamReader(this)),
-      m_source(g->bindedItem<IVideoFormatSource>()) {
+      m_source(g->bindedSource<IVideoFormatSource>()) {
 }
 
 Channel::~Channel() {

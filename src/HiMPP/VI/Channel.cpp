@@ -1,6 +1,6 @@
 #include "Channel.h"
 #include "Device.h"
-#include "HiMPP/VI/Source/ChannelInfo.h"
+#include "HiMPP/VI/Source/IChannelInfo.h"
 #include "HiMPP/ASubsystem/InfoSources/FrameFormatSource.h"
 #include "HiMPP/Misc/Utils.h"
 #include "ChannelAttributes.h"
@@ -12,10 +12,10 @@
 
 namespace hisilicon::mpp::vi {
 
-Channel::Channel(Device *d, const ChannelInfo *info, int id)
+Channel::Channel(Device *d, const IChannelInfo *info, int id)
     : ASubsystemLeaf(d, id),
       vpss::ViBindItem(d, this),
-      m_info(info),
+      m_source(info),
       m_attrBuilder(new ChannelAttributes()) {
 }
 
@@ -25,18 +25,18 @@ Channel::~Channel() {
 }
 
 bool Channel::configureImpl() {
-    if (m_info == nullptr)
+    if (m_source == nullptr)
         throw std::runtime_error("[vi::Channel] Vi info is not set");
 
     if (m_attrBuilder.get() == nullptr)
         throw std::runtime_error("[vi::Channel] Vi m_attrBuilder is not set");
 
-    std::unique_ptr<VI_CHN_ATTR_S> attrs(m_attrBuilder->build(this, m_info));
+    std::unique_ptr<VI_CHN_ATTR_S> attrs(m_attrBuilder->build(this, m_source));
 
     if (attrs.get() == nullptr)
         throw std::runtime_error("[vi::Channel] Vi attr is nullptr");
 
-    if (HI_MPI_VI_SetChnScanMode(id(), m_info->scanMode()) != HI_SUCCESS)
+    if (HI_MPI_VI_SetChnScanMode(id(), m_source->scanMode()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_SetChnScanMode failed");
 
     if (HI_MPI_VI_SetChnAttr(id(), attrs.get()) != HI_SUCCESS)
@@ -48,6 +48,10 @@ bool Channel::configureImpl() {
     return true;
 }
 
+const IChannelInfo *Channel::source() const {
+    return m_source;
+}
+
 void Channel::setAttributes(ChannelAttributes *a) {
     m_attrBuilder.reset(a);
 }
@@ -57,7 +61,7 @@ ChannelAttributes *Channel::attributes() const {
 }
 
 SIZE_S *Channel::createDestSize() const {
-    return new SIZE_S{Utils::toMppSize(m_info->imgSize())};
+    return new SIZE_S{Utils::toMppSize(m_source->imgSize())};
 }
 
 SIZE_S Channel::destSize() const {
@@ -68,11 +72,11 @@ SIZE_S Channel::destSize() const {
 }
 
 SIZE_S Channel::imgSize() const {
-    return Utils::toMppSize(m_info->imgSize());
+    return Utils::toMppSize(m_source->imgSize());
 }
 
 HI_U32 Channel::fps() const {
-    return m_attrBuilder->get<ChannelAttributes::FrameRate>(m_info->fps());
+    return m_attrBuilder->get<ChannelAttributes::FrameRate>(m_source->fps());
 }
 
 const IFrameFormatSource *Channel::vbFormatInfo() const {
@@ -87,7 +91,7 @@ const IFrameFormatSource *Channel::vbFormatInfo() const {
 }
 
 PIXEL_FORMAT_E Channel::pixelFormat() const {
-    return m_info->pixelFormat();
+    return m_source->pixelFormat();
 }
 
 const Device *Channel::device() const {
@@ -95,7 +99,7 @@ const Device *Channel::device() const {
 }
 
 RECT_S Channel::capRect() const {
-    return Utils::toMppRect(m_info->capSize());
+    return Utils::toMppRect(m_source->capSize());
 }
 
 }

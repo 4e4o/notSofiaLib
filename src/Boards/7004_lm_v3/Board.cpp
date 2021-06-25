@@ -5,7 +5,7 @@
 #include "ADC/nvp6134/ViChannel.h"
 #include "ADC/nvp6134/Motion.h"
 
-#include "HiMPP/ViInfoProvider.h"
+#include "HiMPP/VI/InfoProvider.h"
 
 #include "HiMPP/Configurations/hi3520dv200/MPP.h"
 #include "HiMPP/Configurations/hi3520dv200/VI/Subsystem.h"
@@ -62,7 +62,6 @@ Board::Board()
         mpp->addViSubsystem();
         mpp->addVpssSubsystem();
         mpp->addVencSubsystem();
-        //        mpp->addVdaSubsystem();
 
         return mpp;
     });
@@ -154,39 +153,16 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
                 ab->set<H264Attributes::Bpp>(0.05f);
 
             channel->setAttributes(ab);
-            setStreamOut(channel);
+            initVencChannel(channel);
         }
     }
 
     return s;
 }
 
-bool Board::configureImpl() {
-    if (!boards::nvp6134::Board::configureImpl())
-        return false;
-
-    setNvpMotion();
-    return true;
-}
-
-void Board::setNvpMotion() {
-    for (auto &chip : nvp()) {
-        for (auto &channel : chip->viChannels()) {
-            if (channel->formatDetected()) {
-                using namespace ::nvp6134;
-                ViChannel *c = channel.get();
-                Motion *m = channel->motion();
-                m->setAreaAll(true);
-                m->setSensitivity(Motion::Sensitivity::HIGHEST);
-                m->setVisualize(true);
-                m->setEvent([c](Motion *) {
-                    std::cout << "MOTION EVENT!!! " << c->id() << std::endl;
-                });
-                m->setEnabled(true);
-                //                return;
-            }
-        }
-    }
+void Board::initVencChannel(hisilicon::mpp::venc::Channel *c) {
+    setStreamOut(c);
+    setMotion(c);
 }
 
 void Board::setStreamOut(hisilicon::mpp::venc::Channel *c) {
@@ -202,6 +178,26 @@ void Board::setStreamOut(hisilicon::mpp::venc::Channel *c) {
 
     //using Out = hisilicon::mpp::ReaderDummyOut;
     //c->streamReader()->setOut(new Out(), true);
+}
+
+void Board::setMotion(hisilicon::mpp::venc::Channel *c) {
+    ::nvp6134::ViChannel *ch = viChannel(c);
+    ::nvp6134::Motion *motion = ch->motion();
+
+    using namespace ::nvp6134;
+    setMotionEvent(c, motion);
+    motion->setAreaAll(true);
+    motion->setSensitivity(Motion::Sensitivity::HIGHEST);
+    motion->setVisualize(true);
+    motion->setEnabled(true);
+}
+
+void Board::setMotionEvent(hisilicon::mpp::venc::Channel *,
+                           ::nvp6134::Motion *motion) {
+    using namespace ::nvp6134;
+    motion->setEvent([](Motion * m) {
+        std::cout << "MOTION EVENT!!! " << m->channel()->id() << std::endl;
+    });
 }
 
 }

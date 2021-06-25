@@ -8,10 +8,10 @@
 namespace hisilicon::mpp::vi {
 
 class Channel;
-class ChannelInfo;
+class IChannelInfo;
 
 class ChannelAttributes : public
-    IAttributesBuilder<VI_CHN_ATTR_S, Channel *, const ChannelInfo *> {
+    IAttributesBuilder<VI_CHN_ATTR_S, Channel *, const IChannelInfo *> {
   public:
     ChannelAttributes();
 
@@ -20,7 +20,7 @@ class ChannelAttributes : public
     MPP_ATTRIBUTE(Flip, bool);
 
   protected:
-    VI_CHN_ATTR_S *buildImpl(Channel *, const ChannelInfo *) override;
+    VI_CHN_ATTR_S *buildImpl(Channel *, const IChannelInfo *) override;
 };
 
 }

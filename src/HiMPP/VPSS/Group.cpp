@@ -88,15 +88,12 @@ GroupAttributes *Group::attributes() const {
     return m_attrBuilder.get();
 }
 
-void Group::setBindedItem(BindItem *bi, bool source) {
-    BindItem::setBindedItem(bi, source);
+void Group::setBindedSource(BindItem *bi) {
+    BindItem::setBindedSource(bi);
+    m_source = bindedSource<IVideoCaptureFormatSource>();
 
-    if (source) {
-        m_source = bindedItem<IVideoCaptureFormatSource>();
-
-        if (m_source == nullptr)
-            throw std::runtime_error("BindItem must realize IVideoCaptureFormatSource");
-    }
+    if (m_source == nullptr)
+        throw std::runtime_error("bindedSource must realize IVideoCaptureFormatSource");
 }
 
 SIZE_S Group::imgSize() const {

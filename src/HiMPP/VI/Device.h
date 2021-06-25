@@ -13,7 +13,7 @@
 namespace hisilicon::mpp::vi {
 
 class Subsystem;
-class ChannelInfo;
+class IChannelInfo;
 
 class Device : public ASubsystemItem<Subsystem, Configurator, Channel> {
   public:
@@ -31,7 +31,7 @@ class Device : public ASubsystemItem<Subsystem, Configurator, Channel> {
 
   private:
     virtual TIntPair getBindWay(const TIntPair &);
-    Channel *addChannel(const ChannelInfo *, int id);
+    Channel *addChannel(const IChannelInfo *, int id);
     void bindChannels();
 
     VI_DEV_ATTR_S *m_attr;
