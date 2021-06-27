@@ -27,13 +27,20 @@ class Motion : public Holder<ViChannel *> {
     ~Motion();
 
     // значения взяты из Софии
-    enum class Sensitivity : uint8_t {
+    enum class TemporalSensitivity : uint8_t {
         HIGHEST = 0x30,
         VERY_HIGH = 0x3a,
         HIGH = 0x59,
         MEDIUM = 0x78,
         LOW = 0x88,
         LOWEST = 0x98
+    };
+
+    enum class PixelSensitivity : uint8_t {
+        PS_BYPASS = 0,
+        PS_1S2 = 0x01,
+        PS_1S4 = 0x02,
+        PS_1S8 = 0x03
     };
 
     TMotionEvent event() const;
@@ -45,8 +52,9 @@ class Motion : public Holder<ViChannel *> {
     bool visualize() const;
     void setVisualize(bool visualize);
 
-    Sensitivity sensitivity() const;
-    void setSensitivity(const Sensitivity &sensitivity);
+    uint8_t temporalSensitivity() const;
+    void setTemporalSensitivity(const TemporalSensitivity &);
+    void setTemporalSensitivity(const uint8_t &);
 
     void setAreaBlock(uint8_t row, uint8_t column, bool enabled);
     void setAreaRow(uint8_t row, bool enabled);
@@ -56,9 +64,17 @@ class Motion : public Holder<ViChannel *> {
 
     ViChannel *channel() const;
 
+    PixelSensitivity pixelSensitivity() const;
+    void setPixelSensitivity(const PixelSensitivity &);
+
+    uint8_t brightessSensitivity() const;
+    void setBrightessSensitivity(const uint8_t &);
+
   private:
     bool m_enabled;
-    Sensitivity m_sensitivity;
+    uint8_t m_temporalSensitivity;
+    PixelSensitivity m_pixelSensitivity;
+    uint8_t m_brightessSensitivity;
     TArea m_area;
     bool m_visualize;
     TMotionEvent m_event;

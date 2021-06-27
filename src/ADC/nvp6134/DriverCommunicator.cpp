@@ -199,10 +199,13 @@ bool DriverCommunicator::setViMotion(const ViChannel *c) {
 }
 
 bool DriverCommunicator::setViMotionSensitivity(const ViChannel *c) {
-    nvp6134_motion_sens sens;
+    Motion *m = c->motion();
+    nvp6134_motion_sens sens{};
 
     sens.ch = c->id();
-    sens.sens = static_cast<uint8_t>(c->motion()->sensitivity());
+    sens.temporal_sens = m->temporalSensitivity();
+    sens.pixel_sens = static_cast<uint8_t>(m->pixelSensitivity());
+    sens.brightness_sens = m->brightessSensitivity();
 
     if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_SENS, &sens) == -1)
         return false;

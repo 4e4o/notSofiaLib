@@ -187,7 +187,7 @@ void Board::setMotion(hisilicon::mpp::venc::Channel *c) {
     using namespace ::nvp6134;
     setMotionEvent(c, motion);
     motion->setAreaAll(true);
-    motion->setSensitivity(Motion::Sensitivity::HIGHEST);
+    motion->setTemporalSensitivity(Motion::TemporalSensitivity::HIGH);
     motion->setVisualize(true);
     motion->setEnabled(true);
 }

@@ -5,13 +5,19 @@
 
 #include <stdexcept>
 
+#define DEFAULT_TEMPORAL_SENS       TemporalSensitivity::MEDIUM
+#define DEFAULT_PIXEL_SENS          PixelSensitivity::PS_1S8
+#define DEFAULT_BRIGHTNESS_SENS     0x00
+
 namespace nvp6134 {
 
 Motion::Motion(ViChannel *c)
     : Holder<ViChannel *>(c),
       m_enabled(false),
-      m_sensitivity(Sensitivity::MEDIUM),
+      m_pixelSensitivity(DEFAULT_PIXEL_SENS),
+      m_brightessSensitivity(DEFAULT_BRIGHTNESS_SENS),
       m_visualize(false) {
+    setTemporalSensitivity(DEFAULT_TEMPORAL_SENS);
     // enable all block by default
     setAreaAll(true);
 }
@@ -30,12 +36,16 @@ void Motion::setEnabled(bool enabled) {
     driver->setViMotion(value());
 }
 
-Motion::Sensitivity Motion::sensitivity() const {
-    return m_sensitivity;
+u_int8_t Motion::temporalSensitivity() const {
+    return m_temporalSensitivity;
 }
 
-void Motion::setSensitivity(const Sensitivity &sensitivity) {
-    m_sensitivity = sensitivity;
+void Motion::setTemporalSensitivity(const TemporalSensitivity &s) {
+    m_temporalSensitivity = static_cast<uint8_t>(s);
+}
+
+void Motion::setTemporalSensitivity(const uint8_t &s) {
+    m_temporalSensitivity = s;
 }
 
 void Motion::setAreaBlock(uint8_t row, uint8_t column, bool enabled) {
@@ -87,6 +97,22 @@ void Motion::setEvent(const TMotionEvent &event) {
 
 ViChannel *Motion::channel() const {
     return value();
+}
+
+Motion::PixelSensitivity Motion::pixelSensitivity() const {
+    return m_pixelSensitivity;
+}
+
+void Motion::setPixelSensitivity(const PixelSensitivity &pixelSensitivity) {
+    m_pixelSensitivity = pixelSensitivity;
+}
+
+uint8_t Motion::brightessSensitivity() const {
+    return m_brightessSensitivity;
+}
+
+void Motion::setBrightessSensitivity(const uint8_t &brightessSensitivity) {
+    m_brightessSensitivity = brightessSensitivity;
 }
 
 }
