@@ -251,9 +251,11 @@ bool DriverCommunicator::setViMotionArea(const ViChannel *c) {
 }
 
 bool DriverCommunicator::setViMotionVisualize(const ViChannel *c) {
-    unsigned int onoff = c->motion()->visualize();
+    nvp6134_motion_display data;
+    data.ch = c->id();
+    data.display = c->motion()->visualize();
 
-    if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_DISPLAY, &onoff) == -1)
+    if (::ioctl(m_driverFd, IOC_VDEC_SET_MOTION_DISPLAY, &data) == -1)
         return false;
 
     return true;

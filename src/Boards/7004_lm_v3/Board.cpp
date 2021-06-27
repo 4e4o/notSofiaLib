@@ -106,9 +106,9 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
 
         for (auto &device : p->vi()->devices()) {
             for (auto &channel : device->channels()) {
-                using Attr = hisilicon::mpp::vi::ChannelAttributes;
-                auto attr = channel->attributes();
-                attr->set<Attr::FrameRate>(20);
+                //                using Attr = hisilicon::mpp::vi::ChannelAttributes;
+                //                auto attr = channel->attributes();
+                //                attr->set<Attr::FrameRate>(20);
 
                 Group *group = s->addGroup(groupId++);
                 setVpssGroupAttributes(group);
@@ -147,10 +147,12 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
             Channel *channel = venc_group->addChannel(id++);
             H264Attributes *ab = new H264Attributes();
 
+            ab->set<H264Attributes::ProfileType>(H264Attributes::TProfile::HIGH);
+
             if (channel->id() == 0)
-                ab->set<H264Attributes::Bpp>(0.09f);
+                ab->set<H264Attributes::Bpp>(0.04f);
             else
-                ab->set<H264Attributes::Bpp>(0.05f);
+                ab->set<H264Attributes::Bpp>(0.02f);
 
             channel->setAttributes(ab);
             initVencChannel(channel);
@@ -188,7 +190,7 @@ void Board::setMotion(hisilicon::mpp::venc::Channel *c) {
     setMotionEvent(c, motion);
     motion->setAreaAll(true);
     motion->setTemporalSensitivity(Motion::TemporalSensitivity::HIGH);
-    motion->setVisualize(true);
+    //motion->setVisualize(true);
     motion->setEnabled(true);
 }
 
