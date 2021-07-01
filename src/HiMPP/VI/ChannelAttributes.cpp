@@ -41,7 +41,7 @@ HI_S32 ChannelAttributes::setAttributesImpl(VI_CHN_ATTR_S *a) {
                                info->scanMode());
 
     if (scanModeRes != HI_SUCCESS)
-        return HI_SUCCESS;
+        return HI_FAILURE;
 
     return HI_MPI_VI_SetChnAttr(parent()->id(), a);
 }
