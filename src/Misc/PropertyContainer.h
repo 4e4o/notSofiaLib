@@ -8,6 +8,8 @@
 
 #include "Misc/ClassName.h"
 
+#define PROPERTY(KEY, TYPE) struct KEY : Key<TYPE> {}
+
 class PropertyContainer {
   public:
     typedef std::function<void()> TPropertyChanged;

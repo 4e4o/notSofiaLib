@@ -21,19 +21,19 @@ class H264Attributes : public ChannelAttributes {
         FIXQP
     };
 
-    MPP_ATTRIBUTE(ProfileType, TProfile);
-    MPP_ATTRIBUTE(BitrateType, TBitrate);
-    MPP_ATTRIBUTE(Bpp, float);
-    MPP_ATTRIBUTE(SampleRate, HI_S32);
-    MPP_ATTRIBUTE(FrameRate, HI_S32);
-    MPP_ATTRIBUTE(NALPrefixSize, HI_S32);
+    PROPERTY(ProfileType, TProfile);
+    PROPERTY(BitrateType, TBitrate);
+    PROPERTY(Bpp, float);
+    PROPERTY(SampleRate, HI_S32);
+    PROPERTY(FrameRate, HI_S32);
+    PROPERTY(NALPrefixSize, HI_S32);
 
   protected:
-    VENC_CHN_ATTR_S *buildImpl(IVideoFormatSource *) override;
+    VENC_CHN_ATTR_S *buildAttributesImpl() override;
 
   private:
-    void onAttach(Channel *, IVideoFormatSource *) override final;
-    void onChannelCreated(Channel *, IVideoFormatSource *) override final;
+    void onChannelCreated() override final;
+    void onAttached() override final;
 };
 
 }

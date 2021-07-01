@@ -3,15 +3,12 @@
 #include "Source/IChannelInfo.h"
 #include "HiMPP/Misc/Utils.h"
 
-#include <memory>
+#include <mpi_vi.h>
 
 namespace hisilicon::mpp::vi {
 
-ChannelAttributes::ChannelAttributes() {
-}
-
-VI_CHN_ATTR_S *ChannelAttributes::buildImpl(Channel *channel,
-        const IChannelInfo *info) {
+VI_CHN_ATTR_S *ChannelAttributes::buildAttributesImpl() {
+    const IChannelInfo *info = parent()->source();
     std::unique_ptr<VI_CHN_ATTR_S> result(new VI_CHN_ATTR_S{});
 
     // TODO от чего это зависит ?
@@ -30,12 +27,23 @@ VI_CHN_ATTR_S *ChannelAttributes::buildImpl(Channel *channel,
 
     result->enPixFormat = info->pixelFormat();
     result->stCapRect = Utils::toMppRect(info->capSize());
-    result->stDestSize = channel->destSize();
+    result->stDestSize = parent()->destSize();
 
     result->bMirror = toHIBool(get<Mirror>());
     result->bFlip = toHIBool(get<Flip>());
 
     return result.release();
+}
+
+HI_S32 ChannelAttributes::setAttributesImpl(VI_CHN_ATTR_S *a) {
+    const IChannelInfo *info = parent()->source();
+    const HI_S32 scanModeRes = HI_MPI_VI_SetChnScanMode(parent()->id(),
+                               info->scanMode());
+
+    if (scanModeRes != HI_SUCCESS)
+        return HI_SUCCESS;
+
+    return HI_MPI_VI_SetChnAttr(parent()->id(), a);
 }
 
 }

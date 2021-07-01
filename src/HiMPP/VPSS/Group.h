@@ -8,6 +8,7 @@
 
 #include "HiMPP/ASubsystem/InfoSources/IVideoFormatSource.h"
 #include "HiMPP/ASubsystem/ASubsystemItem.h"
+#include "HiMPP/ASubsystem/AttributesHolder.h"
 #include "Misc/Configurator/Configurator.h"
 #include "Binder/BindItem.h"
 #include "Channel.h"
@@ -23,19 +24,16 @@ class GroupAttributes;
 class GroupParameters;
 
 class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
-    public VpssBindItem, public IVideoFormatSource {
+    public VpssBindItem, public IVideoFormatSource,
+    public AttributesHolder<true, GroupAttributes *, GroupParameters *> {
   public:
     Group(Subsystem *, int id);
     ~Group();
 
-    void setAttributes(GroupAttributes *);
-    GroupAttributes *attributes() const;
-
-    void setParameters(GroupParameters *);
-    GroupParameters *parameters() const;
-
     Channel *addChannel(int id);
     const std::vector<Channel *> &channels() const;
+
+    IVideoCaptureFormatSource *source() const;
 
   protected:
     bool configureImpl() override final;
@@ -48,8 +46,6 @@ class Group : public ASubsystemItem<Subsystem, Configurator, Channel>,
     HI_U32 fps() const override final;
     PIXEL_FORMAT_E pixelFormat() const override final;
 
-    std::unique_ptr<GroupAttributes> m_attrBuilder;
-    std::unique_ptr<GroupParameters> m_paramsBuilder;
     IVideoCaptureFormatSource *m_source;
 };
 

@@ -16,8 +16,8 @@ namespace hisilicon::mpp::venc {
 
 Channel::Channel(Group *g, int id)
     : ASubsystemLeaf(g, id),
-      m_streamReader(new StreamReader(this)),
-      m_source(g->bindedSource<IVideoFormatSource>()) {
+      m_source(g->bindedSource<IVideoFormatSource>()),
+      m_streamReader(new StreamReader(this)) {
 }
 
 Channel::~Channel() {
@@ -36,20 +36,11 @@ StreamReader *Channel::streamReader() const {
     return m_streamReader.get();
 }
 
-void Channel::setAttributes(ChannelAttributes *b) {
-    m_attrBuilder.reset(b);
-    b->onAttach(this, m_source);
-}
-
-ChannelAttributes *Channel::attributes() const {
-    return m_attrBuilder.get();
-}
-
 bool Channel::h264Mode() const {
-    if (m_attrBuilder.get() == nullptr)
-        throw std::runtime_error("[venc::Channel] m_attrBuilder is not set");
+    if (attributes() == nullptr)
+        throw std::runtime_error("[venc::Channel] attributes is not set");
 
-    return dynamic_cast<H264Attributes *>(m_attrBuilder.get()) != nullptr;
+    return dynamic_cast<H264Attributes *>(attributes()) != nullptr;
 }
 
 SIZE_S Channel::imgSize() const {
@@ -66,25 +57,26 @@ bool Channel::needUserPool() const {
            && h264Mode();
 }
 
-bool Channel::configureImpl() {
+IVideoFormatSource *Channel::source() const {
     if (m_source == nullptr)
         throw std::runtime_error("m_source is not set");
 
+    return m_source;
+}
+
+bool Channel::configureImpl() {
     if (m_streamReader.get() == nullptr)
         throw std::runtime_error("m_streamReader is not set");
 
-    if (m_attrBuilder.get() == nullptr)
-        throw std::runtime_error("[venc::Channel] m_attrBuilder is not set");
+    if (attributes() == nullptr)
+        throw std::runtime_error("[venc::Channel] attributes is not set");
 
-    std::unique_ptr<VENC_CHN_ATTR_S> attrs(m_attrBuilder->build(m_source));
+    VENC_CHN_ATTR_S *attrs = attributes()->createAttributes();
 
-    if (attrs.get() == nullptr)
-        throw std::runtime_error("[venc::Channel] attr is nullptr");
-
-    if (HI_MPI_VENC_CreateChn(id(), attrs.get()) != HI_SUCCESS)
+    if (HI_MPI_VENC_CreateChn(id(), attrs) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_CreateChn failed");
 
-    m_attrBuilder->onChannelCreated(this, m_source);
+    attributes()->onChannelCreated();
 
     if (needUserPool()) {
         // HiMPP Media Processing Software Development Reference.pdf

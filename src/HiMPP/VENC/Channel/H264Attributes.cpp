@@ -13,6 +13,8 @@ namespace hisilicon::mpp::venc {
 #define DEFAULT_SAMPLE_RATE         90000
 #define DEFAULT_BPP                 0.03f
 #define DEFAULT_NAL_PREFIX_SIZE     4
+#define DEFAULT_PROFILE             TProfile::BASELINE
+#define DEFAULT_BITRATE_TYPE        TBitrate::VBR
 
 // TODO мб более точный метод высчитывания битрейта для h264 есть
 // Зависит от того чего мы хотим, битрейт влияет на качество и объем трафа
@@ -30,18 +32,19 @@ H264Attributes::H264Attributes() {
     set<NALPrefixSize>(DEFAULT_NAL_PREFIX_SIZE);
     set<SampleRate>(DEFAULT_SAMPLE_RATE);
     set<Bpp>(DEFAULT_BPP);
-    set<BitrateType>(TBitrate::VBR);
-    set<ProfileType>(TProfile::BASELINE);
+    set<BitrateType>(DEFAULT_BITRATE_TYPE);
+    set<ProfileType>(DEFAULT_PROFILE);
 }
 
-void H264Attributes::onAttach(Channel *, IVideoFormatSource *source) {
-    const HI_U32 source_fps = source->fps();
+void H264Attributes::onAttached() {
+    const HI_U32 source_fps = parent()->source()->fps();
 
     if (!contains<FrameRate>())
         set<FrameRate>(source_fps);
 }
 
-VENC_CHN_ATTR_S *H264Attributes::buildImpl(IVideoFormatSource *source) {
+VENC_CHN_ATTR_S *H264Attributes::buildAttributesImpl() {
+    const IVideoFormatSource *source = parent()->source();
     std::unique_ptr<VENC_CHN_ATTR_S> result(new VENC_CHN_ATTR_S{});
     VENC_ATTR_H264_S &stH264Attr = result->stVeAttr.stAttrH264e;
 
@@ -110,8 +113,7 @@ VENC_CHN_ATTR_S *H264Attributes::buildImpl(IVideoFormatSource *source) {
     return result.release();
 }
 
-void H264Attributes::onChannelCreated(Channel *channel,
-                                      IVideoFormatSource *) {
+void H264Attributes::onChannelCreated() {
     std::unique_ptr<VENC_PARAM_H264_VUI_S> attrs(new VENC_PARAM_H264_VUI_S{});
 
     attrs->timing_info_present_flag = 1;
@@ -119,7 +121,7 @@ void H264Attributes::onChannelCreated(Channel *channel,
     attrs->time_scale = get<SampleRate>();
     attrs->num_units_in_tick = attrs->time_scale / (2 * get<FrameRate>());
 
-    if (HI_MPI_VENC_SetH264Vui(channel->id(), attrs.get()) != HI_SUCCESS)
+    if (HI_MPI_VENC_SetH264Vui(parent()->id(), attrs.get()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VENC_SetH264Vui failed");
 }
 

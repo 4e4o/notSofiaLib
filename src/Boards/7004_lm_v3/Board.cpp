@@ -92,7 +92,7 @@ static void setVpssGroupParameters(hisilicon::mpp::vpss::Group *g) {
     p->set<Params::SpatialNoiseReductionStrength>(4);
     p->set<Params::TimeNoiseReductionStrength>(8);
 
-    g->setParameters(p);
+    g->setAttributes(p);
 }
 
 hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
@@ -106,9 +106,9 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
 
         for (auto &device : p->vi()->devices()) {
             for (auto &channel : device->channels()) {
-                //                using Attr = hisilicon::mpp::vi::ChannelAttributes;
-                //                auto attr = channel->attributes();
-                //                attr->set<Attr::FrameRate>(20);
+                //using Attr = hisilicon::mpp::vi::ChannelAttributes;
+                //auto attr = channel->attributes();
+                //attr->set<Attr::FrameRate>(10);
 
                 Group *group = s->addGroup(groupId++);
                 setVpssGroupAttributes(group);
@@ -154,7 +154,7 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
             else
                 ab->set<H264Attributes::Bpp>(0.02f);
 
-            channel->setAttributes(ab);
+            channel->setAttributes<ChannelAttributes>(ab);
             initVencChannel(channel);
         }
     }

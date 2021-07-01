@@ -5,6 +5,7 @@
 
 #include <hi_comm_vpss.h>
 
+#include "HiMPP/ASubsystem/AttributesHolder.h"
 #include "HiMPP/ASubsystem/ASubsystemLeaf.h"
 #include "Misc/Size.h"
 
@@ -13,20 +14,16 @@ namespace hisilicon::mpp::vpss {
 class Group;
 class ChannelAttributes;
 
-class Channel : public ASubsystemLeaf<Group> {
+class Channel : public ASubsystemLeaf<Group>,
+    public AttributesHolder<true, ChannelAttributes *> {
   public:
-    Channel(Group *, int id);
+    using ASubsystemLeaf::ASubsystemLeaf;
     ~Channel();
-
-    void setAttributes(ChannelAttributes *);
-    ChannelAttributes *attributes() const;
 
     const Group *group() const;
 
   private:
     bool configureImpl() override final;
-
-    std::unique_ptr<ChannelAttributes> m_attrBuilder;
 };
 
 }

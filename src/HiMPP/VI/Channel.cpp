@@ -15,8 +15,7 @@ namespace hisilicon::mpp::vi {
 Channel::Channel(Device *d, const IChannelInfo *info, int id)
     : ASubsystemLeaf(d, id),
       vpss::ViBindItem(d, this),
-      m_source(info),
-      m_attrBuilder(new ChannelAttributes()) {
+      m_source(info) {
 }
 
 Channel::~Channel() {
@@ -25,22 +24,7 @@ Channel::~Channel() {
 }
 
 bool Channel::configureImpl() {
-    if (m_source == nullptr)
-        throw std::runtime_error("[vi::Channel] Vi info is not set");
-
-    if (m_attrBuilder.get() == nullptr)
-        throw std::runtime_error("[vi::Channel] Vi m_attrBuilder is not set");
-
-    std::unique_ptr<VI_CHN_ATTR_S> attrs(m_attrBuilder->build(this, m_source));
-
-    if (attrs.get() == nullptr)
-        throw std::runtime_error("[vi::Channel] Vi attr is nullptr");
-
-    if (HI_MPI_VI_SetChnScanMode(id(), m_source->scanMode()) != HI_SUCCESS)
-        throw std::runtime_error("HI_MPI_VI_SetChnScanMode failed");
-
-    if (HI_MPI_VI_SetChnAttr(id(), attrs.get()) != HI_SUCCESS)
-        throw std::runtime_error("HI_MPI_VI_SetChnAttr failed");
+    attributes()->setAttributes();
 
     if (HI_MPI_VI_EnableChn(id()) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VI_EnableChn failed");
@@ -49,15 +33,10 @@ bool Channel::configureImpl() {
 }
 
 const IChannelInfo *Channel::source() const {
+    if (m_source == nullptr)
+        throw std::runtime_error("m_source is not set");
+
     return m_source;
-}
-
-void Channel::setAttributes(ChannelAttributes *a) {
-    m_attrBuilder.reset(a);
-}
-
-ChannelAttributes *Channel::attributes() const {
-    return m_attrBuilder.get();
 }
 
 SIZE_S *Channel::createDestSize() const {
@@ -76,7 +55,7 @@ SIZE_S Channel::imgSize() const {
 }
 
 HI_U32 Channel::fps() const {
-    return m_attrBuilder->get<ChannelAttributes::FrameRate>(m_source->fps());
+    return attributes()->get<ChannelAttributes::FrameRate>(m_source->fps());
 }
 
 const IFrameFormatSource *Channel::vbFormatInfo() const {
@@ -94,12 +73,12 @@ PIXEL_FORMAT_E Channel::pixelFormat() const {
     return m_source->pixelFormat();
 }
 
-const Device *Channel::device() const {
-    return Holder<Device *>::value();
-}
-
 RECT_S Channel::capRect() const {
     return Utils::toMppRect(m_source->capSize());
+}
+
+const Device *Channel::device() const {
+    return Holder<Device *>::value();
 }
 
 }

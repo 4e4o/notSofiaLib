@@ -15,7 +15,6 @@ namespace hisilicon::mpp::vpss {
 Group::Group(Subsystem *s, int id)
     : ASubsystemItem(s, id),
       VpssBindItem(this),
-      m_attrBuilder(new GroupAttributes()),
       m_source(nullptr) {
 }
 
@@ -40,30 +39,14 @@ const std::vector<Channel *> &Group::channels() const {
 }
 
 bool Group::configureImpl() {
-    if (m_source == nullptr)
-        throw std::runtime_error("vi::Group source is not set");
-
-    if (m_attrBuilder.get() == nullptr)
-        throw std::runtime_error("vi::Group attributes builder is null");
-
-    std::unique_ptr<VPSS_GRP_ATTR_S> attrs(m_attrBuilder->build(m_source));
-
-    if (attrs.get() == nullptr)
-        throw std::runtime_error("vi::Group attributes is null");
+    VPSS_GRP_ATTR_S *attrs = attributes()->createAttributes();
 
     // создаём группу
-    if (HI_MPI_VPSS_CreateGrp(id(), attrs.get()) != HI_SUCCESS)
+    if (HI_MPI_VPSS_CreateGrp(id(), attrs) != HI_SUCCESS)
         throw std::runtime_error("HI_MPI_VPSS_CreateGrp failed");
 
-    if (m_paramsBuilder.get() != nullptr) {
-        std::unique_ptr<VPSS_GRP_PARAM_S> params(m_paramsBuilder->build());
-
-        if (params.get() != nullptr) {
-            // устанавливаем параметры
-            if (HI_MPI_VPSS_SetGrpParam(id(), params.get()) != HI_SUCCESS)
-                throw std::runtime_error("HI_MPI_VPSS_SetGrpParam failed");
-        }
-    }
+    if (attributes<GroupParameters>() != nullptr)
+        attributes<GroupParameters>()->setAttributes();
 
     // стартуем каналы
     if (!Configurator::configureImpl())
@@ -74,18 +57,6 @@ bool Group::configureImpl() {
         throw std::runtime_error("HI_MPI_VPSS_StartGrp failed");
 
     return true;
-}
-
-void Group::setAttributes(GroupAttributes *builder) {
-    m_attrBuilder.reset(builder);
-}
-
-void Group::setParameters(GroupParameters *p) {
-    m_paramsBuilder.reset(p);
-}
-
-GroupAttributes *Group::attributes() const {
-    return m_attrBuilder.get();
 }
 
 void Group::setBindedSource(BindItem *bi) {
@@ -106,6 +77,13 @@ HI_U32 Group::fps() const {
 
 PIXEL_FORMAT_E Group::pixelFormat() const {
     return m_source->pixelFormat();
+}
+
+IVideoCaptureFormatSource *Group::source() const {
+    if (m_source == nullptr)
+        throw std::runtime_error("m_source is not set");
+
+    return m_source;
 }
 
 }

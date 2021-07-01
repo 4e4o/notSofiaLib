@@ -1,6 +1,7 @@
 #include "Subsystem.h"
 #include "Group.h"
 #include "Channel.h"
+#include "ChannelAttributes.h"
 
 namespace hisilicon::mpp::vpss {
 

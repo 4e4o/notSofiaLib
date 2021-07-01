@@ -1,13 +1,13 @@
 #ifndef MPP_VI_CHANNEL_H
 #define MPP_VI_CHANNEL_H
 
-
 #include <memory>
 
 #include <hi_comm_vi.h>
 
 #include "HiMPP/ASubsystem/InfoSources/IVideoCaptureFormatSource.h"
 #include "HiMPP/ASubsystem/ASubsystemLeaf.h"
+#include "HiMPP/ASubsystem/AttributesHolder.h"
 #include "HiMPP/VPSS/Binder/BindItem.h"
 #include "Misc/Size.h"
 
@@ -18,15 +18,13 @@ class IChannelInfo;
 class ChannelAttributes;
 
 class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
-    public IVideoCaptureFormatSource {
+    public IVideoCaptureFormatSource,
+    public AttributesHolder<true, ChannelAttributes *> {
   public:
     Channel(Device *, const IChannelInfo *, int id);
     ~Channel();
 
     const Device *device() const;
-
-    void setAttributes(ChannelAttributes *);
-    ChannelAttributes *attributes() const;
 
     // IVideoCaptureFormatSource
     SIZE_S destSize() const override final;
@@ -35,7 +33,6 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     PIXEL_FORMAT_E pixelFormat() const override final;
 
     const IFrameFormatSource *vbFormatInfo() const;
-
     const IChannelInfo *source() const;
 
   protected:
@@ -46,7 +43,6 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     bool configureImpl() override final;
 
     const IChannelInfo *m_source;
-    std::unique_ptr<ChannelAttributes> m_attrBuilder;
     mutable std::unique_ptr<SIZE_S> m_destSize;
 };
 
