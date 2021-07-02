@@ -41,9 +41,12 @@ class GroupParameters: public
     PROPERTY(DeInterlaceStrength, HI_U32);
     PROPERTY(ChrominanceAmplitude, HI_U32);
 
+    PROPERTY(Crop, RECT_S);
+
   protected:
     VPSS_GRP_PARAM_S *buildAttributesImpl() override;
     HI_S32 setAttributesImpl(VPSS_GRP_PARAM_S *) override;
+    HI_S32 setCrop();
 };
 
 }

@@ -42,7 +42,26 @@ VPSS_GRP_PARAM_S *GroupParameters::buildAttributesImpl() {
 }
 
 HI_S32 GroupParameters::setAttributesImpl(VPSS_GRP_PARAM_S *p) {
-    return HI_MPI_VPSS_SetGrpParam(parent()->id(), p);
+    if (HI_MPI_VPSS_SetGrpParam(parent()->id(), p) != HI_SUCCESS)
+        return HI_FAILURE;
+
+    if (contains<Crop>())
+        return setCrop();
+
+    return HI_SUCCESS;
+}
+
+HI_S32 GroupParameters::setCrop() {
+    VPSS_CROP_INFO_S stCropInfo;
+
+    if (HI_MPI_VPSS_GetCropCfg(parent()->id(), &stCropInfo) != HI_SUCCESS)
+        return HI_FAILURE;
+
+    stCropInfo.bEnable = HI_TRUE;
+    stCropInfo.enCropCoordinate = VPSS_CROP_ABS_COOR;
+    stCropInfo.stCropRect = get<Crop>();
+
+    return HI_MPI_VPSS_SetCropCfg(parent()->id(), &stCropInfo);
 }
 
 }

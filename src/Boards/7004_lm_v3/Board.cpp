@@ -92,6 +92,9 @@ static void setVpssGroupParameters(hisilicon::mpp::vpss::Group *g) {
     p->set<Params::SpatialNoiseReductionStrength>(4);
     p->set<Params::TimeNoiseReductionStrength>(8);
 
+    if (g->id() == 0)
+        p->set<Params::Crop>({0, 0, 718, 576});
+
     g->setAttributes(p);
 }
 
