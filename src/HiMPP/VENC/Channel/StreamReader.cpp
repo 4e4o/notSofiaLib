@@ -19,7 +19,7 @@ DataBufferWrapper *StreamReader::createBufferWrapper(DataBuffer *d) {
     return new StreamBuffer(d);
 }
 
-void StreamReader::read() {
+void StreamReader::onRead() {
     VENC_CHN_STAT_S stStat{};
     VENC_STREAM_S stStream;
 

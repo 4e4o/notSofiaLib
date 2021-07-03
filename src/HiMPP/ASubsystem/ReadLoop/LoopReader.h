@@ -6,6 +6,7 @@
 #include <hi_common.h>
 
 #include "Misc/IdHolder.h"
+#include "Misc/EventLoop/Epollable.h"
 
 namespace hisilicon::mpp {
 
@@ -14,7 +15,7 @@ class IReaderOut;
 class ReadLoop;
 class DataBufferWrapper;
 
-class LoopReader : public Holder<IdHolder *> {
+class LoopReader : public Holder<IdHolder *>, public Epollable {
   public:
     LoopReader(IdHolder *h);
     virtual ~LoopReader();
@@ -35,13 +36,13 @@ class LoopReader : public Holder<IdHolder *> {
 
   private:
     virtual DataBufferWrapper *createBufferWrapper(DataBuffer *) = 0;
-    virtual void read() = 0;
 
     void releaseOut();
 
     std::unique_ptr<DataBufferWrapper> m_buffer;
     std::unique_ptr<IReaderOut> m_out;
     bool m_ownsOut;
+    int m_fd;
 };
 
 }

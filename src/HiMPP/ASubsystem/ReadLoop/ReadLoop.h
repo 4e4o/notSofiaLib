@@ -1,7 +1,7 @@
-#ifndef MPP_READ_SELECT_LOOP_H
-#define MPP_READ_SELECT_LOOP_H
+#ifndef MPP_READ_LOOP_H
+#define MPP_READ_LOOP_H
 
-#include "Misc/SelectReadLoop.h"
+#include "Misc/EventLoop/EventLoop.h"
 
 #include <memory>
 
@@ -9,7 +9,7 @@ namespace hisilicon::mpp {
 
 class DataBuffer;
 
-class ReadLoop : public SelectReadLoop {
+class ReadLoop : public EventLoop {
   public:
     ReadLoop();
     ~ReadLoop();
@@ -17,12 +17,10 @@ class ReadLoop : public SelectReadLoop {
     DataBuffer *buffer() const;
 
   private:
-    void onTimeout() override final;
-
     std::unique_ptr<DataBuffer> m_buffer;
 };
 
 }
 
-#endif // MPP_READ_SELECT_LOOP_H
+#endif // MPP_READ_LOOP_H
 

@@ -80,6 +80,7 @@ hisilicon::mpp::vi::Subsystem *Board::initVi(hisilicon::mpp::MPP *p) {
 static void setVpssGroupAttributes(hisilicon::mpp::vpss::Group *g) {
     using Attr = hisilicon::mpp::vpss::GroupAttributes;
     g->attributes()->set<Attr::NoiseReduction>(true);
+    //    g->attributes()->set<Attr::ImageEnhancement>(true);
 }
 
 static void setVpssGroupParameters(hisilicon::mpp::vpss::Group *g) {

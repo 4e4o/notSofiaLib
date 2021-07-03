@@ -4,14 +4,16 @@
 #include <map>
 #include <mutex>
 
-#include "Misc/SelectReadLoop.h"
+#include "Misc/EventLoop/EventLoop.h"
 #include "Misc/Holder.h"
+
+class Timer;
 
 namespace nvp6134 {
 
 class DriverCommunicator;
 
-class MotionLoop : public SelectReadLoop,
+class MotionLoop : public EventLoop,
     public Holder<DriverCommunicator *> {
   public:
     typedef std::pair<int, int> TChipChannel;
@@ -24,11 +26,13 @@ class MotionLoop : public SelectReadLoop,
     void remove(TChipChannel);
 
   private:
-    void onTimeout() override final;
+    void onTick();
+
     typedef std::map<TChipChannel, TMotionEvent> TChannels;
 
     TChannels m_channels;
     std::mutex m_channelsMutex;
+    std::unique_ptr<Timer> m_readTimer;
 };
 
 }

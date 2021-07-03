@@ -15,7 +15,7 @@ class StreamReader : public LoopReader {
 
   private:
     DataBufferWrapper *createBufferWrapper(DataBuffer *) override final;
-    void read() override final;
+    void onRead() override final;
 
     bool m_consecutiveMode;
 };

@@ -1,18 +1,23 @@
 #include "MotionLoop.h"
 #include "DriverCommunicator.h"
+#include "Misc/EventLoop/Timer.h"
 
 #include <iostream>
 
-// читаем раз в секунду, торопиться нам некуда
+// читаем раз в две секунды, торопиться нам некуда
 // потому что мы читаем с драйвера в hold mode.
 // Ни один сдетекченный эвент от nvp от нас не уйдет
-#define DEFAULT_MOTION_CHECK_INTERVAL_MILLIS 1000
+#define CHECK_INTERVAL_SEC 2
 
 namespace nvp6134 {
 
 MotionLoop::MotionLoop(DriverCommunicator *dc)
-    : Holder<DriverCommunicator *>(dc) {
-    setTimeout(std::chrono::milliseconds(DEFAULT_MOTION_CHECK_INTERVAL_MILLIS));
+    : Holder<DriverCommunicator *>(dc),
+      m_readTimer(new Timer(this)) {
+    m_readTimer->setTick([this](Timer *) {
+        this->onTick();
+    });
+    m_readTimer->start(std::chrono::seconds(CHECK_INTERVAL_SEC));
     std::cout << "MotionLoop " << this << std::endl;
 }
 
@@ -20,7 +25,7 @@ MotionLoop::~MotionLoop() {
     std::cout << "~MotionLoop " << this << std::endl;
 }
 
-void MotionLoop::onTimeout() {
+void MotionLoop::onTick() {
     TChannels curIds;
 
     {

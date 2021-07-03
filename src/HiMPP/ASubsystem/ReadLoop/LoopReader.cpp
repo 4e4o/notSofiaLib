@@ -3,10 +3,13 @@
 #include "IReaderOut.h"
 #include "DataBufferWrapper.h"
 
+#include <iostream>
+
 namespace hisilicon::mpp {
 
 LoopReader::LoopReader(IdHolder *h)
-    : Holder(h), m_ownsOut(true) {
+    : Holder(h), m_ownsOut(true),
+      m_fd(INVALID_FD) {
 }
 
 LoopReader::~LoopReader() {
@@ -23,11 +26,9 @@ void LoopReader::attach(int fd, ReadLoop *loop) {
     if (fd < 0)
         throw std::runtime_error("[LoopReader] invalid fd");
 
+    m_fd = fd;
     m_buffer.reset(createBufferWrapper(loop->buffer()));
-
-    loop->addFd(fd, [this] () {
-        read();
-    });
+    attachToLoop(loop, EpoolOperationType{.READ = 1}, m_fd);
 }
 
 int LoopReader::id() const {
