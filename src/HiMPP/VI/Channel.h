@@ -35,6 +35,23 @@ class Channel : public ASubsystemLeaf<Device>, public vpss::ViBindItem,
     const IFrameFormatSource *vbFormatInfo() const;
     const IChannelInfo *source() const;
 
+    template<class Child>
+    static int associatedChannelId(Child *child,
+                                   const BindItem *parent = nullptr) {
+        const Channel *viChannel = associatedChannel<Child>(child, parent);
+
+        if (viChannel == nullptr)
+            return -1;
+
+        return viChannel->id();
+    }
+
+    template<class Child>
+    static const Channel *associatedChannel(Child *child,
+                                            const BindItem *parent = nullptr) {
+        return BindItem::firstBindedSource<const Channel>(child, parent);
+    }
+
   protected:
     RECT_S capRect() const;
 

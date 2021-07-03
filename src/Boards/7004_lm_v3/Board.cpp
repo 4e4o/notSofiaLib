@@ -85,15 +85,17 @@ static void setVpssGroupAttributes(hisilicon::mpp::vpss::Group *g) {
 
 static void setVpssGroupParameters(hisilicon::mpp::vpss::Group *g) {
     using namespace hisilicon::mpp::vpss;
+    using hisilicon::mpp::vi::Channel;
     using Params = GroupParameters;
     GroupParameters *p = new GroupParameters();
+    const int viChId = Channel::associatedChannelId(g);
 
     p->set<Params::Contrast>(64);
     p->set<Params::ImageEnhancementStrength>(1);
     p->set<Params::SpatialNoiseReductionStrength>(4);
     p->set<Params::TimeNoiseReductionStrength>(8);
 
-    if (g->id() == 0)
+    if (viChId == 2)
         p->set<Params::Crop>({0, 0, 718, 576});
 
     g->setAttributes(p);
@@ -115,6 +117,8 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
                 //attr->set<Attr::FrameRate>(10);
 
                 Group *group = s->addGroup(groupId++);
+                s->bind(channel, group);
+
                 setVpssGroupAttributes(group);
                 setVpssGroupParameters(group);
                 // id vpss каналов фиксированы и зависят от хики чипа
@@ -124,7 +128,6 @@ hisilicon::mpp::vpss::Subsystem *Board::initVpss(hisilicon::mpp::MPP *p) {
                 // HiMPP Media Processing Software Development Reference.pdf
                 // page 422
                 group->addChannel(VPSS_BSTR_CHN);
-                s->bind(channel, group);
             }
         }
     }
@@ -153,10 +156,12 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
 
             ab->set<H264Attributes::ProfileType>(H264Attributes::TProfile::HIGH);
 
-            if (channel->id() == 0)
-                ab->set<H264Attributes::Bpp>(0.04f);
-            else
+            const int viChId = hisilicon::mpp::vi::Channel::associatedChannelId(venc_group);
+
+            if (viChId == 6)
                 ab->set<H264Attributes::Bpp>(0.02f);
+            else
+                ab->set<H264Attributes::Bpp>(0.04f);
 
             channel->setAttributes<ChannelAttributes>(ab);
             initVencChannel(channel);
@@ -187,22 +192,24 @@ void Board::setStreamOut(hisilicon::mpp::venc::Channel *c) {
 }
 
 void Board::setMotion(hisilicon::mpp::venc::Channel *c) {
-    ::nvp6134::ViChannel *ch = viChannel(c);
+    using hisilicon::mpp::vi::Channel;
+    ::nvp6134::ViChannel *ch = nvpViChannel(c);
     ::nvp6134::Motion *motion = ch->motion();
+    const int viChId = Channel::associatedChannelId(c, c->group());
 
     using namespace ::nvp6134;
-    setMotionEvent(c, motion);
+    setMotionEvent(viChId, motion);
     motion->setAreaAll(true);
     motion->setTemporalSensitivity(Motion::TemporalSensitivity::HIGH);
     //motion->setVisualize(true);
     motion->setEnabled(true);
 }
 
-void Board::setMotionEvent(hisilicon::mpp::venc::Channel *,
+void Board::setMotionEvent(int viChId,
                            ::nvp6134::Motion *motion) {
     using namespace ::nvp6134;
-    motion->setEvent([](Motion * m) {
-        std::cout << "MOTION EVENT!!! " << m->channel()->id() << std::endl;
+    motion->setEvent([viChId](Motion *) {
+        std::cout << "MOTION EVENT!!! " << viChId << std::endl;
     });
 }
 

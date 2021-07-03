@@ -46,12 +46,12 @@ const Board::TNvpChipsets &Board::nvp() const {
     return m_nvpChipsets;
 }
 
-::nvp6134::ViChannel *Board::viChannel(hisilicon::mpp::venc::Channel *c) const {
+::nvp6134::ViChannel *Board::nvpViChannel(hisilicon::mpp::venc::Channel *c)
+const {
     using namespace ::hisilicon::mpp;
     using vi::Channel;
     using vpss::BindItem;
-    const Channel *viChannel = BindItem::firstBindedSource<const Channel>(c,
-                               c->group());
+    const Channel *viChannel = Channel::associatedChannel(c, c->group());
 
     if (viChannel == nullptr)
         return nullptr;

@@ -34,8 +34,7 @@ class Board : public boards::nvp6134::Board {
     void initVencChannel(hisilicon::mpp::venc::Channel *);
     virtual void setStreamOut(hisilicon::mpp::venc::Channel *);
     virtual void setMotion(hisilicon::mpp::venc::Channel *);
-    virtual void setMotionEvent(hisilicon::mpp::venc::Channel *,
-                                ::nvp6134::Motion *);
+    virtual void setMotionEvent(int viChId, ::nvp6134::Motion *);
 
     hisilicon::mpp::vi::Subsystem *initVi(hisilicon::mpp::MPP *p);
     hisilicon::mpp::vpss::Subsystem *initVpss(hisilicon::mpp::MPP *p);

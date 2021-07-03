@@ -30,7 +30,7 @@ class Board : public ABoard {
   protected:
     bool configureImpl() override;
 
-    ::nvp6134::ViChannel *viChannel(hisilicon::mpp::venc::Channel *) const;
+    ::nvp6134::ViChannel *nvpViChannel(hisilicon::mpp::venc::Channel *) const;
 
   private:
     void createChipsets();
