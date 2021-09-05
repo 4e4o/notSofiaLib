@@ -159,9 +159,9 @@ hisilicon::mpp::venc::Subsystem *Board::initVenc(hisilicon::mpp::MPP *p) {
             const int viChId = hisilicon::mpp::vi::Channel::associatedChannelId(venc_group);
 
             if (viChId == 6)
-                ab->set<H264Attributes::Bpp>(0.02f);
+                ab->set<H264Attributes::Bpp>(0.03f);
             else
-                ab->set<H264Attributes::Bpp>(0.04f);
+                ab->set<H264Attributes::Bpp>(0.05f);
 
             channel->setAttributes<ChannelAttributes>(ab);
             initVencChannel(channel);
@@ -200,7 +200,12 @@ void Board::setMotion(hisilicon::mpp::venc::Channel *c) {
     using namespace ::nvp6134;
     setMotionEvent(viChId, motion);
     motion->setAreaAll(true);
-    motion->setTemporalSensitivity(Motion::TemporalSensitivity::HIGH);
+
+    if (viChId == 6)
+        motion->setTemporalSensitivity(Motion::TemporalSensitivity::MEDIUM);
+    else
+        motion->setTemporalSensitivity(Motion::TemporalSensitivity::HIGH);
+
     //motion->setVisualize(true);
     motion->setEnabled(true);
 }
